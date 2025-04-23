@@ -71,7 +71,7 @@ Online Library
 ## Installation
 1. Clone the repository:
 ```bash
- git clone https://github.com/bulatovicb/online-library
+ git clone https://github.com/bulatovicb/OnlineLibrary
 ```
 2. Install dependencies:
 ```
