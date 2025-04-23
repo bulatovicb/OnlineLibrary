@@ -80,8 +80,10 @@ composer require laravel/sail --dev
 php artisan sail:install
 ./vendor/bin/sail up
 # Install redis
+
 $ docker run -d --name redis-stack -p 6381:6379 -p 8001:8001 redis/redis-stack:latest
  ```
  3.  Add Docker to System PATH
  ```
  C:\Program Files\Docker\Docker\resources\bin
+  ```
