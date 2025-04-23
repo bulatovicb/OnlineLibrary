@@ -1,0 +1,57 @@
+{
+	"info": {
+		"_postman_id": "f24c9446-1b1f-41ce-83e8-fae41a91670a",
+		"name": "Online Library",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43907186",
+		"_collection_link": "https://bojana-17894.postman.co/workspace/Online-Library~71074eab-03e6-4e2c-89ac-1f1c57da3b5d/collection/43907186-f24c9446-1b1f-41ce-83e8-fae41a91670a?action=share&source=collection_link&creator=43907186"
+	},
+	"item": [
+		{
+			"name": "Dashboard",
+			"item": []
+		},
+		{
+			"name": "User management",
+			"item": [
+				{
+					"name": "User management",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Book management",
+			"item": [
+				{
+					"name": "Book management",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Author management",
+			"item": []
+		},
+		{
+			"name": "Book reservation",
+			"item": []
+		},
+		{
+			"name": "Book borrow",
+			"item": []
+		},
+		{
+			"name": "Settings",
+			"item": []
+		}
+	]
+}
