@@ -23,12 +23,12 @@ services:
             - sail
         depends_on:
             - mysql
-            - redis 
+            - redis
 
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
-            - '${FORWARD_DB_PORT:-3306}:3306'
+            - '${FORWARD_DB_PORT:-3307}:3306'
         environment:
             MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ROOT_HOST: '%'
@@ -50,7 +50,7 @@ services:
             retries: 3
             timeout: 5s
 
-    redis:  
+    redis:
         image: redis:alpine
         ports:
             - "6381:6379"
