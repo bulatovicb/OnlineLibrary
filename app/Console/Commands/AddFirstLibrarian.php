@@ -33,10 +33,11 @@ class AddFirstLibrarian extends Command
             'confirm_password' => $confirmPassword
         ],[
 
-            'email' => 'required|email|unique:librarians,email',
-            'jmbg' => 'required|unique:librarians,jmbg|regex:/^\d{13}$/',
-            'username' => 'required|unique:librarians,username',
+            'email' => 'required|email|unique:users,email',
+            'jmbg' => 'required|unique:users,jmbg|regex:/^\d{13}$/',
+            'username' => 'required|unique:users,username',
             'password' => 'required|min:8',
+            'role'=>'required',
             'confirm_password' => 'required|same:password',
         ]);
         if ($validator->fails()) {

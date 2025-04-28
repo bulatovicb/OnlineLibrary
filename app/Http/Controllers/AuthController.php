@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Librarian;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
 
 class AuthController extends Controller
 {
@@ -15,14 +17,14 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required'
         ]);
-        $librarian = Librarian::where('email', request('email'))->first();
+        $user = User::where('email', request('email'))->first();
 
-        if (!$librarian || !Hash::check(request('password'), $librarian->password)) {
+        if (!$user || !Hash::check(request('password'), $user->password)) {
             return response()->json(['error' => 'Invalid email or password'], 401);
         }
 
 
-    $token = $librarian->createToken(request('email'))->plainTextToken;
+    $token = $user->createToken(request('email'))->plainTextToken;
         return response()->json([
             'message' => 'Logged in successfully.',
             'access_token' => $token,
@@ -32,6 +34,9 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        if (!Auth::check()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
 
         $request->user()->currentAccessToken()->delete();
         return response()->json([
