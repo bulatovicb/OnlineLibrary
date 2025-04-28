@@ -46,15 +46,6 @@ class AddFirstLibrarian extends Command
             }
             return 1;
         }
-        Librarian::create([
-            'first_name' => $firstName,
-            'last_name' => $lastName,
-            'jmbg' => $jmbg,
-            'username' => $username,
-            'email' => $email,
-            'password' => Hash::make($password),
-        ]);
-        $this->info('Librarian added successfully.');
-        return 0;
+
     }
 }
