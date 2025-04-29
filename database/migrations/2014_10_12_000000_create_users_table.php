@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('jmbg',13)->unique();
             $table->string('password');
+            $table->string('profile_picture')->nullable();
             $table->timestamps();
             $table->enum('role', ['student', 'librarian'])->default('student');
 

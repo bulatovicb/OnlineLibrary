@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Librarian;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -30,6 +30,7 @@ class AddFirstLibrarian extends Command
             'jmbg' => $jmbg,
             'username' => $username,
             'password' => $password,
+            'role' => 'librarian',
             'confirm_password' => $confirmPassword
         ],[
 
@@ -47,6 +48,19 @@ class AddFirstLibrarian extends Command
             }
             return 1;
         }
+        $user = User::create([
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'jmbg' => $jmbg,
+            'email' => $email,
+            'username' => $username,
+            'password' => Hash::make($password),
+            'role' => 'librarian',
+        ]);
+
+        $this->info("Librarian {$user->first_name} {$user->last_name} created successfully.");
+        return 0;
 
     }
+
 }
