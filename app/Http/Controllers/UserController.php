@@ -81,4 +81,42 @@ class UserController extends Controller
         }
         return response()->file(storage_path('app/public/' . $user->profile_picture));
     }
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'sometimes|required|string',
+            'last_name' => 'sometimes|required|string',
+            'email' => 'sometimes|required|string|email|unique:users,email, '. $user->id,
+            'username' => 'sometimes|required|string|unique:users,username,' . $user->id,
+            'jmbg' => 'sometimes|required|regex:/^\d{13}$/'
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+        $data = $request->only(['first_name', 'last_name', 'email', 'username', 'jmbg']);
+        $user->update($data);
+
+        return response()->json([
+            'message' => 'User updated successfully.',
+            'user' => $user
+        ]);
+    }
+    public function updateProfilePicture(Request $request)
+    {
+        $user = Auth::user();
+        $validator = Validator::make($request->all(), [
+            'profile_picture' => 'nullable|image|max:5120',
+        ]);
+        if ($request->hasFile('profile_picture')) {
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+        }
+        $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+        $user->profile_picture =$path;
+        $user->save();
+        return response()->json([
+            'message' => 'Profile picture updated successfully.',
+            'profile_picture_url' => route('user.profilePicture', ['username' => $user->username])
+        ]);
+    }
 }
