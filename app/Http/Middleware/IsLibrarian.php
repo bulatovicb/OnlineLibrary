@@ -5,8 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
 
 class IsLibrarian
 {
@@ -15,8 +13,7 @@ class IsLibrarian
     {
         $user = Auth::user();
 
-
-        if (!$user || $user-> role !== 'librarian') {
+        if (!$user || $user->role_id !== 2) {
             return response()->json(['error' => 'Unauthorized - Librarians only'], 403);
         }
 

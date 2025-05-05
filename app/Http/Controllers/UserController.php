@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    public function create(Request $request){
+    public function create(Request $request)
+    {
 
 
-        if (!Auth::check() || Auth::user()->role !== 'librarian') {
+        if (!Auth::check() || Auth::user()->role_id !== 2) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
         $validator = Validator::make($request->all(), [
@@ -23,7 +24,7 @@ class UserController extends Controller
             'email' => 'required|string|email|unique:users,email',
             'username' => 'required|string|unique:users,username',
             'jmbg' => 'required|regex:/^\d{13}$/|unique:users,jmbg',
-            'role' => 'required|in:student,librarian',
+            'role_id' => 'required|exists:roles,id',
             'profile_picture' => 'nullable|image|max:5120',
             'password' => 'required|min:8',
         ]);
@@ -31,6 +32,8 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
+        $role = Role::findOrFail($request->role_id);
+
         $profilePicturePath = null;
         if ($request->hasFile('profile_picture')) {
             $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
@@ -42,7 +45,7 @@ class UserController extends Controller
             'email' => $request->email,
             'username' => $request->username,
             'jmbg' => $request->jmbg,
-            'role' => $request->role,
+            'role_id' => $role->id,
             'profile_picture' => $profilePicturePath,
             'password' => Hash::make($request->password),
         ]);
@@ -52,9 +55,10 @@ class UserController extends Controller
             'user' => $user
         ], 201);
     }
+
     public function show($username)
     {
-        $user=User::where('username', $username)->first();
+        $user = User::where('username', $username)->first();
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
@@ -64,32 +68,33 @@ class UserController extends Controller
             'email' => $user->email,
             'username' => $user->username,
             'jmbg' => $user->jmbg,
-            'role' => $user->role,
+            'role' => $user->role->name,
             'profile_picture_url' => $user->profile_picture
                 ? route('user.profilePicture', ['username' => $user->username])
                 : null,
         ]);
 
 
-
     }
+
     public function profilePicture($username)
     {
-        $user=User::where('username', $username)->first();
+        $user = User::where('username', $username)->first();
         if (!$user || !$user->profile_picture) {
             return response()->json(['error' => 'Profile picture not found'], 404);
         }
         return response()->file(storage_path('app/public/' . $user->profile_picture));
     }
+
     public function update(Request $request)
     {
         $user = Auth::user();
         $validator = Validator::make($request->all(), [
-            'first_name' => 'sometimes|required|string',
-            'last_name' => 'sometimes|required|string',
-            'email' => 'sometimes|required|string|email|unique:users,email, '. $user->id,
-            'username' => 'sometimes|required|string|unique:users,username,' . $user->id,
-            'jmbg' => 'sometimes|required|regex:/^\d{13}$/'
+            'first_name' => 'sometimes|string',
+            'last_name' => 'sometimes|string',
+            'email' => 'sometimes|string|email|unique:users,email, ' . $user->id,
+            'username' => 'sometimes|string|unique:users,username,' . $user->id,
+            'jmbg' => 'sometimes|regex:/^\d{13}$/'
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
@@ -102,6 +107,7 @@ class UserController extends Controller
             'user' => $user
         ]);
     }
+
     public function updateProfilePicture(Request $request)
     {
         $user = Auth::user();
@@ -112,11 +118,39 @@ class UserController extends Controller
             $path = $request->file('profile_picture')->store('profile_pictures', 'public');
         }
         $path = $request->file('profile_picture')->store('profile_pictures', 'public');
-        $user->profile_picture =$path;
+        $user->profile_picture = $path;
         $user->save();
         return response()->json([
             'message' => 'Profile picture updated successfully.',
             'profile_picture_url' => route('user.profilePicture', ['username' => $user->username])
+        ]);
+    }
+
+    public function index(Request $request)
+    {
+        $request->validate([
+            'role_id' => 'required|exists:roles,id',
+            'per_page' => 'nullable|integer|in:20,50,100',
+            'search_value' => 'nullable|string',
+        ]);
+        $query = User::where('role_id', $request->role_id);
+
+        if ($request->filled('search_value')) {
+            $search = strtolower($request->search_value);
+            $query->where(function ($q) use ($search) {
+                $q->whereRaw('LOWER(first_name) LIKE ?', ["%$search%"])
+                    ->orWhereRaw('LOWER(last_name) LIKE ?', ["%$search%"])
+                    ->orWhereRaw('LOWER(email) LIKE ?', ["%$search%"])
+                    ->orWhereRaw('LOWER(username) LIKE ?', ["%$search%"]);
+            });
+        }
+
+        $per_page = $request->per_page ?? 20;
+        $users = $query->paginate($per_page);
+
+        return response()->json([
+            'message' => 'Users retrieved successfully.',
+            'data' => $users
         ]);
     }
 }
