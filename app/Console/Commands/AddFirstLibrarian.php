@@ -37,6 +37,7 @@ class AddFirstLibrarian extends Command
             'password' => 'required|min:8',
             'confirm_password' => 'required|same:password',
         ]);
+
         if ($validator->fails()) {
             $this->error('Validation Error');
             foreach ($validator->errors()->all() as $error) {
