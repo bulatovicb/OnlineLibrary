@@ -161,12 +161,31 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'No users found.',
                 'data' => []
-            ],404);
+            ], 404);
         }
 
         return response()->json([
             'message' => 'Users retrieved successfully.',
             'data' => $users
+        ]);
+    }
+
+    public function destroy(Request $request)
+    {
+        $selectedUsers = $request->input('users_id');
+
+        if (!is_array($selectedUsers)) {
+            $selectedUsers = [$selectedUsers];
+        }
+        $usersToDelete = User::whereIn('id', $selectedUsers)->get();
+
+        foreach ($usersToDelete as $user) {
+            $user->delete();
+        }
+
+        return response()->json([
+            'message' => 'Users deleted successfully.',
+
         ]);
     }
 }

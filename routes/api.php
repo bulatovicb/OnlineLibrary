@@ -15,4 +15,4 @@ Route::patch('/user/update', [UserController::class, 'update'])->middleware('aut
 Route::post('user/update-profile-picture', [UserController::class, 'updateProfilePicture'])->middleware('auth:sanctum');
 
 Route::get('users', [UserController::class, 'index'])->middleware('auth:sanctum', 'librarian');
-Route::delete('users/{username}', [UserController::class, 'destroy'])->middleware('auth:sanctum', 'librarian');
+Route::delete('users', [UserController::class, 'destroy'])->middleware('auth:sanctum', 'librarian');
