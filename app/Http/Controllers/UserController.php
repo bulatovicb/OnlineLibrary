@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -130,11 +131,16 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $request->validate([
-            'role_id' => 'required|exists:roles,id',
-            'per_page' => 'nullable|integer|in:20,50,100',
-            'search_value' => 'nullable|string',
-        ]);
+        try {
+            $validated = $request->validate([
+                'role_id' => 'required|exists:roles,id',
+                'per_page' => 'nullable|integer|in:20,50,100',
+                'search_value' => 'nullable|string',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
+
 
         $query = User::where('role_id', $request->role_id);
 
@@ -150,6 +156,13 @@ class UserController extends Controller
 
         $per_page = $request->per_page ?? 20;
         $users = $query->paginate($per_page);
+
+        if ($users->isEmpty()) {
+            return response()->json([
+                'message' => 'No users found.',
+                'data' => []
+            ],404);
+        }
 
         return response()->json([
             'message' => 'Users retrieved successfully.',
