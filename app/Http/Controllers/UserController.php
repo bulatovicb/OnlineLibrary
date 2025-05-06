@@ -13,8 +13,6 @@ class UserController extends Controller
 {
     public function create(Request $request)
     {
-
-
         if (!Auth::check() || Auth::user()->role_id !== 2) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
@@ -35,6 +33,7 @@ class UserController extends Controller
         $role = Role::findOrFail($request->role_id);
 
         $profilePicturePath = null;
+
         if ($request->hasFile('profile_picture')) {
             $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
         }
@@ -59,6 +58,7 @@ class UserController extends Controller
     public function show($username)
     {
         $user = User::where('username', $username)->first();
+
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
@@ -73,13 +73,12 @@ class UserController extends Controller
                 ? route('user.profilePicture', ['username' => $user->username])
                 : null,
         ]);
-
-
     }
 
     public function profilePicture($username)
     {
         $user = User::where('username', $username)->first();
+
         if (!$user || !$user->profile_picture) {
             return response()->json(['error' => 'Profile picture not found'], 404);
         }
@@ -96,6 +95,7 @@ class UserController extends Controller
             'username' => 'sometimes|string|unique:users,username,' . $user->id,
             'jmbg' => 'sometimes|regex:/^\d{13}$/'
         ]);
+
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
@@ -114,12 +114,14 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'profile_picture' => 'nullable|image|max:5120',
         ]);
+
         if ($request->hasFile('profile_picture')) {
             $path = $request->file('profile_picture')->store('profile_pictures', 'public');
         }
         $path = $request->file('profile_picture')->store('profile_pictures', 'public');
         $user->profile_picture = $path;
         $user->save();
+
         return response()->json([
             'message' => 'Profile picture updated successfully.',
             'profile_picture_url' => route('user.profilePicture', ['username' => $user->username])
@@ -133,6 +135,7 @@ class UserController extends Controller
             'per_page' => 'nullable|integer|in:20,50,100',
             'search_value' => 'nullable|string',
         ]);
+
         $query = User::where('role_id', $request->role_id);
 
         if ($request->filled('search_value')) {
