@@ -170,6 +170,15 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Deletes  selected users based on provided user IDs.
+     * Accessible only by authenticated librarians.
+     * Accepts a single ID or an array od users IDs.
+     * Returns JSON response with success message.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Request $request)
     {
         $selectedUsers = $request->input('users_id');
