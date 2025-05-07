@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    /**
+     * Handles user login via email and password.
+     * Validates credentials. checks if the provided password matches the stored hash.
+     * Return JSON response with a generated Bearer token on success.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -32,6 +40,14 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Handles user logout.
+     * Checks if the user is authenticated.
+     * Deletes current access token and returns JSON response confirming successful logout.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout(Request $request)
     {
         if (!Auth::check()) {
