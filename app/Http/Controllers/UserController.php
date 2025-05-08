@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Auth\Notifications\ResetPasswordNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+
 
 class UserController extends Controller
 {
@@ -24,7 +26,7 @@ class UserController extends Controller
     public function create(Request $request)
     {
 
-        if (!Auth::check() || Auth::user()->isLibrarian()) {
+        if (!Auth::check() || !Auth::user()->isLibrarian()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
         $validator = Validator::make($request->all(), [
@@ -180,7 +182,7 @@ class UserController extends Controller
             'profile_picture_url' => $user->profile_picture
                 ? route('user.profilePicture', ['username' => $user->username])
                 : null,
-            ]);
+        ]);
     }
 
     /**
@@ -218,6 +220,34 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Users retrieved successfully.',
             'data' => $users
+        ]);
+    }
+
+    /**
+     * Deletes  selected users based on provided user IDs.
+     * Accessible only by authenticated librarians.
+     * Accepts a single ID or an array od users IDs.
+     * Returns JSON response with success message.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Request $request)
+    {
+        $selectedUsers = $request->input('users_id');
+
+        if (!is_array($selectedUsers)) {
+            $selectedUsers = [$selectedUsers];
+        }
+        $usersToDelete = User::whereIn('id', $selectedUsers)->get();
+
+        foreach ($usersToDelete as $user) {
+            $user->delete();
+        }
+
+        return response()->json([
+            'message' => 'Users deleted successfully.',
+
         ]);
     }
 }
