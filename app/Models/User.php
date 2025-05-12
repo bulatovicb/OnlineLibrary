@@ -18,7 +18,6 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'username',
-        'role',
         'email',
         'password',
         'jmbg',
@@ -50,4 +49,12 @@ class User extends Authenticatable
     {
         return $this->role_id === Role::LIBRARIAN;
     }
+
+    // App\Models\User.php
+
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
+
 }

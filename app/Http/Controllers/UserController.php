@@ -69,50 +69,35 @@ class UserController extends Controller
     }
 
     /**
-     * Shows user profile data based on provided username.
-     * Accessible only by authenticated librarians.
-     * Returns error if user is not found.
-     * Returns a JSON response containing users first name, last name, email, jmbg, role and profile picture (if available).
+     *  Shows user profile data based on provided username.
+     *  Accessible only by authenticated librarians.
+     *  Returns error if user is not found.
+     *  Returns a JSON response.
      *
-     * @param $username
+     * @param User $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($username)
+    public function show(User $user)
     {
-        $user = User::where('username', $username)->first();
-
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
-        return response()->json([
-            'first_name' => $user->first_name,
-            'last_name' => $user->last_name,
-            'email' => $user->email,
-            'username' => $user->username,
-            'jmbg' => $user->jmbg,
-            'role' => $user->role->name,
-            'profile_picture_url' => $user->profile_picture
-                ? route('user.profilePicture', ['username' => $user->username])
-                : null,
-        ]);
-
+        return response()->json([]);
 
     }
 
     /**
-     * Returns the profile picture of a user based on the provided username.
-     * Accessible only by authenticated librarians.
-     * Returns JSON error response if the user or the profile picture is not found.
-     * Otherwise, returns the image file.
+     *  Returns the profile picture of a user based on the provided username.
+     *  Accessible only by authenticated librarians.
+     *  Returns JSON error response if the user or the profile picture is not found.
+     *  Otherwise, returns the image file.
      *
-     * @param $username
+     * @param User $user
      * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function profilePicture($username)
+    public function profilePicture(User $user)
     {
-        $user = User::where('username', $username)->first();
-
-        if (!$user || !$user->profile_picture) {
+        if (!$user->profile_picture) {
             return response()->json(['error' => 'Profile picture not found'], 404);
         }
         return response()->file(storage_path('app/public/' . $user->profile_picture));
@@ -163,7 +148,7 @@ class UserController extends Controller
         $user = Auth::user();
 
         $validator = Validator::make($request->all(), [
-            'profile_picture' => 'nullable|image|max:5120',
+            'profile_picture' => 'required|image|max:5120',
         ]);
 
         if ($validator->fails()) {
@@ -179,7 +164,7 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Profile picture updated successfully.',
             'profile_picture_url' => $user->profile_picture
-                ? route('user.profilePicture', ['username' => $user->username])
+                ? route('user.profilePicture', ['user' => $user])
                 : null,
         ]);
     }
@@ -212,10 +197,10 @@ class UserController extends Controller
         if ($request->filled('search_value')) {
             $search = strtolower($request->search_value);
             $query->where(function ($q) use ($search) {
-                $q->whereRaw('LOWER(first_name) LIKE ?', ["%$search%"])
-                    ->orWhereRaw('LOWER(last_name) LIKE ?', ["%$search%"])
-                    ->orWhereRaw('LOWER(email) LIKE ?', ["%$search%"])
-                    ->orWhereRaw('LOWER(username) LIKE ?', ["%$search%"]);
+                $q->whereRaw('first_name ILIKE ?', ["%$search%"])
+                    ->orWhereRaw('last_name ILIKE ?', ["%$search%"])
+                    ->orWhereRaw('email ILIKE ?', ["%$search%"])
+                    ->orWhereRaw('username ILIKE ?', ["%$search%"]);
             });
         }
 
