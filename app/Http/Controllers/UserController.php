@@ -236,11 +236,7 @@ class UserController extends Controller
         if (!is_array($selectedUsers)) {
             $selectedUsers = [$selectedUsers];
         }
-        $usersToDelete = User::whereIn('id', $selectedUsers)->get();
-
-        foreach ($usersToDelete as $user) {
-            $user->delete();
-        }
+        User::whereIn('id', $selectedUsers)->delete();
 
         return response()->json([
             'message' => 'Users deleted successfully.',
