@@ -24,6 +24,7 @@ services:
         depends_on:
             - mysql
             - redis
+            - postgres
 
     mysql:
         image: 'mysql/mysql-server:8.0'
@@ -57,10 +58,26 @@ services:
         networks:
             - sail
 
+    postgres:
+        image: postgres:17
+        container_name: onlinelibrary-postgres
+        environment:
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD}'
+        ports:
+            - "5432:5432"
+        networks:
+            - sail
+        volumes:
+            - 'sail-postgres:/var/lib/postgresql/data'
+
 networks:
     sail:
         driver: bridge
 
 volumes:
     sail-mysql:
+        driver: local
+    sail-postgres:
         driver: local
