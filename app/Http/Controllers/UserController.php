@@ -239,6 +239,7 @@ class UserController extends Controller
         if (!is_array($selectedUsers)) {
             $selectedUsers = [$selectedUsers];
         }
+
         User::whereIn('id', $selectedUsers)->delete();
 
         return response()->json([
