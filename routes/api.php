@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+
 
 Route::post('login', [\App\Http\Controllers\AuthController::class, 'login']);
 
@@ -20,4 +23,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::delete('users/{user}', [UserController::class, 'destroy']);
     });
 });
+
 

@@ -23,11 +23,12 @@ class UserController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function create(Request $request)
-    {
+    {     
 
         if (!Auth::check() || !Auth::user()->isLibrarian()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
+      
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -79,6 +80,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+       
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
@@ -97,6 +99,7 @@ class UserController extends Controller
      */
     public function profilePicture(User $user)
     {
+
         if (!$user->profile_picture) {
             return response()->json(['error' => 'Profile picture not found'], 404);
         }
