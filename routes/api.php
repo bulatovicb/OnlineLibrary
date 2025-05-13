@@ -3,16 +3,25 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
-Route::post('login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::post('create', [UserController::class, 'create'])->middleware('auth:sanctum', 'librarian');
-Route::get('users/{username}', [UserController::class, 'show'])->middleware('auth:sanctum', 'librarian');
-Route::get('/users/{username}/profile-picture', [UserController::class, 'profilePicture'])->middleware('auth:sanctum', 'librarian')->name('user.profilePicture');
+Route::post('login', [\App\Http\Controllers\AuthController::class, 'login']);
 
-Route::patch('/user/update', [UserController::class, 'update'])->middleware('auth:sanctum');
-Route::post('user/update-profile-picture', [UserController::class, 'updateProfilePicture'])->middleware('auth:sanctum');
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::post('logout', [AuthController::class, 'logout']);
 
-Route::get('users', [UserController::class, 'index'])->middleware('auth:sanctum', 'librarian');
-Route::delete('users/{username}', [UserController::class, 'destroy'])->middleware('auth:sanctum', 'librarian');
+    Route::patch('/user/update', [UserController::class, 'update']);
+    Route::post('user/update-profile-picture', [UserController::class, 'updateProfilePicture']);
+
+    Route::middleware(['librarian'])->group(function () {
+        Route::post('create', [UserController::class, 'create']);
+        Route::get('users', [UserController::class, 'index']);
+        Route::get('users/{user}', [UserController::class, 'show']);
+        Route::get('/users/{user}/profile-picture', [UserController::class, 'profilePicture'])->name('user.profilePicture');
+        Route::delete('users/{user}', [UserController::class, 'destroy']);
+    });
+});
+
+
