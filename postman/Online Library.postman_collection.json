@@ -69,7 +69,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"pavle@mail.com\",\n    \"password\": \"Pavle123!1\"\n}",
+							"raw": "{\n    \"email\": \"bpoppopa@mail.coom\",\n    \"password\": \"novalozinka\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -409,7 +409,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"token\": \"498adcc89511c9afd35017b0a3ac60db14ccdd6cc6c24d1009d5e7aa111084f5\",\n  \"email\": \"proba@example.com\",\n  \"password\": \"newpassword123\",\n  \"password_confirmation\": \"newpassword123\"\n}\n",
+							"raw": "{\n  \"password\": \"novaloninnka\",\n  \"password_confirmation\": \"novaloninnka\"\n  \n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -417,7 +417,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/reset-password",
+							"raw": "http://localhost/api/reset-password?token=f753a3c755c7c51516e71017da6ce24179b4cae69fee251bca2b6c56c6f54f11&email=bpoppopa%40mail.coom",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -425,6 +425,16 @@
 							"path": [
 								"api",
 								"reset-password"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "f753a3c755c7c51516e71017da6ce24179b4cae69fee251bca2b6c56c6f54f11"
+								},
+								{
+									"key": "email",
+									"value": "bpoppopa%40mail.coom"
+								}
 							]
 						}
 					},
