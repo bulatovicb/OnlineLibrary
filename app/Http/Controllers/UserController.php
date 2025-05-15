@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\LibrarianCreated;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,18 +18,19 @@ class UserController extends Controller
      * Accessible only by authenticated librarians.
      * Checks if the user is authorised.
      * Validates the provided profile data and creates a new user if validation passes.
+     * If the user is Librarian, triggers the LibrarianCreated event after it is created.
      * Returns a JSON response with the user data and a success message.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function create(Request $request)
-    {     
+    {
 
         if (!Auth::check() || !Auth::user()->isLibrarian()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
-      
+
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -63,6 +65,10 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        if ($role->id === Role::LIBRARIAN) {
+            event(new LibrarianCreated($user));
+        }
+
         return response()->json([
             'message' => 'User created successfully.',
             'user' => $user
@@ -80,7 +86,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-       
+
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
