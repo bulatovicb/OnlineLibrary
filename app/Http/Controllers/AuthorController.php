@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Author;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -205,9 +206,30 @@ class AuthorController extends Controller
 
         return response()->json([
             'message' => 'Picture updated successfully',
-            'picture_url'=>$author->picture
+            'picture_url' => $author->picture
                 ? route('author.authorsPicture', ['author' => $author])
                 : null,
+        ]);
+    }
+
+    /**
+     * Deletes author.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns a JSON response with success message.
+     *
+     * @param Author $author
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Author $author)
+    {
+        if ($author->picture && Storage::disk('public')->exists($author->picture)) {
+            Storage::disk('public')->delete($author->picture);
+        }
+        $author->delete();
+
+        return response()->json([
+            'message' => 'Author deleted successfully',
         ]);
     }
 }
