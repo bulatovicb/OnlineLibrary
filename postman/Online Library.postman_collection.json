@@ -466,7 +466,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "9|q5bnz2RCTDmyjZ6oqtW9pCHDReRkyMMZjJaRfWUNd111b6fc",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
 									"type": "string"
 								}
 							]
@@ -474,13 +474,29 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"first_name\": \"proba\",\n  \"last_name\": \"proba\",\n  \"biography\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\",\n  \"picture\": \"\"\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "Nesto",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "nestoo",
+									"type": "text"
+								},
+								{
+									"key": "biography",
+									"value": "aljkjagkkgjggakjjkafhfakfhjk",
+									"type": "text"
+								},
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-14 13-08-14.png"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "http://localhost/api/authors",
@@ -491,6 +507,74 @@
 							"path": [
 								"api",
 								"authors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Author View",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost/api/authors/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Author's picture",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/authors/2/picture",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"2",
+								"picture"
 							]
 						}
 					},

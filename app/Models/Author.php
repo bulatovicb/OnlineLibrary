@@ -15,4 +15,5 @@ class Author extends Model
         'biography',
         'picture',
     ];
+
 }

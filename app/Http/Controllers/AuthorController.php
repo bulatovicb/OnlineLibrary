@@ -55,4 +55,41 @@ class AuthorController extends Controller
             'author' => $author
         ], 201);
     }
+
+    /**
+     * Display author's profile data based on provided id.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns a JSON response with authors data.
+     * Automatically returns 404 if the author is not found.
+     *
+     * @param Author $author
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Author $author)
+    {
+
+        return response()->json(['author' => $author], 200);
+
+    }
+
+    /**
+     * Returns the picture of an author based on the provided id.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns JSON error response if the author or the picture is not found.
+     * Otherwise, returns the image file.
+     *
+     * @param Author $author
+     * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function authorsPicture(Author $author)
+    {
+        if (!$author->picture) {
+            return response()->json(['error' => 'Picture not found'], 404);
+        }
+
+        return response()->file(storage_path('app/public/' . $author->picture));
+
+    }
 }
