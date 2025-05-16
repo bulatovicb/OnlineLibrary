@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/authors/create', [AuthorController::class, 'create']);
         Route::get('/authors/{author}', [AuthorController::class, 'show']);
         Route::get('/authors/{author}/picture', [AuthorController::class, 'authorsPicture'])->name('author.authorsPicture');
+        Route::get('/authors', [AuthorController::class, 'index']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
