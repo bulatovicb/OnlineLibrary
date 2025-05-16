@@ -141,4 +141,73 @@ class AuthorController extends Controller
             'data' => $authors
         ]);
     }
+
+    /**
+     * Updates the author's data.
+     *
+     * Accessible only by authenticated librarians.
+     * Validates the provided input attributes and returns error message if validator fails.
+     * On success, updates the author's data and returns JSON response with success message.
+     *
+     * @param Request $request
+     * @param Author $author
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, Author $author)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'sometimes|string',
+            'last_name' => 'sometimes|string',
+            'biography' => 'sometimes|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
+        $data = $request->only(['first_name', 'last_name', 'biography']);
+        $author->update($data);
+
+        return response()->json([
+            'message' => 'Author updated successfully',
+            'author' => $author
+        ]);
+    }
+
+    /**
+     * Updates the author's picture.
+     *
+     * Accessible only by authenticated librarians.
+     * Validates the uploaded image file.
+     * If a valid image is provided, it is stored and the author's picture path is updated.
+     * Returns a JSON response with a success message and the URL to the new picture.
+     *
+     * @param Request $request
+     * @param Author $author
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updatePicture(Request $request, Author $author)
+    {
+        $validator = Validator::make($request->all(), [
+            'picture' => 'required|image|max:5120',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
+        if ($request->hasFile('picture')) {
+            $picturePath = $request->file('picture')->store('picture', 'public');
+            $author->picture = $picturePath;
+            $author->save();
+        }
+
+        return response()->json([
+            'message' => 'Picture updated successfully',
+            'picture_url'=>$author->picture
+                ? route('author.authorsPicture', ['author' => $author])
+                : null,
+        ]);
+    }
 }
