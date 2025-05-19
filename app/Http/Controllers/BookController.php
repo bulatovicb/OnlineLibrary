@@ -46,7 +46,6 @@ class BookController extends Controller
             'publishers' => 'nullable|array',
             'publishers.*' => 'exists:publishers,id',
             'images' => 'nullable|array',
-            'images.*.path' => 'required|string',
             'images.*.type' => ['required', Rule::in(['front_cover', 'back_cover', 'artwork'])],
         ]);
 
@@ -66,19 +65,32 @@ class BookController extends Controller
             'dimensions'
         ]));
 
+        if ($request->hasFile('images')) {
+
+            foreach ($request->file('images') as $index => $image) {
+                $imageType = $request->input("images.$index.type");
+
+                if (!$imageType) {
+                    return response()->json(['error' => "Image type is required for each image."], 422);
+                }
+
+                if (!$image instanceof \Illuminate\Http\UploadedFile) {
+                    continue;
+                }
+
+                $imagePath = $image->store('book_images', 'public');
+
+                $book->images()->create([
+                    'path' => $imagePath,
+                    'type' => $imageType,
+                ]);
+            }
+        }
+
         $book->categories()->attach($request->categories);
         $book->genres()->attach($request->genres);
         $book->authors()->attach($request->authors);
         $book->publishers()->attach($request->publishers);
-
-        if ($request->has('images')) {
-            foreach ($request->images as $image) {
-                $book->images()->create([
-                    'path' => $image['path'],
-                    'type' => $image['type'],
-                ]);
-            }
-        }
 
 
         return response()->json([
@@ -89,18 +101,39 @@ class BookController extends Controller
 
     }
 
+
     /**
      * Displays book's data based on provided id.
      *
      * Accessible only by authenticated librarians.
      * Returns a JSON response with book data.
      * Automatically returns 404 if the author is not found.
-     * 
+     *
      * @param Book $book
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Book $book)
     {
         return response()->json(['book' => $book], 200);
+    }
+
+    /**
+     * Displays front cover of the book.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns JSON error response if the author or the picture is not found.
+     *  Otherwise, returns the image file.
+     * 
+     * @param Book $book
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function bookPicture(Book $book)
+    {
+
+        $frontCover = $book->images->firstWhere('type', 'front_cover');
+        if (!$frontCover) {
+            return response()->json(['error' => 'Picture not found'], 404);
+        }
+        return response()->file(storage_path('app/public/' . $frontCover->path));
     }
 }

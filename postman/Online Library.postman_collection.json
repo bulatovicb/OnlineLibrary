@@ -500,7 +500,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost/api/books/6",
+							"raw": "http://localhost/api/books/20",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -508,7 +508,45 @@
 							"path": [
 								"api",
 								"books",
-								"6"
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Book picture",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n"
+						},
+						"url": {
+							"raw": "http://localhost/api/books/20/picture",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+								"20",
+								"picture"
 							]
 						}
 					},
