@@ -14,6 +14,11 @@ class Image extends Model
         'type'
     ];
 
+    /**
+     * Gets the book associated with this image.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function book()
     {
         return $this->belongsTo(Book::class);

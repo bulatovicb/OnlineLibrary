@@ -446,10 +446,41 @@
 			"name": "Book management",
 			"item": [
 				{
-					"name": "Book management",
+					"name": "Book create",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/books/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+								"create"
+							]
+						}
 					},
 					"response": []
 				}
