@@ -46,7 +46,6 @@ class BookController extends Controller
             'publishers' => 'nullable|array',
             'publishers.*' => 'exists:publishers,id',
             'images' => 'nullable|array',
-            'images.*.path' => 'required|string',
             'images.*.type' => ['required', Rule::in(['front_cover', 'back_cover', 'artwork'])],
         ]);
 
@@ -66,19 +65,32 @@ class BookController extends Controller
             'dimensions'
         ]));
 
+        if ($request->hasFile('images')) {
+
+            foreach ($request->file('images') as $index => $image) {
+                $imageType = $request->input("images.$index.type");
+
+                if (!$imageType) {
+                    return response()->json(['error' => "Image type is required for each image."], 422);
+                }
+
+                if (!$image instanceof \Illuminate\Http\UploadedFile) {
+                    continue;
+                }
+
+                $imagePath = $image->store('book_images', 'public');
+
+                $book->images()->create([
+                    'path' => $imagePath,
+                    'type' => $imageType,
+                ]);
+            }
+        }
+
         $book->categories()->attach($request->categories);
         $book->genres()->attach($request->genres);
         $book->authors()->attach($request->authors);
         $book->publishers()->attach($request->publishers);
-
-        if ($request->has('images')) {
-            foreach ($request->images as $image) {
-                $book->images()->create([
-                    'path' => $image['path'],
-                    'type' => $image['type'],
-                ]);
-            }
-        }
 
 
         return response()->json([
@@ -88,4 +100,6 @@ class BookController extends Controller
         ], 201);
 
     }
+
+
 }
