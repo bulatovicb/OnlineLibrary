@@ -88,4 +88,19 @@ class BookController extends Controller
         ], 201);
 
     }
+
+    /**
+     * Displays book's data based on provided id.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns a JSON response with book data.
+     * Automatically returns 404 if the author is not found.
+     * 
+     * @param Book $book
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Book $book)
+    {
+        return response()->json(['book' => $book], 200);
+    }
 }
