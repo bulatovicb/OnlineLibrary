@@ -17,75 +17,428 @@
 				{
 					"name": "CreateUser",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "6|u19YhRYWmv9jneNBzeOaOvSKxxA64GRW0qHjOKng8ba1fdb2",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"first_name\": \"proba\",\n  \"last_name\": \"proba\",\n  \"email\": \"bpoppopa@mail.coom\",\n  \"username\": \"ppppppa\",\n  \"jmbg\": \"6236000890902\",\n  \"password\": \"tajna123\",\n  \"role_id\": 2\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"create"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Login",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"bpoppopa@mail.coom\",\n    \"password\": \"novalozinka\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Logout",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "14|RzxxA3Nx1mkiEH5Cmj5urvXXw8uSiWu6YYBJmwBa0ead95a4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"bojana@mail.com \",\n    \"password\": \"bojana123\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"logout"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "User view",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|4KE2pMP494hCfO6mjfMti6zuPh5in0URv7wXnRex06149cc7",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/users/bojana",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"users",
+								"bojana"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Profile Picture",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|4KE2pMP494hCfO6mjfMti6zuPh5in0URv7wXnRex06149cc7",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/users/bojana/profile-picture",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"users",
+								"bojana",
+								"profile-picture"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Update",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "5|78QhhbtG4Cn4LcSPtVPmznAe5bCJGuW40aXKaqy9ad135b06",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"Promjena\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/user/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"user",
+								"update"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Update Profile Picture",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|4KE2pMP494hCfO6mjfMti6zuPh5in0URv7wXnRex06149cc7",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profile_picture",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-12 14-18-29.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/user/update-profile-picture",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"user",
+								"update-profile-picture"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "List All Users",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "6|u19YhRYWmv9jneNBzeOaOvSKxxA64GRW0qHjOKng8ba1fdb2",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/users?role_id=2&per_page=20&search_value=prob",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "role_id",
+									"value": "2"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								},
+								{
+									"key": "search_value",
+									"value": "prob"
+								}
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "Delete",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "6|u19YhRYWmv9jneNBzeOaOvSKxxA64GRW0qHjOKng8ba1fdb2",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\n{\n    \"users_id\":[\"11\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/users/blabla",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"users",
+								"blabla"
+							]
+						}
 					},
 					"response": []
-
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"bpoppopa@mail.coom\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/forgot-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"password\": \"novaloninnka\",\n  \"password_confirmation\": \"novaloninnka\"\n  \n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/reset-password?token=f753a3c755c7c51516e71017da6ce24179b4cae69fee251bca2b6c56c6f54f11&email=bpoppopa%40mail.coom",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"reset-password"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "f753a3c755c7c51516e71017da6ce24179b4cae69fee251bca2b6c56c6f54f11"
+								},
+								{
+									"key": "email",
+									"value": "bpoppopa%40mail.coom"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -104,11 +457,143 @@
 		},
 		{
 			"name": "Author management",
-			"item": []
+			"item": [
+				{
+					"name": "Author Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "Nesto",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "nestoo",
+									"type": "text"
+								},
+								{
+									"key": "biography",
+									"value": "aljkjagkkgjggakjjkafhfakfhjk",
+									"type": "text"
+								},
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-14 13-08-14.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/authors",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Author View",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost/api/authors/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Author's picture",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/authors/2/picture",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"2",
+								"picture"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Book reservation",
-			"item": []
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Book borrow",
