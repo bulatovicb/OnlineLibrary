@@ -195,8 +195,6 @@ class AuthorController extends Controller
         return response()->json([
             'message' => 'Picture updated successfully',
             'picture_url' => $author->picture
-                ? route('author.authorsPicture', ['author' => $author])
-                : null,
         ]);
     }
 
