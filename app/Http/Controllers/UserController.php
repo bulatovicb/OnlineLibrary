@@ -124,11 +124,11 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $validator = Validator::make($request->all(), [
-            'first_name' => 'sometimes|required|string',
-            'last_name' => 'sometimes|required|string',
-            'email' => 'sometimes|required|string|email|unique:users,email, ' . $user->id,
-            'username' => 'sometimes|required|string|unique:users,username,' . $user->id,
-            'jmbg' => 'sometimes|required|regex:/^\d{13}$/'
+            'first_name' => 'sometimes|string',
+            'last_name' => 'sometimes|string',
+            'email' => 'sometimes|string|email|unique:users,email, ' . $user->id,
+            'username' => 'sometimes|string|unique:users,username,' . $user->id,
+            'jmbg' => 'sometimes|regex:/^\d{13}$/'
         ]);
 
         if ($validator->fails()) {

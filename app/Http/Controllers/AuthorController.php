@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -24,10 +23,6 @@ class AuthorController extends Controller
      */
     public function create(Request $request)
     {
-
-        if (!Auth::check() || !Auth::user()->isLibrarian()) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
 
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string',
@@ -158,9 +153,9 @@ class AuthorController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'first_name' => 'sometimes|string',
-            'last_name' => 'sometimes|string',
-            'biography' => 'sometimes|string',
+            'first_name' => 'nullable|string',
+            'last_name' => 'nullable|string',
+            'biography' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
