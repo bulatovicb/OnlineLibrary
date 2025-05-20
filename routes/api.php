@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PasswordResetController;
-use App\Http\Controllers\AuthorController;
 
 Route::post('login', [AuthController::class, 'login']);
 
@@ -21,6 +21,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/users/{user}/profile-picture', [UserController::class, 'profilePicture'])->name('user.profilePicture');
         Route::delete('users/{user}', [UserController::class, 'destroy']);
         Route::post('/authors/create', [AuthorController::class, 'create']);
+
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
