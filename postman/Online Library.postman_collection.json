@@ -69,7 +69,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"pavle@mail.com\",\n    \"password\": \"Pavle123!1\"\n}",
+							"raw": "{\n    \"email\": \"bpoppopa@mail.coom\",\n    \"password\": \"novalozinka\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -409,7 +409,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"token\": \"498adcc89511c9afd35017b0a3ac60db14ccdd6cc6c24d1009d5e7aa111084f5\",\n  \"email\": \"proba@example.com\",\n  \"password\": \"newpassword123\",\n  \"password_confirmation\": \"newpassword123\"\n}\n",
+							"raw": "{\n  \"password\": \"novaloninnka\",\n  \"password_confirmation\": \"novaloninnka\"\n  \n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -417,7 +417,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/reset-password",
+							"raw": "http://localhost/api/reset-password?token=f753a3c755c7c51516e71017da6ce24179b4cae69fee251bca2b6c56c6f54f11&email=bpoppopa%40mail.coom",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -425,6 +425,16 @@
 							"path": [
 								"api",
 								"reset-password"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "f753a3c755c7c51516e71017da6ce24179b4cae69fee251bca2b6c56c6f54f11"
+								},
+								{
+									"key": "email",
+									"value": "bpoppopa%40mail.coom"
+								}
 							]
 						}
 					},
@@ -447,11 +457,218 @@
 		},
 		{
 			"name": "Author management",
-			"item": []
+			"item": [
+				{
+					"name": "Author Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "Nesto",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "nestoo",
+									"type": "text"
+								},
+								{
+									"key": "biography",
+									"value": "aljkjagkkgjggakjjkafhfakfhjk",
+									"type": "text"
+								},
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-14 13-08-14.png"
+
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/authors/2/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"2",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update author's picture",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-16 13-33-48.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/authors/2/update-picture",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"2",
+								"update-picture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Author",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/authors/5/destroy",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"5",
+								"destroy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Author View",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost/api/authors/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Author's picture",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/authors/2/picture",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"2",
+								"picture"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Book reservation",
-			"item": []
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Book borrow",
