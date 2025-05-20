@@ -21,7 +21,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/users/{user}/profile-picture', [UserController::class, 'profilePicture'])->name('user.profilePicture');
         Route::delete('users/{user}', [UserController::class, 'destroy']);
         Route::post('/authors/create', [AuthorController::class, 'create']);
-
+        Route::get('/authors/{author}', [AuthorController::class, 'show']);
+        Route::get('/authors/{author}/picture', [AuthorController::class, 'authorsPicture'])->name('author.authorsPicture');
+        Route::get('/authors', [AuthorController::class, 'index']);
+        Route::patch('/authors/{author}/update', [AuthorController::class, 'update']);
+        Route::post('/authors/{author}/update-picture', [AuthorController::class, 'updatePicture']);
+        Route::delete('/authors/{author}/destroy', [AuthorController::class, 'destroy']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
