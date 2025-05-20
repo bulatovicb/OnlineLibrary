@@ -153,8 +153,8 @@ class AuthorController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'first_name' => 'nullable|string',
-            'last_name' => 'nullable|string',
+            'first_name' => 'sometimes|string',
+            'last_name' => 'sometimes|string',
             'biography' => 'nullable|string',
         ]);
 
