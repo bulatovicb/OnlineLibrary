@@ -125,13 +125,6 @@ class AuthorController extends Controller
         $perPage = $request->per_page ?? 20;
         $authors = $query->paginate($perPage);
 
-        if ($authors->isEmpty()) {
-            return response()->json([
-                'message' => 'No authors found',
-                'data' => []
-            ]);
-        }
-
         return response()->json([
             'message' => 'Authors retrieved successfully',
             'data' => $authors
