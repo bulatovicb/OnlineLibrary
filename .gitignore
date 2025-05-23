@@ -53,3 +53,4 @@ composer.lock
 # NPM/Yarn
 yarn.lock
 npm-debug.log*
+/storage/app/public/*
