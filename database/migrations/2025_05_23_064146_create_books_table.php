@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->text('description');
             $table->integer('number_of_pages');
             $table->integer('number_of_copies_available');
-            $table->string('isbn');
+            $table->string('isbn')->unique();
             $table->string('language');
             $table->string('script');
             $table->string('binding');
