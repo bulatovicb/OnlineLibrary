@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::patch('/authors/{author}/update', [AuthorController::class, 'update']);
         Route::post('/authors/{author}/update-picture', [AuthorController::class, 'updatePicture']);
         Route::delete('/authors/{author}/destroy', [AuthorController::class, 'destroy']);
+
+        Route::get('/books/{book}', [BookController::class, 'show']);
+        Route::get('/books/{book}/picture', [BookController::class, 'bookPicture'])->name('book.bookPicture');
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
