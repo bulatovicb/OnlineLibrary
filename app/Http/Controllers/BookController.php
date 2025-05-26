@@ -3,10 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
-use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
+    /**
+     * Deletes a book.
+     *
+     * Deletes a book and all of its images.
+     *
+     * @param Book $book
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Book $book)
     {
         $book->delete();
