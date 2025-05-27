@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
@@ -13,6 +14,20 @@ class Image extends Model
         'path',
         'type'
     ];
+
+    /**
+     * Deleting event which deletes storage file.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::deleting(function ($image) {
+            if (Storage::disk('public')->exists($image->path)) {
+                Storage::disk('public')->delete($image->path);
+            }
+        });
+    }
 
     /**
      * Gets the book associated with this image.
