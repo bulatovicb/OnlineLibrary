@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\BookDeleting;
 use App\Models\Book;
 
 class BookController extends Controller
@@ -19,7 +18,10 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        event(new BookDeleting($book));
+        $book->images()->each(function ($image) {
+            $image->delete();
+        });
+
         $book->delete();
         return response()->json([
             'message' => 'Book deleted successfully.',

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 
 #[ObservedBy([ImageObserver::class])]
+
 class Image extends Model
 {
     use HasFactory;

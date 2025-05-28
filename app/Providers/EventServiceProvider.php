@@ -24,9 +24,6 @@ class EventServiceProvider extends ServiceProvider
         ],
         LibrarianCreated::class => [
             SendLibrarianSetPasswordEmail::class,
-        ],
-        BookDeleting::class => [
-            onDelete::class,
         ]
     ];
 
