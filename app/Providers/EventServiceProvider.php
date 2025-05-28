@@ -2,14 +2,11 @@
 
 namespace App\Providers;
 
-use App\Events\BookDeleting;
 use App\Events\LibrarianCreated;
-use App\Listeners\onDelete;
 use App\Listeners\SendLibrarianSetPasswordEmail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
