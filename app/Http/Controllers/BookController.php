@@ -97,7 +97,6 @@ class BookController extends Controller
      * @param Book $book
      * @return \Illuminate\Http\JsonResponse
      */
-
     public function show(Book $book)
     {
         return response()->json(['book' => $book], 200);
@@ -128,7 +127,7 @@ class BookController extends Controller
 
 
     }
-    
+
     /**
      * Deletes a book.
      *
