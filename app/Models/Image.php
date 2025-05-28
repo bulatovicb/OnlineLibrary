@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Observers\ImageObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
+
+#[ObservedBy([ImageObserver::class])]
 class Image extends Model
 {
     use HasFactory;
@@ -14,20 +17,6 @@ class Image extends Model
         'path',
         'type'
     ];
-
-    /**
-     * Deleting event which deletes storage file.
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        static::deleting(function ($image) {
-            if (Storage::disk('public')->exists($image->path)) {
-                Storage::disk('public')->delete($image->path);
-            }
-        });
-    }
 
     /**
      * Gets the book associated with this image.
