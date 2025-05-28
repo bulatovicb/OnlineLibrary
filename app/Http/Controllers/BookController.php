@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Book;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-
-
 
 class BookController extends Controller
 {
@@ -88,6 +85,7 @@ class BookController extends Controller
             'message' => 'Book created successfully',
             'book' => $book,
         ], 201);
+    }
 
     /**
      * Displays book's data based on provided id.
@@ -127,5 +125,28 @@ class BookController extends Controller
             'picture_url' => $frontCover->path
         ]);
 
+
+    }
+
+    /**
+     * Deletes a book.
+     *
+     * Dispatch an event before deleting the book to delete all image files from storage related with book.
+     * Deletes a book and all of its images.
+     * Returns JSON response with success message.
+     *
+     * @param Book $book
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Book $book)
+    {
+        $book->images()->each(function ($image) {
+            $image->delete();
+        });
+
+        $book->delete();
+        return response()->json([
+            'message' => 'Book deleted successfully.',
+        ]);
     }
 }
