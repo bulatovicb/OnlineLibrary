@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Book;
+use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -26,7 +27,6 @@ class BookController extends Controller
      */
     public function create(Request $request)
     {
-
         $validator = Validator::make(request()->all(), [
             'name' => 'required',
             'description' => 'required',
@@ -45,12 +45,7 @@ class BookController extends Controller
             'authors.*' => 'exists:authors,id',
             'publishers' => 'nullable|array',
             'publishers.*' => 'exists:publishers,id',
-            'images' => 'nullable|array',
-            'images.*' => 'file|image|max:5120',
-            'image_types' => 'nullable|array',
-            'image_types.*' => ['required', Rule::in(['front_cover', 'back_cover', 'artwork'])],
-
-        ]);
+        ], Image::validationRules());
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
@@ -75,10 +70,7 @@ class BookController extends Controller
             foreach ($images as $index => $image) {
 
                 $path = $image->store('book_images', 'public');
-
-
                 $type = $imageTypes[$index] ?? 'artwork';
-
                 $book->images()->create([
                     'path' => $path,
                     'type' => $type,
@@ -86,14 +78,11 @@ class BookController extends Controller
             }
         }
 
-
         $book->categories()->attach($request->categories);
         $book->genres()->attach($request->genres);
         $book->authors()->attach($request->authors);
         $book->publishers()->attach($request->publishers);
-
         $book->load(['images', 'authors']);
-
 
         return response()->json([
             'message' => 'Book created successfully',
