@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class BookController extends Controller
@@ -31,10 +32,11 @@ class BookController extends Controller
             'number_of_copies_available' => 'sometimes|integer',
             'isbn' => 'sometimes|string|unique:books,isbn' . $book->id,
             'language' => 'sometimes|string',
-            'script' => 'sometimes|string',
-            'binding' => 'sometimes|string',
-            'dimensions' => 'sometimes|array',
+            'script' => 'nullable|string',
+            'binding' => 'nullable|string',
+            'dimensions' => 'nullable|array',
         ]);
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()->all()], 422);
         }
@@ -77,10 +79,10 @@ class BookController extends Controller
             $existingFrontCover = $book->images()->where('type', 'front_cover')->first();
 
             if ($existingFrontCover) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($existingFrontCover->path);
+                Storage::disk('public')->delete($existingFrontCover->path);
                 $existingFrontCover->delete();
             }
-            
+
             $book->images()->create([
                 'path' => $cover_url,
                 'type' => 'front_cover'
