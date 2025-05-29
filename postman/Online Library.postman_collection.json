@@ -447,6 +447,8 @@
 			"item": [
 				{
 					"name": "Book create",
+
+
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -481,6 +483,76 @@
 								"create"
 							]
 						}
+
+					},
+					"response": []
+				},
+				{
+					"name": "Book View",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n"
+						},
+						"url": {
+							"raw": "http://localhost/api/books/20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Book View Picture",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/books/20/picture",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+								"20",
+								"picture"
+							]
+						}
+
 					},
 					"response": []
 				},
@@ -559,9 +631,15 @@
 							"type": "bearer",
 							"bearer": [
 								{
+
 									"key": "token",
 									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
 									"type": "string"
+
+									"key": "picture",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-14 13-08-14.png"
+
 								}
 							]
 						},
@@ -577,126 +655,38 @@
 							}
 						},
 						"url": {
+
 							"raw": "http://localhost/api/books/20/update",
+
+							"raw": "http://localhost/api/authors",
+
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"api",
+
 								"books",
 								"20",
 								"update"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Book Update Cover",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "front_cover",
-									"type": "file",
-									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-23 13-12-39.png"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://localhost/api/books/20/update-cover",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
-								"books",
-								"20",
-								"update-cover"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Author management",
-			"item": [
-				{
-					"name": "Author Create",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "first_name",
-									"value": "Nesto",
-									"type": "text"
-								},
-								{
-									"key": "last_name",
-									"value": "nestoo",
-									"type": "text"
-								},
-								{
-									"key": "biography",
-									"value": "aljkjagkkgjggakjjkafhfakfhjk",
-									"type": "text"
-								},
-								{
-									"key": "picture",
-									"type": "file",
-									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-14 13-08-14.png"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://localhost/api/authors",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
+
 								"authors"
+
 							]
 						}
 					},
 					"response": []
 				},
 				{
+
+					"name": "Book Update Cover",
+
 					"name": "Author View",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
+
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -736,6 +726,55 @@
 							"type": "bearer",
 							"bearer": [
 								{
+
+									"key": "front_cover",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-23 13-12-39.png"
+
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+
+							"raw": "http://localhost/api/books/20/update-cover",
+
+							"raw": "http://localhost/api/authors/2/picture",
+
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+
+								"books",
+								"20",
+								"update-cover"
+
+								"authors",
+								"2",
+								"picture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+
+					"name": "Book delete",
+					"name": "View all",
+
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
 									"key": "token",
 									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
 									"type": "string"
@@ -744,8 +783,125 @@
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \n    \"name\":\"Promjena\"\n}"
+						},
 						"url": {
-							"raw": "http://localhost/api/authors/2/picture",
+
+							"raw": "http://localhost/api/books/19/destroy",
+
+							"raw": "http://localhost/api/authors?per_page=20",
+
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+								"19",
+								"destroy"
+
+								"authors"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Author management",
+			"item": [
+				{
+					"name": "Author Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "Nestoasdhh",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "nestoo",
+									"type": "text"
+								},
+								{
+									"key": "biography",
+									"value": "aljkjagkkgjggakjjkafhfakfhjk",
+									"type": "text"
+								},
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-14 13-08-14.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/authors/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit author",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\":\"Promjena\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/authors/2/update",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -754,7 +910,79 @@
 								"api",
 								"authors",
 								"2",
-								"picture"
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update author's picture",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-16 13-33-48.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/authors/2/update-picture",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"2",
+								"update-picture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Author",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/authors/5/destroy",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"5",
+								"destroy"
 							]
 						}
 					},
@@ -914,9 +1142,340 @@
 			"item": [
 				{
 					"name": "New Request",
+
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/books/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Book View",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n"
+						},
+						"url": {
+							"raw": "http://localhost/api/books/20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Book View Picture",
+
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/books/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Book View",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n"
+						},
+						"url": {
+							"raw": "http://localhost/api/books/20",
+
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/books/20/picture",
+
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+
+								"20",
+								"picture"
+
+							]
+						}
+					},
+					"response": []
+				},
+				{
+
+					"name": "Book update",
+
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+
+     
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/books/20/picture",
+
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \n    \"name\":\"Promjena\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/books/20/update",
+
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+								"20",
+
+								"update"
+
+							]
+						}
+					},
+					"response": []
+				},
+				{
+
+					"name": "Book update",
+
+					"name": "Book Update Cover",
+
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \n    \"name\":\"Promjena\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/books/20/update",
+
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "front_cover",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-23 13-12-39.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/books/20/update-cover",
+
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+								"20",
+
+								"update"
+
+								"update-cover"
+
+							]
+						}
+					},
+					"response": []
+				},
+				{
+
+					"name": "Book Update Cover",
+
+					"name": "Book delete",
+
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "front_cover",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-23 13-12-39.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/books/20/update-cover",
+
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \n    \"name\":\"Promjena\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost/api/books/19/destroy",
+
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+
+								"19",
+								"destroy"
+
+							]
+						}
 					},
 					"response": []
 				}
@@ -929,6 +1488,506 @@
 		{
 			"name": "Settings",
 			"item": []
+		},
+		{
+			"name": "Category management",
+			"item": [
+				{
+					"name": "Category create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Comedy",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "sasldlkasjflksajljflskalasdw",
+									"type": "text"
+								},
+								{
+									"key": "icon",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-14 13-08-14.png"
+
+								}
+							]
+						},
+						"url": {
+
+							"raw": "http://localhost/api/authors",
+
+							"raw": "http://localhost/api/categories/create",
+
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+
+								"authors"
+
+								"categories",
+								"create"
+
+							]
+						}
+					},
+					"response": []
+				},
+				{
+
+					"name": "Author View",
+
+					"name": "Category view",
+
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost/api/authors/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Author's picture",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+
+									"key": "name",
+									"value": "Comedy",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "sasldlkasjflksajljflskalasdw",
+									"type": "text"
+								},
+								{
+									"key": "icon",
+									"type": "file",
+
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-23 13-12-39.png"
+
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+
+							"raw": "http://localhost/api/authors/2/picture",
+
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+
+								"authors",
+								"2",
+								"picture"
+=
+								"categories",
+								"4"
+
+							]
+						}
+					},
+					"response": []
+				},
+				{
+
+					"name": "View all",
+
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/authors?per_page=20",
+
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+
+								"authors"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+
+							]
+						}
+					},
+					"response": []
+				},
+				{
+
+					"name": "Edit author",
+
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+
+							"raw": "{\n    \"first_name\":\"Promjena\"\n}",
+
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+
+
+							"raw": "http://localhost/api/authors/2/update",
+
+
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+
+								"authors",
+								"2",
+
+								"update"
+
+							]
+						}
+					},
+					"response": []
+				},
+				{
+
+
+					"name": "Update author's picture",
+
+
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost/api/authors/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Author's picture",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+=
+									"key": "picture",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-16 13-33-48.png"
+
+
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+
+							"raw": "http://localhost/api/authors/2/picture",
+
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+
+								"authors",
+								"2",
+								"picture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View all",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/authors?per_page=20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+
+								"authors"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+
+							]
+						}
+					},
+					"response": []
+				},
+				{
+
+					"name": "Edit author",
+
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\":\"Promjena\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/authors/2/update",
+
+						"url": {
+
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+
+								"authors",
+								"2",
+								"update"
+
+							]
+						}
+					},
+					"response": []
+				},
+				{
+
+					"name": "Update author's picture",
+
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+
+						"method": "POST",
+
+						"method": "DELETE",
+
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "picture",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-16 13-33-48.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/authors/2/update-picture",
+
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+
+								"authors",
+								"2",
+								"update-picture"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Author",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/authors/5/destroy",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"authors",
+								"5",
+
+								"categories",
+								"4",
+
+								"destroy"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
