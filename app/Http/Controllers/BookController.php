@@ -6,7 +6,7 @@ use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Validation\Rule;
 class BookController extends Controller
 {
 
@@ -30,11 +30,11 @@ class BookController extends Controller
             'description' => 'sometimes|string',
             'number_of_pages' => 'sometimes|integer',
             'number_of_copies_available' => 'sometimes|integer',
-            'isbn' => 'sometimes|string|unique:books,isbn' . $book->id,
+            'isbn' => 'sometimes|string|unique:books,isbn,' . $book->id,
             'language' => 'sometimes|string',
-            'script' => 'nullable|string',
-            'binding' => 'nullable|string',
-            'dimensions' => 'nullable|array',
+            'script' => ['nullable', Rule::in(Book::SCRIPTS)],
+            'binding' => ['nullable', Rule::in(Book::BINDINGS)],
+            'dimensions' => ['nullable', Rule::in(Book::DIMENSIONS)],
         ]);
 
         if ($validator->fails()) {
