@@ -24,7 +24,7 @@ class BookController extends Controller
      */
     public function create(Request $request)
     {
-        $validator = Validator::make(request()->all(), [
+        $validator = Validator::make(request()->all(), array_merge([
             'name' => 'required',
             'description' => 'required',
             'number_of_pages' => 'required',
@@ -42,7 +42,7 @@ class BookController extends Controller
             'authors.*' => 'exists:authors,id',
             'publishers' => 'nullable|array',
             'publishers.*' => 'exists:publishers,id',
-        ], Image::validationRules());
+        ], Image::validationRules()));
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
@@ -79,7 +79,7 @@ class BookController extends Controller
         $book->genres()->attach($request->genres);
         $book->authors()->attach($request->authors);
         $book->publishers()->attach($request->publishers);
-        $book->load(['images', 'authors']);
+        $book->load(['images', 'authors', 'categories', 'genres', 'publishers']);
 
         return response()->json([
             'message' => 'Book created successfully',
