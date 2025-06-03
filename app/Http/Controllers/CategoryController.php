@@ -21,8 +21,8 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'description' => 'required|string',
+            'name' => 'required|string|max:500',
+            'description' => 'required|string|max:500',
             'icon' => 'nullable|image|max:5120',
         ]);
 
@@ -31,7 +31,7 @@ class CategoryController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-        
+
         $iconPath = null;
 
         if ($request->hasFile('icon')) {
