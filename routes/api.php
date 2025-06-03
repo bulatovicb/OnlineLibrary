@@ -36,6 +36,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::delete('/books/{book}/destroy', [BookController::class, 'destroy']);
 
         Route::get('/genres' , [GenreController::class, 'index']);
+        Route::get('/genres/{genre}', [GenreController::class, 'show']);
+
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Genre;
 use Illuminate\Http\Request;
 
+
 class GenreController extends Controller
 {
     /**
@@ -41,5 +42,20 @@ class GenreController extends Controller
             'message' => "Success",
             'genres' => $genres
         ]);
+
+     * Shows a genre.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns a JSON response with the genre data.
+     * Automatically returns 404 if the genre is not found.
+     *
+     * @param Genre $genre
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Genre $genre)
+    {
+        return response()->json([
+            'genre' => $genre
+        ], 200);
     }
 }
