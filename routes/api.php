@@ -36,6 +36,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::delete('/books/{book}/destroy', [BookController::class, 'destroy']);
 
         Route::post('/genres/create', [GenreController::class, 'create']);
+        Route::get('/genres/{genre}', [GenreController::class, 'show']);
+
 
     });
 });
