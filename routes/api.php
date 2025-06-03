@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\GenreController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
@@ -33,6 +34,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/books/{book}', [BookController::class, 'show']);
         Route::get('/books/{book}/picture', [BookController::class, 'bookPicture'])->name('book.bookPicture');
         Route::delete('/books/{book}/destroy', [BookController::class, 'destroy']);
+
+        Route::get('/genres/{genre}', [GenreController::class, 'show']);
 
     });
 });
