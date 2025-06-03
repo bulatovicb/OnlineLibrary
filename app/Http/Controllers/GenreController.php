@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Validator;
 
 class GenreController extends Controller
 {
+    /**
+     * Creates a new genre for books.
+     *
+     * Validates the provided genre data and creates a new genre if validation passes.
+     * Returns a JSON response with created genre.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request)
     {
         $validator = Validator::make(request()->all(), [
