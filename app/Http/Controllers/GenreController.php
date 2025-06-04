@@ -42,7 +42,7 @@ class GenreController extends Controller
             'message' => "Success",
             'genres' => $genres
         ]);
-
+    }
     /**
     * Creates new book.
     *
