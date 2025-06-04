@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Genre;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 
 class GenreController extends Controller
 {
@@ -43,6 +43,41 @@ class GenreController extends Controller
             'genres' => $genres
         ]);
 
+    /**
+    * Creates new book.
+    *
+    * Accessible only by authenticated librarians.
+    * Validates the provided book's data via CreateBookRequest.
+    * Handles image uploads if any and store the image.
+    * Attaches related models and eager load related data before returning response.
+    * Returns a JSON response with created book and its relations.
+    *
+    * @param CreateBookRequest $request
+    * @return \Illuminate\Http\JsonResponse
+    */
+    public function create(Request $request)
+    {
+        $validator = Validator::make(request()->all(), [
+            'name' => 'required|string|max:500|unique:genres,name',
+            'description' => 'required|max:500',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $genre = Genre::create([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+
+        return response()->json([
+            'message' => 'Genre created successfully.',
+            'genre' => $genre,
+        ], 201);
+    }
+
+     /**
      * Shows a genre.
      *
      * Accessible only by authenticated librarians.
