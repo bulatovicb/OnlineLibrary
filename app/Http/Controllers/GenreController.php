@@ -9,14 +9,52 @@ use Illuminate\Support\Facades\Validator;
 class GenreController extends Controller
 {
     /**
-     * Creates a new genre for books.
+     * Returns a paginated list of genres with optional search filtering.
      *
-     * Validates the provided genre data and creates a new genre if validation passes.
-     * Returns a JSON response with created genre.
+     * Accessible only to authenticated librarians.
+     * Supports case-insensitive partial matching on the name and description fields (ILIKE).
+     * Supports pagination with per-page values of 20 (default), 50, or 100.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+    public function index(Request $request)
+    {
+        request()->validate([
+            'per_page' => 'integer|nullable|in:20,50,100',
+            'search_value' => 'string|nullable',
+        ]);
+
+        $query = Genre::query();
+
+        if ($request->filled('search_value')) {
+            $search = $request->search_value;
+            $query->where(function ($q) use ($search) {
+                $q->whereRaw('name ILIKE ?', ["%$search%"])
+                    ->orWhereRaw('description ILIKE ?', ["%$search%"]);
+            });
+        }
+
+        $perPage = $request->per_page ?? 20;
+        $genres = $query->paginate($perPage);
+
+        return response()->json([
+            'message' => "Success",
+            'genres' => $genres
+        ]);
+
+    /**
+    * Creates new book.
+    *
+    * Accessible only by authenticated librarians.
+    * Validates the provided book's data via CreateBookRequest.
+    * Handles image uploads if any and store the image.
+    * Attaches related models and eager load related data before returning response.
+    * Returns a JSON response with created book and its relations.
+    *
+    * @param CreateBookRequest $request
+    * @return \Illuminate\Http\JsonResponse
+    */
     public function create(Request $request)
     {
         $validator = Validator::make(request()->all(), [
