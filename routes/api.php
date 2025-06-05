@@ -33,12 +33,15 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/books/create', [BookController::class, 'create']);
         Route::get('/books/{book}', [BookController::class, 'show']);
         Route::get('/books/{book}/picture', [BookController::class, 'bookPicture'])->name('book.bookPicture');
+        Route::patch('/books/{book}/update', [BookController::class, 'update']);
+        Route::post('/books/{book}/update-cover', [BookController::class, 'updateCover']);
         Route::delete('/books/{book}/destroy', [BookController::class, 'destroy']);
 
         Route::get('/genres' , [GenreController::class, 'index']);
         Route::post('/genres/create', [GenreController::class, 'create']);
         Route::get('/genres/{genre}', [GenreController::class, 'show']);
         Route::patch('/genres/{genre}/update', [GenreController::class, 'update']);
+        Route::delete('genres/{genre}/destroy', [GenreController::class, 'destroy']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);

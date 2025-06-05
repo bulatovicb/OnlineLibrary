@@ -94,8 +94,8 @@ class GenreController extends Controller
             'genre' => $genre
         ], 200);
     }
-
-    /**
+  
+     /**
      * Updates the genre's details.
      *
      * Accessible only by authenticated librarians.
@@ -123,6 +123,23 @@ class GenreController extends Controller
         return response()->json([
             'message' => 'Genre updated successfully.',
             'genre' => $genre,
+        ]);
+    }
+  
+     /**
+     * Deletes a genre.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns a JSON response with a success message.
+     *
+     * @param Genre $genre
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Genre $genre)
+    {
+        $genre->delete();
+        return response()->json([
+            'message' => 'Genre deleted successfully.',
         ]);
     }
 }
