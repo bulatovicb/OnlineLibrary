@@ -43,18 +43,19 @@ class GenreController extends Controller
             'genres' => $genres
         ]);
     }
+
     /**
-    * Creates new book.
-    *
-    * Accessible only by authenticated librarians.
-    * Validates the provided book's data via CreateBookRequest.
-    * Handles image uploads if any and store the image.
-    * Attaches related models and eager load related data before returning response.
-    * Returns a JSON response with created book and its relations.
-    *
-    * @param CreateBookRequest $request
-    * @return \Illuminate\Http\JsonResponse
-    */
+     * Creates new book.
+     *
+     * Accessible only by authenticated librarians.
+     * Validates the provided book's data via CreateBookRequest.
+     * Handles image uploads if any and store the image.
+     * Attaches related models and eager load related data before returning response.
+     * Returns a JSON response with created book and its relations.
+     *
+     * @param CreateBookRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request)
     {
         $validator = Validator::make(request()->all(), [
@@ -77,7 +78,7 @@ class GenreController extends Controller
         ], 201);
     }
 
-     /**
+    /**
      * Shows a genre.
      *
      * Accessible only by authenticated librarians.
@@ -92,5 +93,22 @@ class GenreController extends Controller
         return response()->json([
             'genre' => $genre
         ], 200);
+    }
+
+    /**
+     * Deletes a genre.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns a JSON response with a success message.
+     *
+     * @param Genre $genre
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Genre $genre)
+    {
+        $genre->delete();
+        return response()->json([
+            'message' => 'Genre deleted successfully.',
+        ]);
     }
 }
