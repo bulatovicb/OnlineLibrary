@@ -43,19 +43,18 @@ class GenreController extends Controller
             'genres' => $genres
         ]);
     }
-
     /**
-     * Creates new book.
-     *
-     * Accessible only by authenticated librarians.
-     * Validates the provided book's data via CreateBookRequest.
-     * Handles image uploads if any and store the image.
-     * Attaches related models and eager load related data before returning response.
-     * Returns a JSON response with created book and its relations.
-     *
-     * @param CreateBookRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     */
+    * Creates new book.
+    *
+    * Accessible only by authenticated librarians.
+    * Validates the provided book's data via CreateBookRequest.
+    * Handles image uploads if any and store the image.
+    * Attaches related models and eager load related data before returning response.
+    * Returns a JSON response with created book and its relations.
+    *
+    * @param CreateBookRequest $request
+    * @return \Illuminate\Http\JsonResponse
+    */
     public function create(Request $request)
     {
         $validator = Validator::make(request()->all(), [
@@ -78,7 +77,7 @@ class GenreController extends Controller
         ], 201);
     }
 
-    /**
+     /**
      * Shows a genre.
      *
      * Accessible only by authenticated librarians.
@@ -93,36 +92,5 @@ class GenreController extends Controller
         return response()->json([
             'genre' => $genre
         ], 200);
-    }
-
-    /**
-     * Updates the genre's details.
-     *
-     * Accessible only by authenticated librarians.
-     * Validates the provided input attributes and returns an error message if validation fails.
-     * On success, updates the genre's data and returns a JSON response with a success message.
-     *
-     * @param Request $request
-     * @param Genre $genre
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function update(Request $request, Genre $genre)
-    {
-        $validator = Validator::make(request()->all(), [
-            'name' => 'sometimes|string|max:500',
-            'description' => 'nullable|max:500',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $data = $request->only(['name', 'description']);
-        $genre->update($data);
-
-        return response()->json([
-            'message' => 'Genre updated successfully.',
-            'genre' => $genre,
-        ]);
     }
 }

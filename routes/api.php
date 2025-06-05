@@ -38,7 +38,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/genres' , [GenreController::class, 'index']);
         Route::post('/genres/create', [GenreController::class, 'create']);
         Route::get('/genres/{genre}', [GenreController::class, 'show']);
-        Route::patch('/genres/{genre}/update', [GenreController::class, 'update']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
