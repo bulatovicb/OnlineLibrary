@@ -94,8 +94,39 @@ class GenreController extends Controller
             'genre' => $genre
         ], 200);
     }
+  
+     /**
+     * Updates the genre's details.
+     *
+     * Accessible only by authenticated librarians.
+     * Validates the provided input attributes and returns an error message if validation fails.
+     * On success, updates the genre's data and returns a JSON response with a success message.
+     *
+     * @param Request $request
+     * @param Genre $genre
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, Genre $genre)
+    {
+        $validator = Validator::make(request()->all(), [
+            'name' => 'sometimes|string|max:500',
+            'description' => 'nullable|max:500',
+        ]);
 
-    /**
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $data = $request->only(['name', 'description']);
+        $genre->update($data);
+
+        return response()->json([
+            'message' => 'Genre updated successfully.',
+            'genre' => $genre,
+        ]);
+    }
+  
+     /**
      * Deletes a genre.
      *
      * Accessible only by authenticated librarians.
