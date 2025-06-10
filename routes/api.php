@@ -6,6 +6,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookImportController;
 
 Route::post('login', [AuthController::class, 'login']);
 
@@ -35,6 +36,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::patch('/books/{book}/update', [BookController::class, 'update']);
         Route::post('/books/{book}/update-cover', [BookController::class, 'updateCover']);
         Route::delete('/books/{book}/destroy', [BookController::class, 'destroy']);
+
+        Route::post('/import-books', [BookImportController::class, 'import']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
