@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateBookRequest;
 use App\Models\Book;
-use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -12,59 +11,6 @@ use Illuminate\Validation\Rule;
 
 class BookController extends Controller
 {
-    /**
-     *  Creates new book.
-     *
-     *  Accessible only by authenticated librarians.
-     *  Validates the provided book's data via CreateBookRequest.
-     *  Handles image uploads if any and store the image.
-     *  Attaches related models and eager load related data before returning response.
-     *  Returns a JSON response with created book and its relations.
-     *
-     * @param CreateBookRequest $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function create(CreateBookRequest $request)
-    {
-        $book = Book::create($request->only([
-            'name',
-            'description',
-            'number_of_pages',
-            'number_of_copies_available',
-            'isbn',
-            'language',
-            'script',
-            'binding',
-            'dimensions'
-        ]));
-
-        if ($request->hasFile('images')) {
-            $images = $request->file('images');
-            $imageTypes = $request->input('image_types', []);
-
-            foreach ($images as $index => $image) {
-
-                $path = $image->store('book_images', 'public');
-                $type = $imageTypes[$index] ?? 'artwork';
-                $book->images()->create([
-                    'path' => $path,
-                    'type' => $type,
-                ]);
-            }
-        }
-
-        $book->categories()->attach($request->categories);
-        $book->genres()->attach($request->genres);
-        $book->authors()->attach($request->authors);
-        $book->publishers()->attach($request->publishers);
-        $book->load(['images', 'authors', 'genres']);
-
-        return response()->json([
-            'message' => 'Book created successfully',
-            'book' => $book,
-        ], 201);
-    }
-
     /**
      * Displays book's data based on provided id.
      *
@@ -78,6 +24,42 @@ class BookController extends Controller
     public function show(Book $book)
     {
         return response()->json(['book' => $book], 200);
+    }
+
+    /**
+     * Returns a paginated list of books with optional search filtering.
+     *
+     * Accessible only by authenticated librarians.
+     * Supports case-insensitive partial matching on first and last name (ILIKE).
+     * Supports pagination with per-page values of 20 (default), 50, or 100.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
+    {
+        request()->validate([
+            'per_page' => 'integer|nullable|in:20,50,100',
+            'search_value' => 'string|nullable',
+        ]);
+
+        $query = Book::query()->with(['images', 'authors', 'genres', 'categories']);
+
+        if ($request->filled('search_value')) {
+            $search = $request->search_value;
+            $query->where(function ($q) use ($search) {
+                $q->whereRaw('name ILIKE ?', ["%$search%"])
+                    ->orWhereRaw('description ILIKE ?', ["%$search%"]);
+            });
+        }
+
+        $perPage = $request->per_page ?? 20;
+        $books = $query->paginate($perPage);
+
+        return response()->json([
+            'message' => 'Books retrieved successfully',
+            'books' => $books
+        ]);
     }
 
     /**
@@ -103,7 +85,7 @@ class BookController extends Controller
             'picture_url' => $frontCover->path
         ]);
     }
-  
+
     /**
      * Updates the book's data.
      *
@@ -189,7 +171,59 @@ class BookController extends Controller
             'picture_url' => $cover_url
         ]);
     }
-  
+
+    /**
+     *  Creates new book.
+     *
+     *  Accessible only by authenticated librarians.
+     *  Validates the provided book's data via CreateBookRequest.
+     *  Handles image uploads if any and store the image.
+     *  Attaches related models and eager load related data before returning response.
+     *  Returns a JSON response with created book and its relations.
+     *
+     * @param CreateBookRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function create(CreateBookRequest $request)
+    {
+        $book = Book::create($request->only([
+            'name',
+            'description',
+            'number_of_pages',
+            'number_of_copies_available',
+            'isbn',
+            'language',
+            'script',
+            'binding',
+            'dimensions'
+        ]));
+
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            $imageTypes = $request->input('image_types', []);
+
+            foreach ($images as $index => $image) {
+
+                $path = $image->store('book_images', 'public');
+                $type = $imageTypes[$index] ?? 'artwork';
+                $book->images()->create([
+                    'path' => $path,
+                    'type' => $type,
+                ]);
+            }
+        }
+
+        $book->categories()->attach($request->categories);
+        $book->genres()->attach($request->genres);
+        $book->authors()->attach($request->authors);
+        $book->publishers()->attach($request->publishers);
+        $book->load(['images', 'authors', 'genres']);
+
+        return response()->json([
+            'message' => 'Book created successfully',
+            'book' => $book,
+        ], 201);
+    }
 
     /**
      * Deletes a book.

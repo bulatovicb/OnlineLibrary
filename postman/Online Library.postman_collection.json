@@ -8,10 +8,6 @@
 	},
 	"item": [
 		{
-			"name": "Dashboard",
-			"item": []
-		},
-		{
 			"name": "User management",
 			"item": [
 				{
@@ -667,6 +663,54 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Book view all",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"queries\": [\"harry potter\", \"lord of the rings\"],\n  \"email\": \"bpoppopa@mail.coom\",\n  \"number_of_copies_available\": 5\n}"
+						},
+						"url": {
+							"raw": "http://localhost/api/books",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "search_value",
+									"value": "oook",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -966,299 +1010,7 @@
 			"name": "Settings",
 			"item": []
 		},
-		{
-			"name": "Category management",
-			"item": [
-				{
-					"name": "Category create",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "name",
-									"value": "Comedy",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "sasldlkasjflksajljflskalasdw",
-									"type": "text"
-								},
-								{
-									"key": "icon",
-									"type": "file",
-									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-23 13-12-39.png"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://localhost/api/categories/create",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
-								"categories",
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Category view",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "name",
-									"value": "Comedy",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "sasldlkasjflksajljflskalasdw",
-									"type": "text"
-								},
-								{
-									"key": "icon",
-									"type": "file",
-									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-23 13-12-39.png"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://localhost/api/categories/4",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
-								"categories",
-								"4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Category Icon view",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost/api/categories/4/icon",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
-								"categories",
-								"4",
-								"icon"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Category Update",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\":\"Comedy\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost/api/categories/4/update",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
-								"categories",
-								"4",
-								"update"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Category Update Icon",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "icon",
-									"type": "file",
-									"src": [
-										"/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-26 12-41-34.png",
-										"/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-23 13-12-39.png"
-									]
-								}
-							]
-						},
-						"url": {
-							"raw": "http://localhost/api/categories/3/update-icon",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
-								"categories",
-								"3",
-								"update-icon"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Category view all",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost/api/categories?per_page=20&search_value=sas",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
-								"categories"
-							],
-							"query": [
-								{
-									"key": "per_page",
-									"value": "20"
-								},
-								{
-									"key": "search_value",
-									"value": "sas"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Category delete",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost/api/categories/4/destroy",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
-								"categories",
-								"4",
-								"destroy"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
+		
 		{
 			"name": "Genre management",
 			"item": [
