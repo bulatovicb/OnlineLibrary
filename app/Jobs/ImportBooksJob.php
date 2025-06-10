@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Book;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -10,7 +11,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Bus\Batchable;
 
 class ImportBooksJob implements ShouldQueue
 {
@@ -29,7 +29,14 @@ class ImportBooksJob implements ShouldQueue
     }
 
     /**
+     *
      * Execute the job.
+     *
+     * Fetches books from Google Books API based on search query and saves them to database.
+     * Implements rate limiting (5 requests per minute).
+     * Creates or updates book records with available data from API response.
+     *
+     * @return void
      */
     public function handle(): void
     {

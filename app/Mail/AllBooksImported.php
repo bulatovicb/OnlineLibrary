@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
@@ -21,6 +22,8 @@ class AllBooksImported extends Mailable
 
     /**
      * Get the message envelope.
+     * Subject for received email.
+     *
      */
     public function envelope(): Envelope
     {
@@ -29,6 +32,16 @@ class AllBooksImported extends Mailable
         );
     }
 
+    /**
+     * Get the message content definition.
+     * Returns the email content using the all-books-imported template
+     */
+    public function content(): Content
+    {
+        return new Content(
+            view: 'emails.all-books-imported',
+        );
+    }
 
     /**
      * Get the attachments for the message.
@@ -38,12 +51,6 @@ class AllBooksImported extends Mailable
     public function attachments(): array
     {
         return [];
-    }
-
-    public function build()
-    {
-        return $this->subject('All Books Imported')
-            ->html('<h1>Books Import Completed</h1><p>All book import tasks have been successfully completed.</p>');
     }
 
 

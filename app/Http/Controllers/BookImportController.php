@@ -3,14 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ImportBooksJob;
-use Illuminate\Http\Request;
+use App\Mail\AllBooksImported;
 use Illuminate\Bus\Batch;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\AllBooksImported;
 
 class BookImportController extends Controller
 {
+    /**
+     * Imports books based on a search query and set their availability.
+     *
+     * Accessible only by authenticated librarians.
+     * Validates the incoming request
+     * Extracts the search query and number of copies
+     * Dispatches a background job to handle the book import process asynchronously.
+     * Returns a JSON response confirming the import was initiated.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function import(Request $request)
     {
         $request->validate([
@@ -31,6 +43,19 @@ class BookImportController extends Controller
         ]);
     }
 
+    /**
+     * Imports multiple books in batch based on multiple search queries.
+     *
+     * Validates the incoming request parameters.
+     * Gets the number of copies or default to 1 if not provided.
+     * Creates a collection of ImportBooksJob instances for each query.
+     * Dispatch all jobs as a batch and send email notification when complete.
+     * Returns a JSON response confirming the batch import was started.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
     public function importBatch(Request $request)
     {
         $validated = $request->validate([
