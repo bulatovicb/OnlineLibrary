@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Models\Image;
 use App\Observers\ImageObserver;
-use Illuminate\Cache\RateLimiter;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Cache\RateLimiting\Limit;
 

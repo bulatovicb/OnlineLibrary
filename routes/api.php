@@ -38,6 +38,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::delete('/books/{book}/destroy', [BookController::class, 'destroy']);
 
         Route::post('/import-books', [BookImportController::class, 'import']);
+        Route::post('/import-books-batch', [BookImportController::class, 'importBatch']);
+
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
