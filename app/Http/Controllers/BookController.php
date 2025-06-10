@@ -57,7 +57,7 @@ class BookController extends Controller
         $book->genres()->attach($request->genres);
         $book->authors()->attach($request->authors);
         $book->publishers()->attach($request->publishers);
-        $book->load(['images', 'authors']);
+        $book->load(['images', 'authors', 'genres']);
 
         return response()->json([
             'message' => 'Book created successfully',

@@ -1,0 +1,8 @@
+Script started, output log file is '='.
+[?2004h[0;32mcodeus@codeus: [0;34mOnlineLibrary [0;31m(task/OL3-71/Import-book-data)[0m$ \q./vendor/bin/sail artisan queue:work[C[C[C[C[C[C[C[4Ptinkerqueue:work^C[?2004l[?2004h[?2004l
+[?2004h[0;32mcodeus@codeus: [0;34mOnlineLibrary [0;31m(task/OL3-71/Import-book-data)[0m$ \q
+[?2004lCommand 'q' not found, but can be installed with:
+sudo snap install q                       # version 1.6.3-1, or
+sudo apt  install python3-q-text-as-data  # version 3.1.6-3
+See 'snap info q' for additional versions.
+[?2004h[0;32mcodeus@codeus: [0;34mOnlineLibrary [0;31m(task/OL3-71/Import-book-data)[0m$ sksd

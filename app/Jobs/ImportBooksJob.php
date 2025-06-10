@@ -29,7 +29,6 @@ class ImportBooksJob implements ShouldQueue
     }
 
     /**
-     * 
      * @return void
      */
     public function handle(): void
@@ -59,6 +58,27 @@ class ImportBooksJob implements ShouldQueue
                         'dimensions' => 'N/A',
                     ]);
                 }
+
+        $response = Http::get('https://www.googleapis.com/books/v1/volumes', [
+            'q' => $this->query,
+        ]);
+
+        if ($response->successful()) {
+            $books = $response->json()['items'] ?? [];
+            foreach ($books as $bookData) {
+                $volumeInfo = $bookData['volumeInfo'] ?? [];
+                Book::updateOrCreate([
+                    'name' => $volumeInfo['title'] ?? 'No title',
+                    'description' => $volumeInfo['description'] ?? 'No description',
+                    'number_of_pages' => $volumeInfo['pageCount'] ?? 0,
+                    'number_of_copies_available' => $this->copiesAvailable,
+                    'isbn' => $volumeInfo['industryIdentifiers'][0]['identifier'] ?? uniqid(),
+                    'language' => $volumeInfo['language'] ?? 'unknown',
+                    'script' => 'Latin',
+                    'binding' => 'Paperback',
+                    'dimensions' => 'N/A',
+                ]);
+
             }
 
         }

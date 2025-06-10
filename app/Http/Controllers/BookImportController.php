@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class BookImportController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function import(Request $request)
     {
         $request->validate([
