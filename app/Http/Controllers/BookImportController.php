@@ -11,16 +11,19 @@ class BookImportController extends Controller
     {
         $request->validate([
             'query' => 'required|string|min:2',
+            'number_of_copies_available' => 'nullable|integer|min:1',
         ]);
 
         $query = $request->input('query');
+        $copies = $request->input('copiesAvailable');
 
-        ImportBooksJob::dispatch($query);
+        ImportBooksJob::dispatch($query, $copies);
 
         return response()->json([
             'message' => 'Books imported successfully.',
             'status' => 200,
             'query' => $query,
+            'copiesAvailable' => $copies,
         ]);
     }
 }

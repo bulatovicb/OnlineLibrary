@@ -15,13 +15,14 @@ class ImportBooksJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $query;
-
+    protected $copiesAvailable;
     /**
      * Create a new job instance.
      */
-    public function __construct($query)
+    public function __construct($query, $copiesAvailable)
     {
         $this->query = $query;
+        $this->copiesAvailable = $copiesAvailable;
     }
 
     /**
@@ -41,7 +42,12 @@ class ImportBooksJob implements ShouldQueue
                     'name' => $volumeInfo['title'] ?? 'No title',
                     'description' => $volumeInfo['description'] ?? 'No description',
                     'number_of_pages' => $volumeInfo['pageCount'] ?? 0,
-
+                    'number_of_copies_available' => $this->copiesAvailable ,
+                    'isbn' => $volumeInfo['industryIdentifiers'][0]['identifier'] ?? uniqid(),
+                    'language' => $volumeInfo['language'] ?? 'unknown',
+                    'script' => 'Latin',
+                    'binding' => 'Paperback',
+                    'dimensions' => 'N/A',
                 ]);
             }
         }
