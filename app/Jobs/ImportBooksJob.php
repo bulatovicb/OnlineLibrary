@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\RateLimiter;
 
 class ImportBooksJob implements ShouldQueue
 {
@@ -29,22 +30,25 @@ class ImportBooksJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $response = Http::get('https://www.googleapis.com/books/v1/volumes', [
-            'q' => $this->query,
-        ]);
+        RateLimiter::attempt('google-books-api', function () {
 
-        if ($response->successful()) {
-            $books = $response->json()['items'] ?? [];
-            foreach ($books as $bookData) {
-                $volumeInfo = $bookData['volumeInfo'];
-                Book::create([
-                    'name' => $volumeInfo['title'] ?? 'No title',
-                    'description' => $volumeInfo['description'] ?? 'No description',
-                    'number_of_pages' => $volumeInfo['pageCount'] ?? 0,
+            $response = Http::get('https://www.googleapis.com/books/v1/volumes', [
+                'q' => $this->query,
+            ]);
 
-                ]);
+            if ($response->successful()) {
+                $books = $response->json()['items'] ?? [];
+                foreach ($books as $bookData) {
+                    $volumeInfo = $bookData['volumeInfo'];
+                    Book::create([
+                        'name' => $volumeInfo['title'] ?? 'No title',
+                        'description' => $volumeInfo['description'] ?? 'No description',
+                        'number_of_pages' => $volumeInfo['pageCount'] ?? 0,
+
+                    ]);
+                }
             }
-        }
+        }, 100);
 
     }
 }
