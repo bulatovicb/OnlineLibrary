@@ -15,7 +15,7 @@ class BookImportController extends Controller
         ]);
 
         $query = $request->input('query');
-        $copies = $request->input('copiesAvailable');
+        $copies = $request->input('number_of_copies_available') ?? 1;
 
         ImportBooksJob::dispatch($query, $copies);
 
@@ -25,5 +25,6 @@ class BookImportController extends Controller
             'query' => $query,
             'copiesAvailable' => $copies,
         ]);
+
     }
 }
