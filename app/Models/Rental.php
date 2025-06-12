@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,5 +31,17 @@ class Rental extends Model
     public function librarian()
     {
         return $this->belongsTo(User::class, 'librarian_id');
+    }
+
+    public function getDaysRentedAttribute()
+    {
+        return Carbon::now()->diffInDays($this->rented_at);
+    }
+
+    public function getIsOverdueAttribute()
+    {
+        $rentalPeriodDays = Policy::where('name', 'rental_period')->first();
+
+        return $this->days_rented > $rentalPeriodDays && $this-> returned_at=== null;
     }
 }
