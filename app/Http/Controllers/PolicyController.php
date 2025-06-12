@@ -31,13 +31,12 @@ class PolicyController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Policy $policy)
     {
         $request->validate([
             'period' => 'required|integer|min:1',
         ]);
 
-        $policy = Policy::findOrFail($id);
         $policy->update(['period' => $request->period]);
 
         return response()->json([

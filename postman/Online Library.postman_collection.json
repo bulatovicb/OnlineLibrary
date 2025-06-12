@@ -9,7 +9,89 @@
 	"item": [
 		{
 			"name": "Dashboard",
-			"item": []
+			"item": [
+				{
+					"name": "Import Book",
+					"item": [
+						{
+							"name": "Import Book",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"query\": [\"harry potter\"]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost/api/import-books",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"api",
+										"import-books"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Import Batch",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"queries\": [\"harry potter\", \"lord of the rings\"],\n  \"email\": \"bpoppopa@mail.coom\",\n  \"number_of_copies_available\": 5\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost/api/import-books-batch",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"api",
+										"import-books-batch"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
 		},
 		{
 			"name": "User management",
@@ -667,6 +749,54 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Book view all",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"queries\": [\"harry potter\", \"lord of the rings\"],\n  \"email\": \"bpoppopa@mail.coom\",\n  \"number_of_copies_available\": 5\n}"
+						},
+						"url": {
+							"raw": "http://localhost/api/books",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "search_value",
+									"value": "oook",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -949,7 +1079,15 @@
 			"name": "Book reservation",
 			"item": [
 				{
-					"name": "New Request",
+					"name": "Rent a book",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "LImit for rental period",
 					"request": {
 						"method": "GET",
 						"header": []
@@ -1504,6 +1642,79 @@
 									"value": "op",
 									"disabled": true
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Policy",
+			"item": [
+				{
+					"name": "Edit the policy period",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"period\":30\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/policies/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"policies",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all policies",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/policies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"policies"
 							]
 						}
 					},

@@ -45,7 +45,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::delete('genres/{genre}/destroy', [GenreController::class, 'destroy']);
 
         Route::get('/policies' , [PolicyController::class, 'index']);
-        Route::patch('policies/{id}', [PolicyController::class, 'update']);
+        Route::patch('policies/{policy}', [PolicyController::class, 'update']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
