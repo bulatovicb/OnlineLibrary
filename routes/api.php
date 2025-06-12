@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/genres/{genre}', [GenreController::class, 'show']);
         Route::patch('/genres/{genre}/update', [GenreController::class, 'update']);
         Route::delete('genres/{genre}/destroy', [GenreController::class, 'destroy']);
+
+        Route::get('/policies' , [PolicyController::class, 'index']);
+        Route::patch('policies/{id}', [PolicyController::class, 'update']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
