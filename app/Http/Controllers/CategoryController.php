@@ -25,6 +25,7 @@ class CategoryController extends Controller
         ]);
 
         $search = $validated['search_value'] ?? null;
+        $perPage = $validated['per_page'] ?? 20;
 
         $query = Category::query()
             ->when($search, function ($query, $search) {
@@ -35,7 +36,6 @@ class CategoryController extends Controller
 
             });
 
-        $perPage = $request->per_page ?? 20;
         $categories = $query->paginate($perPage);
 
         return response()->json([
