@@ -49,7 +49,7 @@ class CategoryController extends Controller
             'message' => 'Category created successfully',
             'category' => $category
 
-        ], 201);
+       ], 201);
 
     }
 
@@ -69,7 +69,7 @@ class CategoryController extends Controller
             'category' => $category,
         ], 200);
     }
-  
+
     /**
      * Shows a category icon.
      *
@@ -93,7 +93,40 @@ class CategoryController extends Controller
         ]);
     }
 
-    /**
+     /**
+     * Returns a paginated list of categories with optional search filtering.
+     *
+     * Accessible only by authenticated librarians.
+     * Supports case-insensitive partial matching on name and description (ILIKE).
+     * Supports pagination with per-page values of 20 (default), 50, or 100.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
+    {
+        $validated = $request->validate([
+            'per_page' => 'nullable|integer|in:20,50,100',
+            'search_value' => 'nullable|string'
+        ]);
+
+        $search = $validated['search_value'] ?? null;
+        $perPage = $validated['per_page'] ?? 20;
+
+        $categories = Category::when($search, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereRaw('name ILIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('description ILIKE ?', ["%{$search}%"]);
+            });
+        })->paginate($perPage);
+
+        return response()->json([
+            'message' => 'Category list',
+            'categories' => $categories,
+        ]);
+    }
+
+     /**
      * Updates category's details.
      *
      * Accessible only by authenticated librarians.
@@ -151,7 +184,6 @@ class CategoryController extends Controller
             $iconPath = $request->file('icon')->store('icons', 'public');
             $category->icon = $iconPath;
             $category->save();
-
         }
 
         return response()->json([
@@ -159,7 +191,7 @@ class CategoryController extends Controller
             'icon_url' => $category->icon
         ]);
     }
-  
+
      /**
      * Deletes category.
      *
@@ -172,7 +204,6 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-
         if ($category->icon && Storage::disk('public')->exists($category->icon)) {
             Storage::disk('public')->delete($category->icon);
         }
