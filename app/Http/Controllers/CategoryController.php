@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -39,7 +40,7 @@ class CategoryController extends Controller
         ]);
     }
 
-    /**
+     /**
      * Updates category's icon.
      *
      * Accessible only by authenticated librarians.
@@ -72,6 +73,30 @@ class CategoryController extends Controller
         return response()->json([
             'message' => 'Icon updated successfully',
             'icon_url' => $category->icon
+        ]);
+    }
+  
+     /**
+     * Deletes category.
+     *
+     * Accessible only by authenticated librarians.
+     * If the category has an associated icon, the file will be deleted from storage.
+     * Returns a JSON response with success message.
+     *
+     * @param Category $category
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Category $category)
+    {
+
+        if ($category->icon && Storage::disk('public')->exists($category->icon)) {
+            Storage::disk('public')->delete($category->icon);
+        }
+
+        $category->delete();
+
+        return response()->json([
+            'message' => 'Category deleted'
         ]);
     }
 }
