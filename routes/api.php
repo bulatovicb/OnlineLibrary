@@ -34,6 +34,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/categories/create', [CategoryController::class, 'create']);
         Route::get('/categories/{category}', [CategoryController::class, 'show']);
         Route::get('/categories/{category}/icon', [CategoryController::class, 'categoryIcon'])->name('category.categoryIcon');
+        Route::patch('/categories/{category}/update', [CategoryController::class, 'update']);
+        Route::post('/categories/{category}/update-icon', [CategoryController::class, 'updateIcon']);
         Route::delete('/categories/{category}/destroy', [CategoryController::class, 'destroy']);
 
         Route::post('/books/create', [BookController::class, 'create']);
