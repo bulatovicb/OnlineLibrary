@@ -27,16 +27,12 @@ class CategoryController extends Controller
         $search = $validated['search_value'] ?? null;
         $perPage = $validated['per_page'] ?? 20;
 
-        $query = Category::query()
-            ->when($search, function ($query, $search) {
-                $query->where(function ($q) use ($search) {
-                    $q->whereRaw('name ILIKE ?', ["%{$search}%"])
-                        ->orWhereRaw('description ILIKE ?', ["%{$search}%"]);
-                });
-
+        $categories = Category::when($search, function ($query, $search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereRaw('name ILIKE ?', ["%{$search}%"])
+                    ->orWhereRaw('description ILIKE ?', ["%{$search}%"]);
             });
-
-        $categories = $query->paginate($perPage);
+        })->paginate($perPage);
 
         return response()->json([
             'message' => 'Category list',
