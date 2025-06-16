@@ -21,7 +21,7 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:500',
+            'name' => 'required|string|unique:categories,name|max:500',
             'description' => 'required|string|max:500',
             'icon' => 'nullable|image|max:5120',
         ]);
