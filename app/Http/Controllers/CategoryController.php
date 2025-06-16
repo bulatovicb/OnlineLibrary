@@ -69,7 +69,7 @@ class CategoryController extends Controller
             'category' => $category,
         ], 200);
     }
-  
+
     /**
      * Shows a category icon.
      *
@@ -92,7 +92,7 @@ class CategoryController extends Controller
             'icon_url' => $category->icon,
         ]);
     }
-  
+
      /**
      * Returns a paginated list of categories with optional search filtering.
      *
@@ -125,7 +125,7 @@ class CategoryController extends Controller
             'categories' => $categories,
         ]);
     }
-  
+
      /**
      * Updates category's details.
      *
@@ -191,7 +191,7 @@ class CategoryController extends Controller
             'icon_url' => $category->icon
         ]);
     }
-  
+
      /**
      * Deletes category.
      *
@@ -204,7 +204,6 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-
         if ($category->icon && Storage::disk('public')->exists($category->icon)) {
             Storage::disk('public')->delete($category->icon);
         }
