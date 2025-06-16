@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
@@ -29,7 +31,26 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/authors/{author}/update-picture', [AuthorController::class, 'updatePicture']);
         Route::delete('/authors/{author}/destroy', [AuthorController::class, 'destroy']);
 
+        Route::post('/categories/create', [CategoryController::class, 'create']);
+        Route::get('/categories/{category}', [CategoryController::class, 'show']);
+        Route::get('/categories/{category}/icon', [CategoryController::class, 'categoryIcon'])->name('category.categoryIcon');
         Route::get('/categories', [CategoryController::class, 'index']);
+        Route::patch('/categories/{category}/update', [CategoryController::class, 'update']);
+        Route::post('/categories/{category}/update-icon', [CategoryController::class, 'updateIcon']);
+        Route::delete('/categories/{category}/destroy', [CategoryController::class, 'destroy']);
+
+        Route::post('/books/create', [BookController::class, 'create']);
+        Route::get('/books/{book}', [BookController::class, 'show']);
+        Route::get('/books/{book}/picture', [BookController::class, 'bookPicture'])->name('book.bookPicture');
+        Route::patch('/books/{book}/update', [BookController::class, 'update']);
+        Route::post('/books/{book}/update-cover', [BookController::class, 'updateCover']);
+        Route::delete('/books/{book}/destroy', [BookController::class, 'destroy']);
+
+        Route::get('/genres' , [GenreController::class, 'index']);
+        Route::post('/genres/create', [GenreController::class, 'create']);
+        Route::get('/genres/{genre}', [GenreController::class, 'show']);
+        Route::patch('/genres/{genre}/update', [GenreController::class, 'update']);
+        Route::delete('genres/{genre}/destroy', [GenreController::class, 'destroy']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
