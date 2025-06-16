@@ -7,6 +7,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
@@ -31,6 +32,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/authors/{author}/update-picture', [AuthorController::class, 'updatePicture']);
         Route::delete('/authors/{author}/destroy', [AuthorController::class, 'destroy']);
 
+        Route::post('/categories/create', [CategoryController::class, 'create']);
         Route::delete('/categories/{category}/destroy', [CategoryController::class, 'destroy']);
 
         Route::post('/books/create', [BookController::class, 'create']);
