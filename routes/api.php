@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PasswordResetController;
@@ -33,6 +32,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::delete('/authors/{author}/destroy', [AuthorController::class, 'destroy']);
 
         Route::post('/categories/create', [CategoryController::class, 'create']);
+        Route::get('/categories/{category}', [CategoryController::class, 'show']);
+        Route::get('/categories/{category}/icon', [CategoryController::class, 'categoryIcon'])->name('category.categoryIcon');
         Route::delete('/categories/{category}/destroy', [CategoryController::class, 'destroy']);
 
         Route::post('/books/create', [BookController::class, 'create']);
