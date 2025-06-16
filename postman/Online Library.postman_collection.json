@@ -507,7 +507,7 @@
 							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n"
 						},
 						"url": {
-							"raw": "http://localhost/api/books/41",
+							"raw": "http://localhost/api/books/20",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -515,7 +515,7 @@
 							"path": [
 								"api",
 								"books",
-								"41"
+								"20"
 							]
 						}
 					},
@@ -569,7 +569,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \n    \"name\":\"Promjenaaa\"\n}",
+							"raw": "{\n    \n    \"name\":\"Promjena\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -577,7 +577,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/books/6/update",
+							"raw": "http://localhost/api/books/20/update",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -585,7 +585,7 @@
 							"path": [
 								"api",
 								"books",
-								"6",
+								"20",
 								"update"
 							]
 						}
@@ -613,12 +613,12 @@
 								{
 									"key": "front_cover",
 									"type": "file",
-									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-19 13-11-13.png"
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-23 13-12-39.png"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost/api/books/6/update-cover",
+							"raw": "http://localhost/api/books/20/update-cover",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -626,7 +626,7 @@
 							"path": [
 								"api",
 								"books",
-								"6",
+								"20",
 								"update-cover"
 							]
 						}
@@ -650,10 +650,10 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n    \n    \"name\":\"Promjena\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost/api/books/21/destroy",
+							"raw": "http://localhost/api/books/19/destroy",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -661,7 +661,7 @@
 							"path": [
 								"api",
 								"books",
-								"21",
+								"19",
 								"destroy"
 							]
 						}
@@ -693,7 +693,7 @@
 							"formdata": [
 								{
 									"key": "first_name",
-									"value": "Nestoasdhh",
+									"value": "Nesto",
 									"type": "text"
 								},
 								{
@@ -714,15 +714,14 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost/api/authors/create",
+							"raw": "http://localhost/api/authors",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"api",
-								"authors",
-								"create"
+								"authors"
 							]
 						}
 					},
@@ -751,7 +750,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/api/authors/10",
+							"raw": "http://localhost/api/authors/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -759,7 +758,7 @@
 							"path": [
 								"api",
 								"authors",
-								"10"
+								"2"
 							]
 						}
 					},
@@ -1252,258 +1251,6 @@
 								"categories",
 								"4",
 								"destroy"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Genre management",
-			"item": [
-				{
-					"name": "Create genre",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\":\"Epika\",\n    \"description\":\"Epika je književni žanr koji obuhvata narativna dela velikih razmera, često ispunjena epskim herojima, legendarnim bitkama i temama koje istražuju sukobe između dobra i zla, čovekovu sudbinu i njegovu ulogu u svetu. Karakteristično je da epika uključuje opširne opise, složene zaplete i duboko razvijene likove koji putuju kroz vreme, prostor i sopstveni unutrašnji svet. .\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost/api/genres/create",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
-								"genres",
-								"create"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "View genre",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\":\"Fantasy\",\n    \"description\":\"Opis opis Opis opisOpis opis\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost/api/genres/10",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
-								"genres",
-								"10"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "View all genres",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost/api/genres/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
-								"genres",
-								""
-							],
-							"query": [
-								{
-									"key": "per_page",
-									"value": "20",
-									"disabled": true
-								},
-								{
-									"key": "search_value",
-									"value": "op",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update genre",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\":\"Eeeepika\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost/api/genres/10/update",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
-								"genres",
-								"10",
-								"update"
-							],
-							"query": [
-								{
-									"key": "per_page",
-									"value": "20",
-									"disabled": true
-								},
-								{
-									"key": "search_value",
-									"value": "op",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Genre delete",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\":\"Eeeepika\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost/api/genres/8/destroy",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"path": [
-								"api",
-								"genres",
-								"8",
-								"destroy"
-							],
-							"query": [
-								{
-									"key": "per_page",
-									"value": "20",
-									"disabled": true
-								},
-								{
-									"key": "search_value",
-									"value": "op",
-									"disabled": true
-								}
 							]
 						}
 					},
