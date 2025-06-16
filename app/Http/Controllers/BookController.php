@@ -38,28 +38,24 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-        request()->validate([
+        $validated = request()->validate([
             'per_page' => 'integer|nullable|in:20,50,100',
             'search_value' => 'string|nullable',
         ]);
 
-        $query = Book::query()->with(['images', 'authors', 'genres', 'categories']);
+        $search = $validated['search_value'] ?? null;
+        $perPage = $validated['per_page'] ?? 20;
 
-        if ($request->filled('search_value')) {
-            $search = $request->search_value;
-            $query->where(function ($q) use ($search) {
-                $q->whereRaw('name ILIKE ?', ["%$search%"])
-                    ->orWhereRaw('description ILIKE ?', ["%$search%"]);
-            });
-        }
+        $books = Book::with(['images', 'authors', 'genres', 'categories'])
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->whereRaw('name ILIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('description ILIKE ?', ["%{$search}%"]);
+                });
+            })->paginate($perPage);
 
-        $perPage = $request->per_page ?? 20;
-        $books = $query->paginate($perPage);
-
-        return response()->json([
-            'message' => 'Books retrieved successfully',
-            'books' => $books
-        ]);
+        return response()->json(['message' => 'Books retrieved successfully',
+            'books' => $books]);
     }
 
     /**
@@ -72,7 +68,8 @@ class BookController extends Controller
      * @param Book $book
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function bookPicture(Book $book)
+    public
+    function bookPicture(Book $book)
     {
 
         $frontCover = $book->images->firstWhere('type', 'front_cover');
@@ -98,7 +95,8 @@ class BookController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, Book $book)
+    public
+    function update(Request $request, Book $book)
     {
 
         $validator = Validator::make($request->all(), [
@@ -139,7 +137,8 @@ class BookController extends Controller
      * @param Book $book
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateCover(Request $request, Book $book)
+    public
+    function updateCover(Request $request, Book $book)
     {
         $validator = Validator::make($request->all(), [
             'front_cover' => 'required|image|max:5120'
@@ -184,7 +183,8 @@ class BookController extends Controller
      * @param CreateBookRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(CreateBookRequest $request)
+    public
+    function create(CreateBookRequest $request)
     {
         $book = Book::create($request->only([
             'name',
@@ -235,7 +235,8 @@ class BookController extends Controller
      * @param Book $book
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Book $book)
+    public
+    function destroy(Book $book)
     {
         $book->images()->each(function ($image) {
             $image->delete();
