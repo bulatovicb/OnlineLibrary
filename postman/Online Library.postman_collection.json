@@ -8,6 +8,92 @@
 	},
 	"item": [
 		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "Import Book",
+					"item": [
+						{
+							"name": "Import Book",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"query\": [\"harry potter\"]\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost/api/import-books",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"api",
+										"import-books"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Import Batch",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"queries\": [\"harry potter\", \"lord of the rings\"],\n  \"email\": \"bpoppopa@mail.coom\",\n  \"number_of_copies_available\": 5\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost/api/import-books-batch",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"api",
+										"import-books-batch"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
 			"name": "User management",
 			"item": [
 				{
@@ -503,7 +589,7 @@
 							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n"
 						},
 						"url": {
-							"raw": "http://localhost/api/books/20",
+							"raw": "http://localhost/api/books/41",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -511,7 +597,7 @@
 							"path": [
 								"api",
 								"books",
-								"20"
+								"41"
 							]
 						}
 					},
@@ -565,7 +651,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \n    \"name\":\"Promjena\"\n}",
+							"raw": "{\n    \n    \"name\":\"Promjenaaa\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -573,7 +659,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/books/20/update",
+							"raw": "http://localhost/api/books/6/update",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -581,7 +667,7 @@
 							"path": [
 								"api",
 								"books",
-								"20",
+								"6",
 								"update"
 							]
 						}
@@ -609,12 +695,12 @@
 								{
 									"key": "front_cover",
 									"type": "file",
-									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-23 13-12-39.png"
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-19 13-11-13.png"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost/api/books/20/update-cover",
+							"raw": "http://localhost/api/books/6/update-cover",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -622,7 +708,7 @@
 							"path": [
 								"api",
 								"books",
-								"20",
+								"6",
 								"update-cover"
 							]
 						}
@@ -646,10 +732,10 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \n    \"name\":\"Promjena\"\n}"
+							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/api/books/19/destroy",
+							"raw": "http://localhost/api/books/21/destroy",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -657,7 +743,7 @@
 							"path": [
 								"api",
 								"books",
-								"19",
+								"21",
 								"destroy"
 							]
 						}
@@ -687,7 +773,7 @@
 							"raw": "{\n   \"queries\": [\"harry potter\", \"lord of the rings\"],\n  \"email\": \"bpoppopa@mail.coom\",\n  \"number_of_copies_available\": 5\n}"
 						},
 						"url": {
-							"raw": "http://localhost/api/books",
+							"raw": "http://localhost/api/books?per_page=20&search_value=15",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -699,13 +785,11 @@
 							"query": [
 								{
 									"key": "per_page",
-									"value": "20",
-									"disabled": true
+									"value": "20"
 								},
 								{
 									"key": "search_value",
-									"value": "oook",
-									"disabled": true
+									"value": "15"
 								}
 							]
 						}
@@ -737,7 +821,7 @@
 							"formdata": [
 								{
 									"key": "first_name",
-									"value": "Nesto",
+									"value": "Nestoasdhh",
 									"type": "text"
 								},
 								{
@@ -758,14 +842,15 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost/api/authors",
+							"raw": "http://localhost/api/authors/create",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"api",
-								"authors"
+								"authors",
+								"create"
 							]
 						}
 					},
@@ -794,7 +879,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/api/authors/2",
+							"raw": "http://localhost/api/authors/10",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -802,7 +887,7 @@
 							"path": [
 								"api",
 								"authors",
-								"2"
+								"10"
 							]
 						}
 					},
@@ -992,7 +1077,15 @@
 			"name": "Book reservation",
 			"item": [
 				{
-					"name": "New Request",
+					"name": "Rent a book",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "LImit for rental period",
 					"request": {
 						"method": "GET",
 						"header": []
@@ -1009,13 +1102,11 @@
 			"name": "Settings",
 			"item": []
 		},
-
 		{
 			"name": "Category management",
 			"item": [
 				{
 					"name": "Category create",
-
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1030,18 +1121,6 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-
-							"mode": "raw",
-							"raw": "{\n    \"name\":\"Epika\",\n    \"description\":\"Epika je književni žanr koji obuhvata narativna dela velikih razmera, često ispunjena epskim herojima, legendarnim bitkama i temama koje istražuju sukobe između dobra i zla, čovekovu sudbinu i njegovu ulogu u svetu. Karakteristično je da epika uključuje opširne opise, složene zaplete i duboko razvijene likove koji putuju kroz vreme, prostor i sopstveni unutrašnji svet. .\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost/api/genres/create",
-
 							"mode": "formdata",
 							"formdata": [
 								{
@@ -1063,16 +1142,13 @@
 						},
 						"url": {
 							"raw": "http://localhost/api/categories/create",
-
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"api",
-
 								"categories",
-
 								"create"
 							]
 						}
@@ -1080,9 +1156,7 @@
 					"response": []
 				},
 				{
-
 					"name": "Category view",
-
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -1100,7 +1174,6 @@
 						"method": "GET",
 						"header": [],
 						"body": {
-
 							"mode": "formdata",
 							"formdata": [
 								{
@@ -1122,26 +1195,21 @@
 						},
 						"url": {
 							"raw": "http://localhost/api/categories/4",
-
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"api",
-
 								"categories",
 								"4"
-
 							]
 						}
 					},
 					"response": []
 				},
 				{
-
 					"name": "Category Icon view",
-
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1154,31 +1222,25 @@
 							]
 						},
 						"method": "GET",
-
 						"header": [],
 						"url": {
 							"raw": "http://localhost/api/categories/4/icon",
-
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"api",
-
 								"categories",
 								"4",
 								"icon"
-
 							]
 						}
 					},
 					"response": []
 				},
 				{
-
 					"name": "Category Update",
-
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1191,13 +1253,10 @@
 							]
 						},
 						"method": "PATCH",
-
-
 						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"name\":\"Comedy\"\n}",
-
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1205,16 +1264,13 @@
 							}
 						},
 						"url": {
-
 							"raw": "http://localhost/api/categories/4/update",
-
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"api",
-
 								"categories",
 								"4",
 								"update"
@@ -1263,15 +1319,12 @@
 								"3",
 								"update-icon"
 							]
-
 						}
 					},
 					"response": []
 				},
 				{
-
 					"name": "Category view all",
-
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1283,38 +1336,388 @@
 								}
 							]
 						},
-
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost/api/categories?per_page=20&search_value=sas",
-
+							"raw": "http://localhost/api/categories?search_value=horror",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"api",
-
 								"categories"
-
 							],
 							"query": [
 								{
 									"key": "per_page",
-
-									"value": "20"
+									"value": "20",
+									"disabled": true
 								},
 								{
 									"key": "search_value",
-									"value": "sas"
-
+									"value": "horror"
 								}
 							]
 						}
 					},
 					"response": []
-
+				},
+				{
+					"name": "Category delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/categories/4/destroy",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"categories",
+								"4",
+								"destroy"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Genre management",
+			"item": [
+				{
+					"name": "Create genre",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Epika\",\n    \"description\":\"Epika je književni žanr koji obuhvata narativna dela velikih razmera, često ispunjena epskim herojima, legendarnim bitkama i temama koje istražuju sukobe između dobra i zla, čovekovu sudbinu i njegovu ulogu u svetu. Karakteristično je da epika uključuje opširne opise, složene zaplete i duboko razvijene likove koji putuju kroz vreme, prostor i sopstveni unutrašnji svet. .\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/genres/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"genres",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View genre",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Fantasy\",\n    \"description\":\"Opis opis Opis opisOpis opis\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost/api/genres/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"genres",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View all genres",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/genres/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"genres",
+								""
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "search_value",
+									"value": "op",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update genre",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Eeeepika\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/genres/10/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"genres",
+								"10",
+								"update"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "search_value",
+									"value": "op",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Genre delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Eeeepika\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost/api/genres/8/destroy",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"genres",
+								"8",
+								"destroy"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "search_value",
+									"value": "op",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Policy",
+			"item": [
+				{
+					"name": "Edit the policy period",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"period\":30\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/policies/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"policies",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all policies",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/policies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"policies"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

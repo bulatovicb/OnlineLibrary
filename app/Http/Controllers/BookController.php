@@ -38,7 +38,7 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-        $validated = request()->validate([
+        $validated = $request->validate([
             'per_page' => 'integer|nullable|in:20,50,100',
             'search_value' => 'string|nullable',
         ]);
@@ -68,8 +68,7 @@ class BookController extends Controller
      * @param Book $book
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public
-    function bookPicture(Book $book)
+    public function bookPicture(Book $book)
     {
 
         $frontCover = $book->images->firstWhere('type', 'front_cover');
@@ -95,8 +94,7 @@ class BookController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public
-    function update(Request $request, Book $book)
+    public function update(Request $request, Book $book)
     {
 
         $validator = Validator::make($request->all(), [
@@ -137,8 +135,7 @@ class BookController extends Controller
      * @param Book $book
      * @return \Illuminate\Http\JsonResponse
      */
-    public
-    function updateCover(Request $request, Book $book)
+    public function updateCover(Request $request, Book $book)
     {
         $validator = Validator::make($request->all(), [
             'front_cover' => 'required|image|max:5120'
@@ -183,8 +180,7 @@ class BookController extends Controller
      * @param CreateBookRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public
-    function create(CreateBookRequest $request)
+    public function create(CreateBookRequest $request)
     {
         $book = Book::create($request->only([
             'name',
@@ -235,8 +231,7 @@ class BookController extends Controller
      * @param Book $book
      * @return \Illuminate\Http\JsonResponse
      */
-    public
-    function destroy(Book $book)
+    public function destroy(Book $book)
     {
         $book->images()->each(function ($image) {
             $image->delete();
