@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +31,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/authors/{author}/update-picture', [AuthorController::class, 'updatePicture']);
         Route::delete('/authors/{author}/destroy', [AuthorController::class, 'destroy']);
 
+        Route::post('/categories/create', [CategoryController::class, 'create']);
+        Route::get('/categories/{category}', [CategoryController::class, 'show']);
+        Route::get('/categories/{category}/icon', [CategoryController::class, 'categoryIcon'])->name('category.categoryIcon');
+        Route::get('/categories', [CategoryController::class, 'index']);
+        Route::patch('/categories/{category}/update', [CategoryController::class, 'update']);
+        Route::post('/categories/{category}/update-icon', [CategoryController::class, 'updateIcon']);
         Route::delete('/categories/{category}/destroy', [CategoryController::class, 'destroy']);
 
         Route::post('/books/create', [BookController::class, 'create']);
