@@ -57,7 +57,7 @@ class BookController extends Controller
         $book->genres()->attach($request->genres);
         $book->authors()->attach($request->authors);
         $book->publishers()->attach($request->publishers);
-        $book->load(['images', 'authors', 'genres']);
+        $book->load(['images', 'authors', 'genres', 'categories']);
 
         return response()->json([
             'message' => 'Book created successfully',
@@ -103,7 +103,7 @@ class BookController extends Controller
             'picture_url' => $frontCover->path
         ]);
     }
-  
+
     /**
      * Updates the book's data.
      *
@@ -189,7 +189,7 @@ class BookController extends Controller
             'picture_url' => $cover_url
         ]);
     }
-  
+
 
     /**
      * Deletes a book.
