@@ -49,7 +49,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::patch('policies/{policy}', [PolicyController::class, 'update']);
 
         Route::post('/rentals', [RentalController::class, 'store']);
-        Route::get('/rentals/{id}', [RentalController::class, 'show']);
+        Route::get('/rentals/{rental}', [RentalController::class, 'show']);
 
     });
 });
