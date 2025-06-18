@@ -52,9 +52,11 @@ class BookController extends Controller
                     $q->whereRaw('name ILIKE ?', ["%{$search}%"])
                         ->orWhereRaw('description ILIKE ?', ["%{$search}%"]);
                 });
-            })->paginate($perPage);
+            }
+            )->paginate($perPage);
 
-        return response()->json(['message' => 'Books retrieved successfully',
+        return response()->json([
+            'message' => 'Books retrieved successfully',
             'books' => $books]);
     }
 
@@ -197,9 +199,8 @@ class BookController extends Controller
         if ($request->hasFile('images')) {
             $images = $request->file('images');
             $imageTypes = $request->input('image_types', []);
-
+            
             foreach ($images as $index => $image) {
-
                 $path = $image->store('book_images', 'public');
                 $type = $imageTypes[$index] ?? 'artwork';
                 $book->images()->create([
