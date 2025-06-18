@@ -5,6 +5,8 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Policy;
+
 
 class Rental extends Model
 {
@@ -40,8 +42,8 @@ class Rental extends Model
 
     public function getIsOverdueAttribute()
     {
-        $rentalPeriodDays = Policy::where('name', 'rental_period')->first();
-
+        $policy= Policy::where('name', 'rental_period')->first();
+        $rentalPeriodDays = $policy ? $policy->period : 30;
         return $this->days_rented > $rentalPeriodDays && $this-> returned_at=== null;
     }
 }
