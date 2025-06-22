@@ -773,7 +773,7 @@
 							"raw": "{\n   \"queries\": [\"harry potter\", \"lord of the rings\"],\n  \"email\": \"bpoppopa@mail.coom\",\n  \"number_of_copies_available\": 5\n}"
 						},
 						"url": {
-							"raw": "http://localhost/api/books",
+							"raw": "http://localhost/api/books?per_page=20&search_value=15",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -785,14 +785,52 @@
 							"query": [
 								{
 									"key": "per_page",
-									"value": "20",
-									"disabled": true
+									"value": "20"
 								},
 								{
 									"key": "search_value",
-									"value": "oook",
-									"disabled": true
+									"value": "15"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Discard book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"librarian_id\":13\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/books/51/discard",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+								"51",
+								"discard"
 							]
 						}
 					},
@@ -1081,16 +1119,188 @@
 				{
 					"name": "Rent a book",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"book_id\": 14,\n    \"student_id\": 15,\n    \"librarian_id\": 16\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/rentals",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"rentals"
+							]
+						}
 					},
 					"response": []
 				},
 				{
 					"name": "LImit for rental period",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/rentals/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"rentals",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Return book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"librarian_id\": 15\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/rentals/4/return",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"rentals",
+								"4",
+								"return"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Active Rentals",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/rentals/active",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"rentals",
+								"active"
+							],
+							"query": [
+								{
+									"key": "search_value",
+									"value": "harry",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "50",
+									"disabled": true
+								}
+							]
+						}
 					},
 					"response": []
 				}
@@ -1341,7 +1551,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost/api/categories?per_page=20&search_value=sas",
+							"raw": "http://localhost/api/categories?search_value=horror",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1353,11 +1563,12 @@
 							"query": [
 								{
 									"key": "per_page",
-									"value": "20"
+									"value": "20",
+									"disabled": true
 								},
 								{
 									"key": "search_value",
-									"value": "sas"
+									"value": "horror"
 								}
 							]
 						}
