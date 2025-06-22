@@ -80,5 +80,9 @@ class Book extends Model
         return $this->hasMany(Rental::class);
     }
 
+    public function discardedRecords()
+    {
+        return $this->hasMany(DiscardedBook::class);
+    }
 
 }

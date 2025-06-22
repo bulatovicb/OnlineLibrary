@@ -80,4 +80,9 @@ class User extends Authenticatable implements CanResetPassword
         return $this->hasMany(Rental::class, 'librarian_id');
     }
 
+    public function discardedBooks()
+    {
+        return $this->hasMany(DiscardedBook::class, 'librarian_id');
+    }
+
 }

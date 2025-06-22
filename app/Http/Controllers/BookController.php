@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateBookRequest;
 use App\Models\Book;
-use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -12,6 +11,90 @@ use Illuminate\Validation\Rule;
 
 class BookController extends Controller
 {
+    /**
+     * Displays book's data based on provided id.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns a JSON response with book data.
+     * Automatically returns 404 if the author is not found.
+     *
+     * @param Book $book
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Book $book)
+    {
+        return response()->json(['book' => $book], 200);
+    }
+
+    /**
+     * Displays front cover of the book.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns JSON error response if the front cover picture is not found.
+     * Otherwise, returns the image path.
+     *
+     * @param Book $book
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function bookPicture(Book $book)
+    {
+
+        $frontCover = $book->images->firstWhere('type', 'front_cover');
+
+        if (!$frontCover) {
+            return response()->json(['error' => 'Picture not found'], 404);
+        }
+
+        return response()->json([
+            'picture_url' => $frontCover->path
+        ]);
+    }
+
+    /**
+     * Updates the front cover image of the given book.
+     *
+     * Accessible only by authenticated librarians.
+     * Validates the upload image and deletes any existing front cover image.
+     * Saves new front cover image in storage.
+     * Return a JSON response with a success message
+     *
+     * @param Request $request
+     * @param Book $book
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateCover(Request $request, Book $book)
+    {
+        $validator = Validator::make($request->all(), [
+            'front_cover' => 'required|image|max:5120'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()->all()], 422);
+        }
+
+        if ($request->hasFile('front_cover')) {
+            $coverFile = $request->file('front_cover');
+            $cover_url = $coverFile->store('book_images', 'public');
+            $existingFrontCover = $book->images()->where('type', 'front_cover')->first();
+
+            if ($existingFrontCover) {
+                Storage::disk('public')->delete($existingFrontCover->path);
+                $existingFrontCover->delete();
+            }
+
+            $book->images()->create([
+                'path' => $cover_url,
+                'type' => 'front_cover'
+            ]);
+
+        }
+
+        return response()->json([
+            'message' => 'Front cover updated successfully.',
+            'picture_url' => $cover_url
+        ]);
+    }
+
     /**
      *  Creates new book.
      *
@@ -66,44 +149,27 @@ class BookController extends Controller
     }
 
     /**
-     * Displays book's data based on provided id.
+     * Deletes a book.
      *
-     * Accessible only by authenticated librarians.
-     * Returns a JSON response with book data.
-     * Automatically returns 404 if the author is not found.
+     * Dispatch an event before deleting the book to delete all image files from storage related with book.
+     * Deletes a book and all of its images.
+     * Returns JSON response with success message.
      *
      * @param Book $book
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Book $book)
+    public function destroy(Book $book)
     {
-        return response()->json(['book' => $book], 200);
-    }
+        $book->images()->each(function ($image) {
+            $image->delete();
+        });
 
-    /**
-     * Displays front cover of the book.
-     *
-     * Accessible only by authenticated librarians.
-     * Returns JSON error response if the front cover picture is not found.
-     * Otherwise, returns the image path.
-     *
-     * @param Book $book
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-     */
-    public function bookPicture(Book $book)
-    {
-
-        $frontCover = $book->images->firstWhere('type', 'front_cover');
-
-        if (!$frontCover) {
-            return response()->json(['error' => 'Picture not found'], 404);
-        }
-
+        $book->delete();
         return response()->json([
-            'picture_url' => $frontCover->path
+            'message' => 'Book deleted successfully.',
         ]);
     }
-  
+
     /**
      * Updates the book's data.
      *
@@ -143,74 +209,6 @@ class BookController extends Controller
             'book' => $book,
         ]);
 
-    }
-
-    /**
-     * Updates the front cover image of the given book.
-     *
-     * Accessible only by authenticated librarians.
-     * Validates the upload image and deletes any existing front cover image.
-     * Saves new front cover image in storage.
-     * Return a JSON response with a success message
-     *
-     * @param Request $request
-     * @param Book $book
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function updateCover(Request $request, Book $book)
-    {
-        $validator = Validator::make($request->all(), [
-            'front_cover' => 'required|image|max:5120'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->all()], 422);
-        }
-
-        if ($request->hasFile('front_cover')) {
-            $coverFile = $request->file('front_cover');
-            $cover_url = $coverFile->store('book_images', 'public');
-            $existingFrontCover = $book->images()->where('type', 'front_cover')->first();
-
-            if ($existingFrontCover) {
-                Storage::disk('public')->delete($existingFrontCover->path);
-                $existingFrontCover->delete();
-            }
-
-            $book->images()->create([
-                'path' => $cover_url,
-                'type' => 'front_cover'
-            ]);
-
-        }
-
-        return response()->json([
-            'message' => 'Front cover updated successfully.',
-            'picture_url' => $cover_url
-        ]);
-    }
-  
-
-    /**
-     * Deletes a book.
-     *
-     * Dispatch an event before deleting the book to delete all image files from storage related with book.
-     * Deletes a book and all of its images.
-     * Returns JSON response with success message.
-     *
-     * @param Book $book
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function destroy(Book $book)
-    {
-        $book->images()->each(function ($image) {
-            $image->delete();
-        });
-
-        $book->delete();
-        return response()->json([
-            'message' => 'Book deleted successfully.',
-        ]);
     }
 
 }
