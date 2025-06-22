@@ -17,6 +17,10 @@ class Rental extends Model
         'returned_at',
     ];
 
+    protected $casts = [
+        'rented_at' => 'datetime',
+    ];
+
     public function book()
     {
         return $this->belongsTo(Book::class);

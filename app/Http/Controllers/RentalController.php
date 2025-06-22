@@ -2,10 +2,69 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use App\Models\User;
+use App\Models\Rental;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RentalController extends Controller
 {
-    
+    /**
+     * Returns rented book list.
+     *
+     * Accessible only to authenticated librarians.
+     * Supports case-insensitive partial matching on the book name field (ILIKE).
+     * Supports pagination with per-page values of 20 (default), 50, or 100.
+     *
+ * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function indexRented(Request $request)
+    {
+        request()->validate([
+            'per_page' => 'integer|nullable|in:20,50,100',
+            'search_value' => 'string|nullable',
+        ]);
+
+        $query = Rental::with([
+            'book',
+            'student',
+            'librarian'
+        ])->whereNull('returned_at');
+
+        if ($request->filled('search_value')) {
+            $search = $request->search_value;
+            Log::info('Search value: ' . $request->search_value);
+
+            $query->whereHas('book', function ($q) use ($search) {
+                $q->whereRaw("name ILIKE ?", ["%{$search}%"]);
+            });
+        }
+
+        $perPage = $request->per_page ?? 20;
+        $activeRentals = $query->paginate($perPage);
+
+        $activeRentals->getCollection()->transform(function ($rental) {
+            return [
+                'book_title' => $rental->book->name,
+                'rented_by' => [
+                    'name' => $rental->student->first_name,
+                    'last_name' => $rental->student->last_name,
+                    'id' => $rental->student->id,
+                ],
+                'rental_date' => $rental->rented_at->toDateTimeString(),
+                'active_days' => now()->diffInDays($rental->rented_at),
+                'rented_out_by' => [
+                    'name' => $rental->librarian->first_name,
+                    'last_name' => $rental->librarian->last_name,
+                    'id' => $rental->librarian->id,
+                    ],
+                ];
+
+        });
+
+           return response()->json([
+               'message' => "Success",
+               'data' => $activeRentals,
+           ]);
+       }
 }
