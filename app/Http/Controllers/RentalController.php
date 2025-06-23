@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Rental;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class RentalController extends Controller
 {
@@ -15,7 +14,7 @@ class RentalController extends Controller
      * Supports case-insensitive partial matching on the book name field (ILIKE).
      * Supports pagination with per-page values of 20 (default), 50, or 100.
      *
- * @param Request $request
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function indexRented(Request $request)
@@ -33,8 +32,6 @@ class RentalController extends Controller
 
         if ($request->filled('search_value')) {
             $search = $request->search_value;
-            Log::info('Search value: ' . $request->search_value);
-
             $query->whereHas('book', function ($q) use ($search) {
                 $q->whereRaw("name ILIKE ?", ["%{$search}%"]);
             });
@@ -57,14 +54,14 @@ class RentalController extends Controller
                     'name' => $rental->librarian->first_name,
                     'last_name' => $rental->librarian->last_name,
                     'id' => $rental->librarian->id,
-                    ],
-                ];
+                ],
+            ];
 
         });
 
-           return response()->json([
-               'message' => "Success",
-               'data' => $activeRentals,
-           ]);
-       }
+        return response()->json([
+            'message' => "Success",
+            'data' => $activeRentals,
+        ]);
+    }
 }
