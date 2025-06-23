@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 class RentalController extends Controller
 {
     /**
+     * Returns a paginated list of overdue books.
+     *
+     * Accessible only to authenticated librarians.
+     * Supports case-insensitive partial matching on the book name (ILIKE).
+     * Supports pagination with 'per_page' values of 20 (default), 50, or 100.
+     * Overdue books are defined as books rented for longer than the allowed rental period in policy.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
