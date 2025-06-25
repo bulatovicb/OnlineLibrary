@@ -3,11 +3,11 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BookImportController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BookImportController;
 
 Route::post('login', [AuthController::class, 'login']);
 
@@ -45,7 +45,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::delete('genres/{genre}/destroy', [GenreController::class, 'destroy']);
         
         Route::post('/import-books', [BookImportController::class, 'import']);
-      
+        Route::post('/import-books-batch', [BookImportController::class, 'importBatch']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
