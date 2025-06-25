@@ -48,7 +48,9 @@ class ImportBooksJob implements ShouldQueue
                 foreach ($books as $bookData) {
                     $volumeInfo = $bookData['volumeInfo'] ?? [];
                     Book::updateOrCreate(
-                        ['isbn' => $volumeInfo['industryIdentifiers'][0]['identifier'] ?? uniqid()],
+                        [
+                            'isbn' => $volumeInfo['industryIdentifiers'][0]['identifier'] ?? uniqid()
+                        ],
                         [
                             'name' => $volumeInfo['title'] ?? 'No title',
                             'description' => $volumeInfo['description'] ?? 'No description',
