@@ -7,7 +7,7 @@
 </head>
 <body>
 <p>
-    All book import tasks have been successfully completed :).
+    All books have been imported successfully.
 </p>
 
 </body>
