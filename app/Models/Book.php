@@ -66,12 +66,11 @@ class Book extends Model
     }
 
     /**
-     * Get all publisher associated with this book.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function publishers()
     {
-        return $this->belongsToMany(Publisher::class);
+        return $this->belongsTo(Publisher::class);
     }
 }
