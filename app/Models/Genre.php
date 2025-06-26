@@ -5,20 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
-class Author extends Model
+class Genre extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'biography',
-        'picture',
-    ];
+    protected $fillable = ['name', 'description'];
 
     /**
-     * The books that belong to the author.
+     * Get all books associated with this genre.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -26,5 +20,4 @@ class Author extends Model
     {
         return $this->belongsToMany(Book::class);
     }
-
 }
