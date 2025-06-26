@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\Book;
-use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,13 +13,14 @@ use Illuminate\Support\Facades\RateLimiter;
 
 class ImportBooksJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $query;
     protected $copiesAvailable;
 
     /**
-     * Create a new job instance.
+     * @param $query
+     * @param $copiesAvailable
      */
     public function __construct($query, $copiesAvailable)
     {
@@ -29,12 +29,6 @@ class ImportBooksJob implements ShouldQueue
     }
 
     /**
-     *
-     * Execute the job.
-     *
-     * Fetches books from Google Books API based on search query and saves them to database.
-     * Implements rate limiting (5 requests per minute).
-     * Creates or updates book records with available data from API response.
      *
      * @return void
      */
@@ -53,21 +47,22 @@ class ImportBooksJob implements ShouldQueue
                 $books = $response->json()['items'] ?? [];
                 foreach ($books as $bookData) {
                     $volumeInfo = $bookData['volumeInfo'] ?? [];
-                    Book::updateOrCreate([
-                        'name' => $volumeInfo['title'] ?? 'No title',
-                        'description' => $volumeInfo['description'] ?? 'No description',
-                        'number_of_pages' => $volumeInfo['pageCount'] ?? 0,
-                        'number_of_copies_available' => $this->copiesAvailable,
-                        'isbn' => $volumeInfo['industryIdentifiers'][0]['identifier'] ?? uniqid(),
-                        'language' => $volumeInfo['language'] ?? 'unknown',
-                        'script' => 'Latin',
-                        'binding' => 'Paperback',
-                        'dimensions' => 'N/A',
-                    ]);
+                    Book::updateOrCreate(
+                        [
+                            'isbn' => $volumeInfo['industryIdentifiers'][0]['identifier'] ?? uniqid()
+                        ],
+                        [
+                            'name' => $volumeInfo['title'] ?? 'No title',
+                            'description' => $volumeInfo['description'] ?? 'No description',
+                            'number_of_pages' => $volumeInfo['pageCount'] ?? 0,
+                            'number_of_copies_available' => $this->copiesAvailable,
+                            'language' => $volumeInfo['language'] ?? 'unknown',
+                            'script' => 'Latin',
+                            'binding' => 'Paperback',
+                            'dimensions' => 'N/A'
+                        ]);
                 }
             }
-
         }
     }
-
 }

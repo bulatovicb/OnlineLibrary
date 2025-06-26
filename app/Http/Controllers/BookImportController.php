@@ -41,6 +41,7 @@ class BookImportController extends Controller
             'query' => $query,
             'copiesAvailable' => $copies,
         ]);
+
     }
 
     /**
