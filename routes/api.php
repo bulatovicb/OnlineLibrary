@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BookImportController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\CategoryController;
@@ -52,6 +53,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/genres/{genre}', [GenreController::class, 'show']);
         Route::patch('/genres/{genre}/update', [GenreController::class, 'update']);
         Route::delete('genres/{genre}/destroy', [GenreController::class, 'destroy']);
+        
+        Route::post('/import-books', [BookImportController::class, 'import']);
+        Route::post('/import-books-batch', [BookImportController::class, 'importBatch']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
