@@ -9,7 +9,14 @@ class Publisher extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'address',
+        'website',
+        'email',
+        'phone',
+        'established_year'
+    ];
 
     /**
      * Get all books associated with this publisher.
@@ -18,6 +25,16 @@ class Publisher extends Model
      */
     public function books()
     {
-        return $this->belongsToMany(Book::class);
+        return $this->hasMany(Book::class);
+    }
+
+    /**
+     * Get all authors associated with this publisher.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function authors()
+    {
+        return $this->belongsToMany(Author::class);
     }
 }
