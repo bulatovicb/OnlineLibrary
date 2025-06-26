@@ -39,10 +39,10 @@ class RentalController extends Controller
             ], 422);
         }
 
-        if ($book->number_of_copies_available <= 0) {
+        if ($book->number_of_copies_available == 0) {
             return response()->json([
-                'error' => "Book is out of stock"
-            ]);
+                'error' => "You can’t rent out books if there are none in the library as they were all rented out"
+            ], 422);
         }
 
         $rental = Rental::create([
