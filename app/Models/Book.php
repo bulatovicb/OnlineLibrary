@@ -67,7 +67,7 @@ class Book extends Model
 
     /**
      * Get the publisher that published this book.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function publisher()
