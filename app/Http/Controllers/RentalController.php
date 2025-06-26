@@ -41,7 +41,7 @@ class RentalController extends Controller
 
         if ($book->number_of_copies_available == 0) {
             return response()->json([
-                'error' => "You can’t rent out books if there are none in the library as they were all rented out"
+                'error' => "All copies of the book $book->id have been rented out"
             ], 422);
         }
 
