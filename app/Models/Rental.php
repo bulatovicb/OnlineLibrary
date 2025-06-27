@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Rental extends Model
 {
     use HasFactory;
@@ -72,5 +73,4 @@ class Rental extends Model
         $policy= Policy::where('name', 'rental_period')->first();
         return $policy ? $policy->period : 30;
     }
-
 }

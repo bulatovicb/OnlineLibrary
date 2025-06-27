@@ -9,6 +9,7 @@ use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RentalController;
 
 Route::post('login', [AuthController::class, 'login']);
 
@@ -48,6 +49,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/policies', [PolicyController::class, 'index']);
         Route::patch('policies/{policy}', [PolicyController::class, 'update']);
 
+        Route::post('/rentals', [RentalController::class, 'store']);
+        Route::get('/rentals/{rental}', [RentalController::class, 'show']);
         Route::post('/rentals/{id}/return', [RentalController::class, 'returnBook']);
     });
 });
