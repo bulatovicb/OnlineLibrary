@@ -6,6 +6,8 @@ use App\Models\Rental;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 class RentalController extends Controller
 {
@@ -37,7 +39,7 @@ class RentalController extends Controller
         ]);
 
         try {
-            $this->validateUserRoles($rental->student_id, $request->librarian_id);
+            $this->validateUserRoles($request->librarian_id);
         } catch (\Exception $exception) {
             return response()->json([
                 'error' => $exception->getMessage()
@@ -60,6 +62,10 @@ class RentalController extends Controller
         $book->increment('number_of_copies_available');
 
         $overdue = max(0, $rental->days_rented - $rental->rental_period);
+
+        if ($overdue > 0) {
+            Log::debug("Book ID {$book->id} returned with {$overdue} overdue days by student ID {$rental->student_id}.");
+        }
 
         return response()->json([
             'message' => 'Book returned',
