@@ -15,6 +15,7 @@ class Publisher extends Model
         'website',
         'email',
         'phone',
+        'logo',
         'established_year'
     ];
 
