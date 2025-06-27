@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Rental;
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -100,7 +98,6 @@ class RentalController extends Controller
      * Handles the return of a rented book.
      *
      * Validates the existence of the rental record.
-     * Ensures that the provided librarian ID exists and holds the correct role.
      * Checks if the book has already been returned.
      * If all conditions are met, the book is marked as returned, the number of available copies is incremented,
      * and any overdue days are calculated.
@@ -119,29 +116,19 @@ class RentalController extends Controller
             ], 422);
         }
 
-        $request->validate([
-            'librarian_id' => 'required|exists:users,id',
-        ]);
-
-        try {
-            $this->validateUserRoles($request->librarian_id);
-        } catch (\Exception $exception) {
-            return response()->json([
-                'error' => $exception->getMessage()
-            ], 422);
-        }
-
         if ($rental->returned_at !== null) {
             return response()->json([
                 'error' => 'Already returned',
             ], 422);
         }
 
+        $librarian = $request->user();
+
         $book = $rental->book;
 
         $rental->update([
             'returned_at' => now(),
-            'librarian_id' => $request->librarian_id
+            'librarian_id' => $librarian->id
         ]);
 
         $book->increment('number_of_copies_available');
@@ -153,7 +140,9 @@ class RentalController extends Controller
         }
 
         return response()->json([
-            'message' => 'Book returned',
+            'message' => 'Book returned by student ',
+            'librarian_id' => $rental->librarian_id,
+            'student_id' => $rental->student_id,
             'overdue_days' => $overdue,
         ]);
     }
