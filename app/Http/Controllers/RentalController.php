@@ -93,7 +93,7 @@ class RentalController extends Controller
             'message' => $rental->is_overdue ? 'This rental is overdue!' : 'Rental period is still valid.'
         ]);
     }
-  
+
     /**
      * Handles the return of a rented book.
      *
@@ -140,7 +140,7 @@ class RentalController extends Controller
         }
 
         return response()->json([
-            'message' => 'Book returned by student ',
+            'message' => 'Book returned',
             'librarian_id' => $rental->librarian_id,
             'student_id' => $rental->student_id,
             'overdue_days' => $overdue,
