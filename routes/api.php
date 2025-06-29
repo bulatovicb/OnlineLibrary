@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/import-books-batch', [BookImportController::class, 'importBatch']);
 
         Route::post('/publishers/create', [PublisherController::class, 'create']);
+        Route::delete('/publishers/{publisher}', [PublisherController::class, 'destroy']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);

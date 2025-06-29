@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Publisher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PublisherController extends Controller
@@ -55,5 +56,28 @@ class PublisherController extends Controller
             'message' => 'Publisher created successfully',
             'publisher' => $publisher
         ], 201);
+    }
+
+    /**
+     * Deletes publisher.
+     *
+     * Accessible only by authenticated librarians.
+     * If the publisher has an associated logo, the file will be deleted from storage.
+     * Returns a JSON response with success message.
+     *
+     * @param Publisher $publisher
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Publisher $publisher)
+    {
+        if ($publisher->logo && Storage::disk('public')->exists($publisher->logo)) {
+            Storage::disk('public')->delete($publisher->logo);
+        }
+
+        $publisher->delete();
+
+        return response()->json([
+            'message' => 'Publisher deleted successfully'
+        ]);
     }
 }
