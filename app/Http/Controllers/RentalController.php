@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Rental;
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RentalController extends Controller
 {
-    /**
+     /**
      * Store a newly created rental in storage.
      *
      * Validates the request to ensure the book, student, and librarian exist.
@@ -92,6 +91,59 @@ class RentalController extends Controller
             'days_rented' => $rental->days_rented,
             'is_overdue' => $rental->is_overdue,
             'message' => $rental->is_overdue ? 'This rental is overdue!' : 'Rental period is still valid.'
+        ]);
+    }
+
+    /**
+     * Handles the return of a rented book.
+     *
+     * Validates the existence of the rental record.
+     * Checks if the book has already been returned.
+     * If all conditions are met, the book is marked as returned, the number of available copies is incremented,
+     * and any overdue days are calculated.
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function returnBook(Request $request, $id)
+    {
+        $rental = Rental::find($id);
+
+        if (!$rental) {
+            return response()->json([
+                'error' => 'This book was not rented out, hence cannot be returned.'
+            ], 422);
+        }
+
+        if ($rental->returned_at !== null) {
+            return response()->json([
+                'error' => 'Already returned',
+            ], 422);
+        }
+
+        $librarian = $request->user();
+
+        $book = $rental->book;
+
+        $rental->update([
+            'returned_at' => now(),
+            'librarian_id' => $librarian->id
+        ]);
+
+        $book->increment('number_of_copies_available');
+
+        $overdue = max(0, $rental->days_rented - $rental->rental_period);
+
+        if ($overdue > 0) {
+            Log::debug("Book ID {$book->id} returned with {$overdue} overdue days by student ID {$rental->student_id}.");
+        }
+
+        return response()->json([
+            'message' => 'Book returned',
+            'librarian_id' => $rental->librarian_id,
+            'student_id' => $rental->student_id,
+            'overdue_days' => $overdue,
         ]);
     }
 }

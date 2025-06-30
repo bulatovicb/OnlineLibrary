@@ -60,4 +60,17 @@ class Rental extends Model
         $rentalPeriodDays = $policy ? $policy->period : 30;
         return $this->days_rented > $rentalPeriodDays && $this->returned_at === null;
     }
+
+    /**
+     *  Get the allowed rental period for a book.
+     *
+     *  Retrieves the rental period from the 'Policy' table where the policy name is 'rental_period'.
+     *  If no such policy is found in the database, a default rental period of 30 days is returned.
+     * @return int
+     */
+    public function getRentalPeriodAttribute()
+    {
+        $policy= Policy::where('name', 'rental_period')->first();
+        return $policy ? $policy->period : 30;
+    }
 }
