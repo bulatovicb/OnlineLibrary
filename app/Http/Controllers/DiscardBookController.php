@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\DiscardedBook;
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class DiscardBookController extends Controller
@@ -14,7 +12,7 @@ class DiscardBookController extends Controller
      *Discards a book.
      *
      * Accessible only by authenticated librarians.
-     * Validates the existence of the book and the librarian.
+     * Validates the existence of the book.
      * Records the discard event with timestamp and librarian ID for audit purposes.
      * Decrements the available copies count of the book.
      * If no copies remain after discarding, marks the book as inactive.
@@ -34,22 +32,13 @@ class DiscardBookController extends Controller
             ], 422);
         }
 
-        $request->validate([
-            'librarian_id' => 'required|exists:users,id',
-        ]);
+        $librarian = $request->user();
 
-        $librarian = User::find($request->librarian_id);
-
-        if ($librarian->role_id !== Role::LIBRARIAN) {
-            return response()->json([
-                'error' => 'Only librarians can discard books.'
-            ], 403);
-        }
-
-        if ($book->number_of_copies_available <= 0) {
+        if ($book->number_of_copies_available == 0) {
             $book->update([
                 'is_active' => false,
             ]);
+
             return response()->json([
                 'error' => 'This book have no copies to discard.'
             ], 422);
@@ -58,7 +47,8 @@ class DiscardBookController extends Controller
         $discardedBook = DiscardedBook::create([
             'book_id' => $book->id,
             'librarian_id' => $librarian->id,
-            'discarded_at' => now()]);
+            'discarded_at' => now()
+        ]);
 
         $book->decrement('number_of_copies_available');
 
