@@ -202,6 +202,7 @@ class BookController extends Controller
         }
 
         $data = $validator->validated();
+
         $book->update($data);
 
         return response()->json([
