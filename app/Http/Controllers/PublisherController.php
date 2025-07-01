@@ -75,7 +75,7 @@ class PublisherController extends Controller
             'address' => 'nullable|string',
             'website' => 'nullable|string',
             'email' => 'sometimes|string|email',
-            'phone' => 'nullable|integer',
+            'phone' => 'nullable|string',
             'established_year' => 'nullable|integer|max:' . date('Y'),
         ]);
 
