@@ -17,7 +17,6 @@ class Rental extends Model
         'returned_at',
     ];
 
-
     protected $casts = [
         'rented_at' => 'datetime',
         'returned_at' => 'datetime',

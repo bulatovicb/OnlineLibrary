@@ -8,6 +8,7 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\UserController;
+use \App\Http\Controllers\RentalController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
@@ -48,6 +49,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/policies' , [PolicyController::class, 'index']);
         Route::patch('policies/{policy}', [PolicyController::class, 'update']);
 
+        Route::get('/rentals/active' , [RentalController::class, 'indexRented']);
         Route::get('/rentals/returned', [RentalController::class, 'indexReturned']);
     });
 });
