@@ -29,15 +29,13 @@ class RentalController extends Controller
         $rentalPolicy = Policy::where('name', 'rental_period')->first();
         $rentalPeriod = $rentalPolicy->period;
 
-        $query = Rental::with([
-            'book',
-            'librarian',
-            'student'
-        ])->whereNull('returned_at')
+        $query = Rental::with(['book', 'librarian', 'student'])
+            ->whereNull('returned_at')
             ->whereDate('rented_at', '<=', now()->subDays($rentalPeriod));
 
         if ($request->filled('search_value')) {
             $search = $request->search_value;
+
             $query->whereHas('book', function ($q) use ($search) {
                 $q->whereRaw("name ILIKE ?", ["%{$search}%"]);
             });
