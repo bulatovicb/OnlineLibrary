@@ -99,9 +99,9 @@ class PublisherController extends Controller
         return response()->json([
             'logo_url' => $logo
         ]);
-    }    
-  
-  ```/**
+    }
+
+     /**
      * Returns a paginated list of publishers with optional search filtering.
      *
      * Accessible only by authenticated librarians.
@@ -130,7 +130,7 @@ class PublisherController extends Controller
             'publishers' => $publishers
         ]);
     }
- 
+
      /**
      * Updates publisher's details.
      *
@@ -207,7 +207,7 @@ class PublisherController extends Controller
             'logo _url' => $publisher->logo
         ]);
     }
-    
+
      /**
      * Deletes publisher.
      *
