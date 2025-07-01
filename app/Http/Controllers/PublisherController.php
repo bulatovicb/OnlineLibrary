@@ -56,8 +56,51 @@ class PublisherController extends Controller
             'publisher' => $publisher
         ], 201);
     }
+    
+    /**
+     * Display the publisher's details.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns a JSON response containing publisher data.
+     * Automatically returns a 404 response if the publisher is not found.
+     *
+     * @param Publisher $publisher
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Publisher $publisher)
+    {
+        return response()->json([
+            'message' => 'Publisher retrieved successfully',
+            'publisher' => $publisher
+        ], 200);
+    }
 
     /**
+     * Retrieve the logo URL of the publisher.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns a 404 JSON response if the logo is not available.
+     * Otherwise, returns the logo URL in a JSON response.
+     *
+     * @param Publisher $publisher
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function publisherLogo(Publisher $publisher)
+    {
+        $logo = $publisher->logo;
+
+        if (!$logo) {
+            return response()->json([
+                'message' => 'Publisher logo not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'logo_url' => $logo
+        ]);
+    }    
+  
+  ```/**
      * Returns a paginated list of publishers with optional search filtering.
      *
      * Accessible only by authenticated librarians.
