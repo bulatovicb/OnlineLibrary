@@ -19,6 +19,7 @@ class Rental extends Model
 
     protected $casts = [
         'rented_at' => 'datetime',
+        'returned_at' => 'datetime',
     ];
 
     public function book()

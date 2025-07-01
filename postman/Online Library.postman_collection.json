@@ -799,8 +799,40 @@
 				{
 					"name": "Discard book",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"librarian_id\":13\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/books/51/discard",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"books",
+								"51",
+								"discard"
+							]
+						}
 					},
 					"response": []
 				}
@@ -1266,6 +1298,59 @@
 									"key": "per_page",
 									"value": "50",
 									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Returned Books",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"book_id\": 14,\n    \"student_id\": 15,\n    \"librarian_id\": 16\n}\n"
+						},
+						"url": {
+							"raw": "http://localhost/api/rentals/returned?search_value=test&per_page=20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"rentals",
+								"returned"
+							],
+							"query": [
+								{
+									"key": "search_value",
+									"value": "test"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
 								}
 							]
 						}
