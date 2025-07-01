@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Publisher;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PublisherController extends Controller
@@ -58,6 +59,79 @@ class PublisherController extends Controller
     }
 
     /**
+     * Display the publisher's details.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns a JSON response containing publisher data.
+     * Automatically returns a 404 response if the publisher is not found.
+     *
+     * @param Publisher $publisher
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(Publisher $publisher)
+    {
+        return response()->json([
+            'message' => 'Publisher retrieved successfully',
+            'publisher' => $publisher
+        ], 200);
+    }
+
+    /**
+     * Retrieve the logo URL of the publisher.
+     *
+     * Accessible only by authenticated librarians.
+     * Returns a 404 JSON response if the logo is not available.
+     * Otherwise, returns the logo URL in a JSON response.
+     *
+     * @param Publisher $publisher
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function publisherLogo(Publisher $publisher)
+    {
+        $logo = $publisher->logo;
+
+        if (!$logo) {
+            return response()->json([
+                'message' => 'Publisher logo not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'logo_url' => $logo
+        ]);
+    }    
+  
+  ```/**
+     * Returns a paginated list of publishers with optional search filtering.
+     *
+     * Accessible only by authenticated librarians.
+     * Supports case-insensitive partial matching on name (ILIKE).
+     * Supports pagination with per-page values of 20 (default), 50, or 100.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
+    {
+        $validated = $request->validate([
+            'per_page' => 'nullable|integer|in:20,50,100',
+            'search_value' => 'nullable|string'
+        ]);
+
+        $search = $validated['search_value'] ?? null;
+        $perPage = $validated['per_page'] ?? 20;
+
+        $publishers = Publisher::when($search, function ($query, $search) {
+            $query->whereRaw('name ILIKE ?', ["%{$search}%"]);
+        })->paginate($perPage);
+
+        return response()->json([
+            'message' => 'Publishers list',
+            'publishers' => $publishers
+        ]);
+    }
+ 
+     /**
      * Updates publisher's details.
      *
      * Accessible only by authenticated librarians.
@@ -131,6 +205,29 @@ class PublisherController extends Controller
         return response()->json([
             'message' => 'Publisher logo updated successfully',
             'logo _url' => $publisher->logo
+        ]);
+    }
+    
+     /**
+     * Deletes publisher.
+     *
+     * Accessible only by authenticated librarians.
+     * If the publisher has an associated logo, the file will be deleted from storage.
+     * Returns a JSON response with success message.
+     *
+     * @param Publisher $publisher
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Publisher $publisher)
+    {
+        if ($publisher->logo && Storage::disk('public')->exists($publisher->logo)) {
+            Storage::disk('public')->delete($publisher->logo);
+        }
+
+        $publisher->delete();
+
+        return response()->json([
+            'message' => 'Publisher deleted successfully'
         ]);
     }
 }
