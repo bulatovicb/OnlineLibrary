@@ -199,7 +199,7 @@ class BookController extends Controller
         if ($request->hasFile('images')) {
             $images = $request->file('images');
             $imageTypes = $request->input('image_types', []);
-            
+
             foreach ($images as $index => $image) {
                 $path = $image->store('book_images', 'public');
                 $type = $imageTypes[$index] ?? 'artwork';
@@ -214,7 +214,7 @@ class BookController extends Controller
         $book->genres()->attach($request->genres);
         $book->authors()->attach($request->authors);
         $book->publishers()->attach($request->publishers);
-        $book->load(['images', 'authors', 'genres']);
+        $book->load(['images', 'authors', 'genres', 'categories', 'publisher']);
 
         return response()->json([
             'message' => 'Book created successfully',

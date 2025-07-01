@@ -8,6 +8,7 @@ use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PublisherController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
@@ -53,9 +54,17 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/genres/{genre}', [GenreController::class, 'show']);
         Route::patch('/genres/{genre}/update', [GenreController::class, 'update']);
         Route::delete('genres/{genre}/destroy', [GenreController::class, 'destroy']);
-        
+
         Route::post('/import-books', [BookImportController::class, 'import']);
         Route::post('/import-books-batch', [BookImportController::class, 'importBatch']);
+
+        Route::post('/publishers/create', [PublisherController::class, 'create']);
+        Route::get('/publishers/{publisher}', [PublisherController::class, 'show']);
+        Route::get('/publishers/{publisher}/logo', [PublisherController::class, 'publisherLogo'])->name('publisher.publisherLogo');
+        Route::get('/publishers', [PublisherController::class, 'index']);
+        Route::patch('/publishers/{publisher}/update', [PublisherController::class, 'update']);
+        Route::post('/publishers/{publisher}/update-logo', [PublisherController::class, 'updateLogo']);
+        Route::delete('/publishers/{publisher}', [PublisherController::class, 'destroy']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
