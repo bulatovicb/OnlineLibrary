@@ -101,7 +101,7 @@ class PublisherController extends Controller
         ]);
     }
 
-     /**
+    /**
      * Returns a paginated list of publishers with optional search filtering.
      *
      * Accessible only by authenticated librarians.
@@ -131,7 +131,7 @@ class PublisherController extends Controller
         ]);
     }
 
-     /**
+    /**
      * Updates publisher's details.
      *
      * Accessible only by authenticated librarians.
@@ -208,7 +208,7 @@ class PublisherController extends Controller
         ]);
     }
 
-     /**
+    /**
      * Deletes publisher.
      *
      * Accessible only by authenticated librarians.
