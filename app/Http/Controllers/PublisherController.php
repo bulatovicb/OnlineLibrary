@@ -56,7 +56,7 @@ class PublisherController extends Controller
             'publisher' => $publisher
         ], 201);
     }
-
+    
     /**
      * Display the publisher's details.
      *
@@ -97,6 +97,36 @@ class PublisherController extends Controller
 
         return response()->json([
             'logo_url' => $logo
+        ]);
+    }    
+  
+  ```/**
+     * Returns a paginated list of publishers with optional search filtering.
+     *
+     * Accessible only by authenticated librarians.
+     * Supports case-insensitive partial matching on name (ILIKE).
+     * Supports pagination with per-page values of 20 (default), 50, or 100.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
+    {
+        $validated = $request->validate([
+            'per_page' => 'nullable|integer|in:20,50,100',
+            'search_value' => 'nullable|string'
+        ]);
+
+        $search = $validated['search_value'] ?? null;
+        $perPage = $validated['per_page'] ?? 20;
+
+        $publishers = Publisher::when($search, function ($query, $search) {
+            $query->whereRaw('name ILIKE ?', ["%{$search}%"]);
+        })->paginate($perPage);
+
+        return response()->json([
+            'message' => 'Publishers list',
+            'publishers' => $publishers
         ]);
     }
 }
