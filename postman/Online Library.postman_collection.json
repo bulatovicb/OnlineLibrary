@@ -2098,6 +2098,106 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "View publisher",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/publishers/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"publishers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View logo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/publishers/1/logo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"publishers",
+								"1",
+								"logo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View all publishers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/publishers?search_value=1&per_page=50",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"publishers"
+							],
+							"query": [
+								{
+									"key": "search_value",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
