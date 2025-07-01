@@ -62,6 +62,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/publishers/{publisher}', [PublisherController::class, 'show']);
         Route::get('/publishers/{publisher}/logo', [PublisherController::class, 'publisherLogo'])->name('publisher.publisherLogo');
         Route::get('/publishers', [PublisherController::class, 'index']);
+        Route::delete('/publishers/{publisher}', [PublisherController::class, 'destroy']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
