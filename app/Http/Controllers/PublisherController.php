@@ -57,7 +57,7 @@ class PublisherController extends Controller
             'publisher' => $publisher
         ], 201);
     }
-    
+
     /**
      * Display the publisher's details.
      *
@@ -131,6 +131,83 @@ class PublisherController extends Controller
         ]);
     }
  
+     /**
+     * Updates publisher's details.
+     *
+     * Accessible only by authenticated librarians.
+     * Validates the provided input attributes and returns error message if validator fails.
+     * On success, updates the publisher's data and returns JSON response with success message.
+     *
+     * @param Request $request
+     * @param Publisher $publisher
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, Publisher $publisher)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|string',
+            'address' => 'nullable|string',
+            'website' => 'nullable|string',
+            'email' => 'sometimes|string|email',
+            'phone' => 'nullable|string',
+            'established_year' => 'nullable|integer|max:' . date('Y'),
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $data = $request->only([
+            'name',
+            'address',
+            'website',
+            'email',
+            'phone',
+            'established_year'
+        ]);
+
+        $publisher->update($data);
+
+        return response()->json([
+            'message' => 'Publisher updated successfully',
+            'publisher' => $publisher
+        ]);
+    }
+
+    /**
+     * Updates publisher's logo.
+     *
+     * Accessible only by authenticated librarians.
+     * Validates the uploaded image file.
+     * If a valid image is provided, it is stored and the publisher's logo path is updated.
+     * Returns a JSON response with a success message and the URL to the new logo.
+     *
+     * @param Request $request
+     * @param Publisher $publisher
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateLogo(Request $request, Publisher $publisher)
+    {
+        $validator = Validator::make($request->all(), [
+            'logo' => 'nullable|image|max:5120',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        if ($request->hasFile('logo')) {
+            $logoPath = $request->file('logo')->store('publisher/logo', 'public');
+            $publisher->logo = $logoPath;
+            $publisher->save();
+        }
+
+        return response()->json([
+            'message' => 'Publisher logo updated successfully',
+            'logo _url' => $publisher->logo
+        ]);
+    }
+    
      /**
      * Deletes publisher.
      *
