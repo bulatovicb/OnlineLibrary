@@ -1303,6 +1303,99 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Returned Books",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"book_id\": 14,\n    \"student_id\": 15,\n    \"librarian_id\": 16\n}\n"
+						},
+						"url": {
+							"raw": "http://localhost/api/rentals/returned?search_value=test&per_page=20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"rentals",
+								"returned"
+							],
+							"query": [
+								{
+									"key": "search_value",
+									"value": "test"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Overdue Books",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/rentals/overdue?search_value=Knjiga&per_page=20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"rentals",
+								"overdue"
+							],
+							"query": [
+								{
+									"key": "search_value",
+									"value": "Knjiga"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
