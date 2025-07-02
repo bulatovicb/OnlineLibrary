@@ -6,8 +6,10 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookImportController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PasswordResetController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PolicyController;
+use App\Http\Controllers\RentalController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PublisherController;
 use Illuminate\Support\Facades\Route;
 
@@ -49,11 +51,23 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/books/{book}/update-cover', [BookController::class, 'updateCover']);
         Route::delete('/books/{book}/destroy', [BookController::class, 'destroy']);
 
-        Route::get('/genres' , [GenreController::class, 'index']);
+        Route::get('/genres', [GenreController::class, 'index']);
         Route::post('/genres/create', [GenreController::class, 'create']);
         Route::get('/genres/{genre}', [GenreController::class, 'show']);
         Route::patch('/genres/{genre}/update', [GenreController::class, 'update']);
         Route::delete('genres/{genre}/destroy', [GenreController::class, 'destroy']);
+
+        Route::get('/policies', [PolicyController::class, 'index']);
+        Route::patch('policies/{policy}', [PolicyController::class, 'update']);
+
+        Route::post('books/{id}/discard', [RentalController::class, 'discard']);
+
+        Route::post('/rentals', [RentalController::class, 'store']);
+        Route::get('/rentals/{rental}', [RentalController::class, 'show']);
+        Route::post('/rentals/{id}/return', [RentalController::class, 'returnBook']);
+        Route::get('/rentals/active' , [RentalController::class, 'indexRented']);
+        Route::get('/rentals/returned', [RentalController::class, 'indexReturned']);
+        Route::get('/rentals/overdue', [RentalController::class, 'indexOverdue']);
 
         Route::post('/import-books', [BookImportController::class, 'import']);
         Route::post('/import-books-batch', [BookImportController::class, 'importBatch']);

@@ -69,4 +69,20 @@ class User extends Authenticatable implements CanResetPassword
         $this->notify(new ResetPasswordNotification($token));
     }
 
+
+    public function rentedBooks()
+    {
+        return $this->hasMany(Rental::class, 'student_id');
+    }
+
+    public function rentedOutBooks()
+    {
+        return $this->hasMany(Rental::class, 'librarian_id');
+    }
+
+    public function discardedBooks()
+    {
+        return $this->hasMany(DiscardedBook::class, 'librarian_id');
+    }
+
 }
