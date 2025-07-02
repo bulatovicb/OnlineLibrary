@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
         Route::get('/rentals/active' , [RentalController::class, 'indexRented']);
         Route::get('/rentals/returned', [RentalController::class, 'indexReturned']);
+        Route::get('/rentals/overdue', [RentalController::class, 'indexOverdue']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
