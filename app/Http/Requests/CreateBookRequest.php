@@ -30,7 +30,7 @@ class CreateBookRequest extends FormRequest
             'description' => 'required',
             'number_of_pages' => 'required|integer|min:1',
             'number_of_copies_available' => 'required|integer',
-            'isbn' => 'required',
+            'isbn' => 'required|unique:books,isbn',
             'language' => 'nullable',
             'script' => ['nullable', Rule::in(Book::SCRIPTS)],
             'binding' => ['nullable', Rule::in(Book::BINDINGS)],

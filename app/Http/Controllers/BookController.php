@@ -11,7 +11,7 @@ use Illuminate\Validation\Rule;
 
 class BookController extends Controller
 {
-    /**
+     /**
      * Displays book's data based on provided id.
      *
      * Accessible only by authenticated librarians.
@@ -126,7 +126,6 @@ class BookController extends Controller
             $imageTypes = $request->input('image_types', []);
 
             foreach ($images as $index => $image) {
-
                 $path = $image->store('book_images', 'public');
                 $type = $imageTypes[$index] ?? 'artwork';
                 $book->images()->create([
@@ -140,7 +139,7 @@ class BookController extends Controller
         $book->genres()->attach($request->genres);
         $book->authors()->attach($request->authors);
         $book->publishers()->attach($request->publishers);
-        $book->load(['images', 'authors', 'genres']);
+        $book->load(['images', 'authors', 'genres', 'categories', 'publisher' ]);
 
         return response()->json([
             'message' => 'Book created successfully',
@@ -210,6 +209,40 @@ class BookController extends Controller
             'book' => $book,
         ]);
 
+    }
+  
+    /**
+     * Returns a paginated list of books with optional search filtering.
+     *
+     * Accessible only by authenticated librarians.
+     * Supports case-insensitive partial matching on first and last name (ILIKE).
+     * Supports pagination with per-page values of 20 (default), 50, or 100.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
+    {
+        $validated = $request->validate([
+            'per_page' => 'integer|nullable|in:20,50,100',
+            'search_value' => 'string|nullable',
+        ]);
+
+        $search = $validated['search_value'] ?? null;
+        $perPage = $validated['per_page'] ?? 20;
+
+        $books = Book::with(['images', 'authors', 'genres', 'categories'])
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->whereRaw('name ILIKE ?', ["%{$search}%"])
+                        ->orWhereRaw('description ILIKE ?', ["%{$search}%"]);
+                });
+            }
+            )->paginate($perPage);
+
+        return response()->json([
+            'message' => 'Books retrieved successfully',
+            'books' => $books]);
     }
 
 }

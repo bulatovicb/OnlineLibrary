@@ -66,13 +66,13 @@ class Book extends Model
     }
 
     /**
-     * Get all publisher associated with this book.
+     * Get the publisher that published this book.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function publishers()
+    public function publisher()
     {
-        return $this->belongsToMany(Publisher::class);
+        return $this->belongsTo(Publisher::class);
     }
 
     public function rentals()
