@@ -3,12 +3,14 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BookImportController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\UserController;
-use \App\Http\Controllers\RentalController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PublisherController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
@@ -33,25 +35,50 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/authors/{author}/update-picture', [AuthorController::class, 'updatePicture']);
         Route::delete('/authors/{author}/destroy', [AuthorController::class, 'destroy']);
 
+        Route::post('/categories/create', [CategoryController::class, 'create']);
+        Route::get('/categories/{category}', [CategoryController::class, 'show']);
+        Route::get('/categories/{category}/icon', [CategoryController::class, 'categoryIcon'])->name('category.categoryIcon');
+        Route::get('/categories', [CategoryController::class, 'index']);
+        Route::patch('/categories/{category}/update', [CategoryController::class, 'update']);
+        Route::post('/categories/{category}/update-icon', [CategoryController::class, 'updateIcon']);
+        Route::delete('/categories/{category}/destroy', [CategoryController::class, 'destroy']);
+
         Route::post('/books/create', [BookController::class, 'create']);
         Route::get('/books/{book}', [BookController::class, 'show']);
+        Route::get('/books', [BookController::class, 'index']);
         Route::get('/books/{book}/picture', [BookController::class, 'bookPicture'])->name('book.bookPicture');
         Route::patch('/books/{book}/update', [BookController::class, 'update']);
         Route::post('/books/{book}/update-cover', [BookController::class, 'updateCover']);
         Route::delete('/books/{book}/destroy', [BookController::class, 'destroy']);
 
-        Route::get('/genres' , [GenreController::class, 'index']);
+        Route::get('/genres', [GenreController::class, 'index']);
         Route::post('/genres/create', [GenreController::class, 'create']);
         Route::get('/genres/{genre}', [GenreController::class, 'show']);
         Route::patch('/genres/{genre}/update', [GenreController::class, 'update']);
         Route::delete('genres/{genre}/destroy', [GenreController::class, 'destroy']);
 
-        Route::get('/policies' , [PolicyController::class, 'index']);
+        Route::get('/policies', [PolicyController::class, 'index']);
         Route::patch('policies/{policy}', [PolicyController::class, 'update']);
 
+        Route::post('books/{id}/discard', [RentalController::class, 'discard']);
+
+        Route::post('/rentals', [RentalController::class, 'store']);
+        Route::get('/rentals/{rental}', [RentalController::class, 'show']);
+        Route::post('/rentals/{id}/return', [RentalController::class, 'returnBook']);
         Route::get('/rentals/active' , [RentalController::class, 'indexRented']);
         Route::get('/rentals/returned', [RentalController::class, 'indexReturned']);
         Route::get('/rentals/overdue', [RentalController::class, 'indexOverdue']);
+
+        Route::post('/import-books', [BookImportController::class, 'import']);
+        Route::post('/import-books-batch', [BookImportController::class, 'importBatch']);
+
+        Route::post('/publishers/create', [PublisherController::class, 'create']);
+        Route::get('/publishers/{publisher}', [PublisherController::class, 'show']);
+        Route::get('/publishers/{publisher}/logo', [PublisherController::class, 'publisherLogo'])->name('publisher.publisherLogo');
+        Route::get('/publishers', [PublisherController::class, 'index']);
+        Route::patch('/publishers/{publisher}/update', [PublisherController::class, 'update']);
+        Route::post('/publishers/{publisher}/update-logo', [PublisherController::class, 'updateLogo']);
+        Route::delete('/publishers/{publisher}', [PublisherController::class, 'destroy']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
