@@ -62,12 +62,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
         Route::post('books/{id}/discard', [RentalController::class, 'discard']);
 
-        Route::post('/rentals', [RentalController::class, 'store']);
-        Route::get('/rentals/{rental}', [RentalController::class, 'show']);
-        Route::post('/rentals/{id}/return', [RentalController::class, 'returnBook']);
-        Route::get('/rentals/active' , [RentalController::class, 'indexRented']);
+        Route::get('/rentals/active', [RentalController::class, 'indexRented']);
         Route::get('/rentals/returned', [RentalController::class, 'indexReturned']);
         Route::get('/rentals/overdue', [RentalController::class, 'indexOverdue']);
+
+        Route::post('/rentals', [RentalController::class, 'store']);
+        Route::post('/rentals/{id}/return', [RentalController::class, 'returnBook']);
+        Route::get('/rentals/{rental}', [RentalController::class, 'show']);
 
         Route::post('/import-books', [BookImportController::class, 'import']);
         Route::post('/import-books-batch', [BookImportController::class, 'importBatch']);

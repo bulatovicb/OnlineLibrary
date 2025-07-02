@@ -138,7 +138,7 @@ class BookController extends Controller
         $book->categories()->attach($request->categories);
         $book->genres()->attach($request->genres);
         $book->authors()->attach($request->authors);
-        $book->publishers()->attach($request->publishers);
+        $book->publisher()->associate($request->publisher_id);
         $book->load(['images', 'authors', 'genres', 'categories', 'publisher' ]);
 
         return response()->json([
@@ -210,7 +210,7 @@ class BookController extends Controller
         ]);
 
     }
-  
+
     /**
      * Returns a paginated list of books with optional search filtering.
      *
