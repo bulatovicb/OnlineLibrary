@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Policy;
-use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Models\DiscardedBook;
+use App\Models\Policy;
 use App\Models\Rental;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Models\DiscardedBook;
 
 class RentalController extends Controller
 {
@@ -201,11 +201,12 @@ class RentalController extends Controller
             'librarian' => $librarian->id,
         ]);
     }
-  
+
     /**
      * Returns rented book list.
      *
      * Accessible only to authenticated librarians.
+     * Supports filtering by student ID to view active rentals for a specific student.
      * Supports case-insensitive partial matching on the book name field (ILIKE).
      * Supports pagination with per-page values of 20 (default), 50, or 100.
      *
@@ -217,6 +218,7 @@ class RentalController extends Controller
         request()->validate([
             'per_page' => 'integer|nullable|in:20,50,100',
             'search_value' => 'string|nullable',
+            'student_id' => 'nullable|integer|exists:users,id',
         ]);
 
         $query = Rental::with([
@@ -224,6 +226,10 @@ class RentalController extends Controller
             'student',
             'librarian'
         ])->whereNull('returned_at');
+
+        if ($request->filled('student_id')) {
+            $query->where('student_id', $request->student_id);
+        }
 
         if ($request->filled('search_value')) {
             $search = $request->search_value;
@@ -251,7 +257,6 @@ class RentalController extends Controller
                     'id' => $rental->librarian->id,
                 ],
             ];
-
         });
 
         return response()->json([
@@ -259,8 +264,8 @@ class RentalController extends Controller
             'data' => $activeRentals,
         ]);
     }
-  
-     /**
+
+    /**
      * Returns a paginated list of returned books.
      *
      * Accessible only to authenticated librarians.
@@ -341,7 +346,7 @@ class RentalController extends Controller
         $query = Rental::with(['book', 'librarian', 'student'])
             ->whereNull('returned_at')
             ->whereDate('rented_at', '<=', now()
-            ->subDays($rentalPeriod));
+                ->subDays($rentalPeriod));
 
         if ($request->filled('search_value')) {
             $search = $request->search_value;
@@ -375,6 +380,6 @@ class RentalController extends Controller
             'message' => "Success",
             'data' => $overdueRentals,
         ]);
-           
+
     }
 }
