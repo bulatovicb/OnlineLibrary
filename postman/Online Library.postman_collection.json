@@ -1278,7 +1278,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost/api/rentals/active",
+							"raw": "http://localhost/api/rentals/active?book_id=365",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1298,6 +1298,15 @@
 									"key": "per_page",
 									"value": "50",
 									"disabled": true
+								},
+								{
+									"key": "student_id",
+									"value": "17",
+									"disabled": true
+								},
+								{
+									"key": "book_id",
+									"value": "365"
 								}
 							]
 						}
@@ -1333,7 +1342,7 @@
 							"raw": "{\n    \"book_id\": 14,\n    \"student_id\": 15,\n    \"librarian_id\": 16\n}\n"
 						},
 						"url": {
-							"raw": "http://localhost/api/rentals/returned?search_value=test&per_page=20",
+							"raw": "http://localhost/api/rentals/returned?book_id=365",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1346,11 +1355,22 @@
 							"query": [
 								{
 									"key": "search_value",
-									"value": "test"
+									"value": "",
+									"disabled": true
 								},
 								{
 									"key": "per_page",
-									"value": "20"
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "student_id",
+									"value": "17",
+									"disabled": true
+								},
+								{
+									"key": "book_id",
+									"value": "365"
 								}
 							]
 						}
@@ -1373,7 +1393,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost/api/rentals/overdue?search_value=Knjiga&per_page=20",
+							"raw": "http://localhost/api/rentals/overdue?search_value=Knjiga&per_page=20&student_id=17&book_id=365",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1391,17 +1411,69 @@
 								{
 									"key": "per_page",
 									"value": "20"
+								},
+								{
+									"key": "student_id",
+									"value": "17"
+								},
+								{
+									"key": "book_id",
+									"value": "365"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bar chart for rentals",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/rentals/summary",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"rentals",
+								"summary"
 							]
 						}
 					},
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "Book borrow",
-			"item": []
 		},
 		{
 			"name": "Settings",
@@ -2019,6 +2091,298 @@
 							"path": [
 								"api",
 								"policies"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Publisher management",
+			"item": [
+				{
+					"name": "Create publisher",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Publisher 10",
+									"type": "text"
+								},
+								{
+									"key": "logo",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-06-26 11-45-37.png"
+								},
+								{
+									"key": "address",
+									"value": "adresa 2",
+									"type": "text"
+								},
+								{
+									"key": "website",
+									"value": "blablaaa.com",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "publisher10@email.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "069999999",
+									"type": "text"
+								},
+								{
+									"key": "established_year",
+									"value": "2012",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/publishers/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"publishers",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View publisher",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/publishers/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"publishers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View logo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/publishers/1/logo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"publishers",
+								"1",
+								"logo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View all publishers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/publishers?search_value=1&per_page=50",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"publishers"
+							],
+							"query": [
+								{
+									"key": "search_value",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete publisher",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/publishers/12",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"publishers",
+								"12"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update publisher",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"izmjena\",\n    \"address\": \"123 Main Street\",\n    \"website\": \"https://example.com\",\n    \"email\": \"publisher@mail\",\n    \"phone\": 123456789,\n    \"established_year\": 2024\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/publishers/10/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"publishers",
+								"10",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update logo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "logo",
+									"type": "file",
+									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-19 13-11-13.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/publishers/10/update-logo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"publishers",
+								"10",
+								"update-logo"
 							]
 						}
 					},

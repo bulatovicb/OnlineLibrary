@@ -201,7 +201,7 @@ class RentalController extends Controller
             'librarian' => $librarian->id,
         ]);
     }
-  
+
     /**
      * Returns rented book list.
      *
@@ -259,7 +259,7 @@ class RentalController extends Controller
             'data' => $activeRentals,
         ]);
     }
-  
+
      /**
      * Returns a paginated list of returned books.
      *
@@ -375,6 +375,37 @@ class RentalController extends Controller
             'message' => "Success",
             'data' => $overdueRentals,
         ]);
-           
+
+    }
+
+    /**
+     * Returns a summary of currently active rentals.
+     *
+     * Provides a count of books that are currently rented out and not overdue,
+     * and a count of those that are overdue based on the rental policy period.
+     *
+ * @return \Illuminate\Http\JsonResponse
+     */
+    public function rentalSummary()
+    {
+        $rentalPolicy = Policy::where('name', 'rental_period')->first();
+        $rentalPeriod = $rentalPolicy->period;
+        $now = now();
+
+        $notOverdueCount = Rental::whereNull('returned_at')
+            ->whereDate('rented_at', '>', $now->copy()->subDays($rentalPeriod))
+            ->count();
+
+        $overdueCount = Rental::whereNull('returned_at')
+            ->whereDate('rented_at', '<=', $now->copy()->subDays($rentalPeriod))
+            ->count();
+
+        return response()->json([
+            'message' => "Rental Summary retrieved successfully",
+            'data' => [
+                'active_rentals_not_overdue' => $notOverdueCount,
+                'active_rentals_overdue' => $overdueCount,
+            ]
+        ]);
     }
 }

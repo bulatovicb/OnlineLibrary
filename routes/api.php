@@ -65,6 +65,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/rentals/active', [RentalController::class, 'indexRented']);
         Route::get('/rentals/returned', [RentalController::class, 'indexReturned']);
         Route::get('/rentals/overdue', [RentalController::class, 'indexOverdue']);
+        Route::get('/rentals/summary', [RentalController::class, 'rentalSummary']);
 
         Route::post('/rentals', [RentalController::class, 'store']);
         Route::post('/rentals/{id}/return', [RentalController::class, 'returnBook']);
