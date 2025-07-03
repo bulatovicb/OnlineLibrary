@@ -80,8 +80,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::patch('/publishers/{publisher}/update', [PublisherController::class, 'update']);
         Route::post('/publishers/{publisher}/update-logo', [PublisherController::class, 'updateLogo']);
         Route::delete('/publishers/{publisher}', [PublisherController::class, 'destroy']);
-
-        Route::get('/rentals/history/{student}', [RentalController::class, 'historyStudent']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
