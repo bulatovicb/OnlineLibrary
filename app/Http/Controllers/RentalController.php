@@ -269,7 +269,7 @@ class RentalController extends Controller
      * Returns a paginated list of returned books.
      *
      * Accessible only to authenticated librarians.
-     * Supports filtering by student ID to view active rentals for a specific student.
+     * Supports filtering by student ID to view returned rentals for a specific student.
      * Supports case-insensitive partial matching on the book name (using ILIKE for PostgreSQL).
      * Supports pagination with 'per_page' values of 20 (default), 50, or 100.
      *
@@ -332,7 +332,7 @@ class RentalController extends Controller
      * Returns a paginated list of overdue books.
      *
      * Accessible only to authenticated librarians.
-     * Supports filtering by student ID to view active rentals for a specific student.
+     * Supports filtering by student ID to view overdue rentals for a specific student.
      * Supports case-insensitive partial matching on the book name (ILIKE).
      * Supports pagination with 'per_page' values of 20 (default), 50, or 100.
      * Overdue books are defined as books rented for longer than the allowed rental period in policy.
