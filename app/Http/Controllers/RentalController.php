@@ -269,6 +269,7 @@ class RentalController extends Controller
      * Returns a paginated list of returned books.
      *
      * Accessible only to authenticated librarians.
+     * Supports filtering by student ID to view active rentals for a specific student.
      * Supports case-insensitive partial matching on the book name (using ILIKE for PostgreSQL).
      * Supports pagination with 'per_page' values of 20 (default), 50, or 100.
      *
@@ -279,7 +280,8 @@ class RentalController extends Controller
     {
         $request->validate([
             'per_page' => 'nullable|integer|in:20,50,100',
-            'search_value' => 'nullable|string'
+            'search_value' => 'nullable|string',
+            'student_id' => 'nullable|integer|exists:users,id',
         ]);
 
         $query = Rental::with([
@@ -287,6 +289,10 @@ class RentalController extends Controller
             'librarian',
             'student',
         ])->whereNotNull('returned_at');
+
+        if ($request->filled('student_id')) {
+            $query->where('student_id', $request->student_id);
+        }
 
         if ($request->filled('search_value')) {
             $search = $request->search_value;
@@ -326,6 +332,7 @@ class RentalController extends Controller
      * Returns a paginated list of overdue books.
      *
      * Accessible only to authenticated librarians.
+     * Supports filtering by student ID to view active rentals for a specific student.
      * Supports case-insensitive partial matching on the book name (ILIKE).
      * Supports pagination with 'per_page' values of 20 (default), 50, or 100.
      * Overdue books are defined as books rented for longer than the allowed rental period in policy.
@@ -338,6 +345,7 @@ class RentalController extends Controller
         $request->validate([
             'search_value' => 'nullable|string',
             'per_page' => 'nullable|integer|in:20,50,100',
+            'student_id' => 'nullable|integer|exists:users,id',
         ]);
 
         $rentalPolicy = Policy::where('name', 'rental_period')->first();
@@ -347,6 +355,10 @@ class RentalController extends Controller
             ->whereNull('returned_at')
             ->whereDate('rented_at', '<=', now()
                 ->subDays($rentalPeriod));
+
+        if ($request->filled('student_id')) {
+            $query->where('student_id', $request->student_id);
+        }
 
         if ($request->filled('search_value')) {
             $search = $request->search_value;
