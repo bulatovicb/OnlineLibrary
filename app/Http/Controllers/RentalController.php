@@ -202,18 +202,6 @@ class RentalController extends Controller
         ]);
     }
 
-    /**
-     * Returns rented book list.
-     *
-     * Accessible only to authenticated librarians.
-     * Supports filtering by book ID to view active rentals for a specific book.
-     * Supports filtering by student ID to view active rentals for a specific student.
-     * Supports case-insensitive partial matching on the book name field (ILIKE).
-     * Supports pagination with per-page values of 20 (default), 50, or 100.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function indexRented(Request $request)
     {
         request()->validate([
@@ -368,12 +356,12 @@ class RentalController extends Controller
         $query = Rental::with(['book', 'librarian', 'student'])
             ->whereNull('returned_at')
             ->whereDate('rented_at', '<=', now()
-            ->subDays($rentalPeriod));
+                ->subDays($rentalPeriod));
 
         if ($request->filled('book_id')) {
             $query->where('book_id', $request->book_id);
         }
-      
+
         if ($request->filled('student_id')) {
             $query->where('student_id', $request->student_id);
         }
@@ -411,5 +399,36 @@ class RentalController extends Controller
             'data' => $overdueRentals,
         ]);
 
+    }
+
+    /**
+     * Returns a summary of currently active rentals.
+     *
+     * Provides a count of books that are currently rented out and not overdue,
+     * and a count of those that are overdue based on the rental policy period.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function rentalSummary()
+    {
+        $rentalPolicy = Policy::where('name', 'rental_period')->first();
+        $rentalPeriod = $rentalPolicy->period;
+        $now = now();
+
+        $notOverdueCount = Rental::whereNull('returned_at')
+            ->whereDate('rented_at', '>', $now->copy()->subDays($rentalPeriod))
+            ->count();
+
+        $overdueCount = Rental::whereNull('returned_at')
+            ->whereDate('rented_at', '<=', $now->copy()->subDays($rentalPeriod))
+            ->count();
+
+        return response()->json([
+            'message' => "Rental Summary retrieved successfully",
+            'data' => [
+                'active_rentals_not_overdue' => $notOverdueCount,
+                'active_rentals_overdue' => $overdueCount,
+            ]
+        ]);
     }
 }
