@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Policy;
-use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Models\DiscardedBook;
+use App\Models\Policy;
 use App\Models\Rental;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Models\DiscardedBook;
 
 class RentalController extends Controller
 {
@@ -202,21 +202,13 @@ class RentalController extends Controller
         ]);
     }
 
-    /**
-     * Returns rented book list.
-     *
-     * Accessible only to authenticated librarians.
-     * Supports case-insensitive partial matching on the book name field (ILIKE).
-     * Supports pagination with per-page values of 20 (default), 50, or 100.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function indexRented(Request $request)
     {
         request()->validate([
             'per_page' => 'integer|nullable|in:20,50,100',
             'search_value' => 'string|nullable',
+            'book_id' => 'integer|nullable|exists:books,id',
+            'student_id' => 'nullable|integer|exists:users,id',
         ]);
 
         $query = Rental::with([
@@ -224,6 +216,14 @@ class RentalController extends Controller
             'student',
             'librarian'
         ])->whereNull('returned_at');
+
+        if ($request->filled('book_id')) {
+            $query->where('book_id', $request->book_id);
+        }
+
+        if ($request->filled('student_id')) {
+            $query->where('student_id', $request->student_id);
+        }
 
         if ($request->filled('search_value')) {
             $search = $request->search_value;
@@ -251,7 +251,6 @@ class RentalController extends Controller
                     'id' => $rental->librarian->id,
                 ],
             ];
-
         });
 
         return response()->json([
@@ -260,10 +259,12 @@ class RentalController extends Controller
         ]);
     }
 
-     /**
+    /**
      * Returns a paginated list of returned books.
      *
      * Accessible only to authenticated librarians.
+     * Supports filtering by book ID to view returned rentals for a specific book.
+     * Supports filtering by student ID to view returned rentals for a specific student.
      * Supports case-insensitive partial matching on the book name (using ILIKE for PostgreSQL).
      * Supports pagination with 'per_page' values of 20 (default), 50, or 100.
      *
@@ -274,7 +275,9 @@ class RentalController extends Controller
     {
         $request->validate([
             'per_page' => 'nullable|integer|in:20,50,100',
-            'search_value' => 'nullable|string'
+            'search_value' => 'nullable|string',
+            'book_id' => 'integer|nullable|exists:books,id',
+            'student_id' => 'nullable|integer|exists:users,id',
         ]);
 
         $query = Rental::with([
@@ -282,6 +285,14 @@ class RentalController extends Controller
             'librarian',
             'student',
         ])->whereNotNull('returned_at');
+
+        if ($request->filled('book_id')) {
+            $query->where('book_id', $request->book_id);
+        }
+
+        if ($request->filled('student_id')) {
+            $query->where('student_id', $request->student_id);
+        }
 
         if ($request->filled('search_value')) {
             $search = $request->search_value;
@@ -321,6 +332,8 @@ class RentalController extends Controller
      * Returns a paginated list of overdue books.
      *
      * Accessible only to authenticated librarians.
+     * Supports filtering by book ID to view overdue rentals for a specific book.
+     * Supports filtering by student ID to view overdue rentals for a specific student.
      * Supports case-insensitive partial matching on the book name (ILIKE).
      * Supports pagination with 'per_page' values of 20 (default), 50, or 100.
      * Overdue books are defined as books rented for longer than the allowed rental period in policy.
@@ -333,6 +346,8 @@ class RentalController extends Controller
         $request->validate([
             'search_value' => 'nullable|string',
             'per_page' => 'nullable|integer|in:20,50,100',
+            'book_id' => 'integer|nullable|exists:books,id',
+            'student_id' => 'nullable|integer|exists:users,id',
         ]);
 
         $rentalPolicy = Policy::where('name', 'rental_period')->first();
@@ -341,7 +356,15 @@ class RentalController extends Controller
         $query = Rental::with(['book', 'librarian', 'student'])
             ->whereNull('returned_at')
             ->whereDate('rented_at', '<=', now()
-            ->subDays($rentalPeriod));
+                ->subDays($rentalPeriod));
+
+        if ($request->filled('book_id')) {
+            $query->where('book_id', $request->book_id);
+        }
+
+        if ($request->filled('student_id')) {
+            $query->where('student_id', $request->student_id);
+        }
 
         if ($request->filled('search_value')) {
             $search = $request->search_value;
@@ -384,7 +407,7 @@ class RentalController extends Controller
      * Provides a count of books that are currently rented out and not overdue,
      * and a count of those that are overdue based on the rental policy period.
      *
- * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function rentalSummary()
     {
