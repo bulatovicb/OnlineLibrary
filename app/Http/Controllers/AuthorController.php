@@ -3,14 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Author;
+use App\Services\AuthorService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 
 class AuthorController extends Controller
 {
+    private AuthorService $authorService;
+
+    public function __construct(AuthorService $authorService)
+    {
+        $this->authorService = $authorService;
+    }
+
     /**
      * Creates new author.
      *
@@ -23,7 +30,6 @@ class AuthorController extends Controller
      */
     public function create(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -35,17 +41,7 @@ class AuthorController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $picturePath = null;
-        if ($request->hasFile('picture')) {
-            $picturePath = $request->file('picture')->store('picture', 'public');
-        }
-
-        $author = Author::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'biography' => $request->biography,
-            'picture' => $picturePath,
-        ]);
+        $author = $this->authorService->create($request->all());
 
         return response()->json([
             'message' => 'Author created successfully',
@@ -65,9 +61,7 @@ class AuthorController extends Controller
      */
     public function show(Author $author)
     {
-
         return response()->json(['author' => $author], 200);
-
     }
 
     /**
@@ -103,32 +97,16 @@ class AuthorController extends Controller
     public function index(Request $request)
     {
         try {
-            $validated = $request->validate([
-                'per_page' => 'nullable|integer|in:20,50,100',
-                'search_value' => 'nullable|string',
+            $authors = $this->authorService->getAuthors($request->all());
+
+            return response()->json([
+                'message' => 'Authors retrieved successfully',
+                'data' => $authors
             ]);
 
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
         }
-
-        $query = Author::query();
-
-        if ($request->filled('search_value')) {
-            $search = $request->search_value;
-            $query->where(function ($q) use ($search) {
-                $q->whereRaw('first_name ILIKE ?', ["%$search%"])
-                    ->orWhereRaw('last_name ILIKE ?', ["%$search%"]);
-            });
-        }
-
-        $perPage = $request->per_page ?? 20;
-        $authors = $query->paginate($perPage);
-
-        return response()->json([
-            'message' => 'Authors retrieved successfully',
-            'data' => $authors
-        ]);
     }
 
     /**
@@ -144,7 +122,6 @@ class AuthorController extends Controller
      */
     public function update(Request $request, Author $author)
     {
-
         $validator = Validator::make($request->all(), [
             'first_name' => 'sometimes|string',
             'last_name' => 'sometimes|string',
@@ -155,8 +132,7 @@ class AuthorController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $data = $request->only(['first_name', 'last_name', 'biography']);
-        $author->update($data);
+        $author = $this->authorService->update($author, $request->all());
 
         return response()->json([
             'message' => 'Author updated successfully',
@@ -178,19 +154,11 @@ class AuthorController extends Controller
      */
     public function updatePicture(Request $request, Author $author)
     {
-        $validator = Validator::make($request->all(), [
+        $validated = $request->validate([
             'picture' => 'required|image|max:5120',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
-        }
-
-        if ($request->hasFile('picture')) {
-            $picturePath = $request->file('picture')->store('picture', 'public');
-            $author->picture = $picturePath;
-            $author->save();
-        }
+        $author = $this->authorService->updatePicture($author, $validated['picture']);
 
         return response()->json([
             'message' => 'Picture updated successfully',
@@ -209,10 +177,7 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
-        if ($author->picture && Storage::disk('public')->exists($author->picture)) {
-            Storage::disk('public')->delete($author->picture);
-        }
-        $author->delete();
+        $this->authorService->delete($author);
 
         return response()->json([
             'message' => 'Author deleted successfully',
