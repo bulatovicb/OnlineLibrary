@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateAuthorRequest;
+use App\Http\Requests\UpdateAuthorRequest;
 use App\Models\Author;
 use App\Services\AuthorService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 
@@ -25,23 +26,12 @@ class AuthorController extends Controller
      * Validates the provided profile data and creates a new user if validation passes.
      * Returns a JSON response with the author data and a success message.
      *
-     * @param Request $request
+     * @param CreateAuthorRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(Request $request)
+    public function create(CreateAuthorRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'biography' => 'nullable|string',
-            'picture' => 'nullable|image|max:5120',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
-        }
-
-        $author = $this->authorService->create($request->all());
+        $author = $this->authorService->create($request->validated());
 
         return response()->json([
             'message' => 'Author created successfully',
@@ -81,7 +71,6 @@ class AuthorController extends Controller
         }
 
         return response()->file(storage_path('app/public/' . $author->picture));
-
     }
 
     /**
@@ -116,23 +105,13 @@ class AuthorController extends Controller
      * Validates the provided input attributes and returns error message if validator fails.
      * On success, updates the author's data and returns JSON response with success message.
      *
-     * @param Request $request
+     * @param UpdateAuthorRequest $request
      * @param Author $author
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Author $author)
+    public function update(UpdateAuthorRequest $request, Author $author)
     {
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'sometimes|string',
-            'last_name' => 'sometimes|string',
-            'biography' => 'nullable|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
-        }
-
-        $author = $this->authorService->update($author, $request->all());
+        $author = $this->authorService->update($author, $request->validated());
 
         return response()->json([
             'message' => 'Author updated successfully',
