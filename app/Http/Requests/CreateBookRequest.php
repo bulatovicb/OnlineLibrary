@@ -41,8 +41,7 @@ class CreateBookRequest extends FormRequest
             'genres.*' => 'exists:genres,id',
             'authors' => 'required|array',
             'authors.*' => 'exists:authors,id',
-            'publishers' => 'nullable|array',
-            'publishers.*' => 'exists:publishers,id',
+            'publisher_id' => 'required|exists:publishers,id',
 
             'images' => 'nullable|array',
             'images.*' => 'file|image|max:5120',
