@@ -2,58 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+use App\Services\CategoryService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
-     /**
+    private CategoryService $categoryService;
+
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
+
+    /**
      * Creates new category for books.
      *
      * Validates the provided category's data and creates a new category if validation passes.
      * Handles icon uploads if any and store the icon.
      * Returns a JSON response with created category.
      *
-     * @param Request $request
+     * @param CreateCategoryRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(Request $request)
+    public function create(CreateCategoryRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|unique:categories,name|max:500',
-            'description' => 'required|string|max:500',
-            'icon' => 'nullable|image|max:5120',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 422);
-        }
+        $validated = $request->validated();
+        $icon = $request->file('icon');
 
-        $iconPath = null;
+        $category = $this->categoryService->create($validated, $icon);
 
-        if ($request->hasFile('icon')) {
-            $iconPath = $request->file('icon')->store('icons', 'public');
-        }
-
-        $category = Category::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'icon' => $iconPath,
-        ]);
-
-       return response()->json([
+        return response()->json([
             'message' => 'Category created successfully',
             'category' => $category
 
-       ], 201);
-
+        ], 201);
     }
 
-     /**
+    /**
      * Shows a category.
      *
      * Accessible only by authenticated librarians.
@@ -93,7 +84,7 @@ class CategoryController extends Controller
         ]);
     }
 
-     /**
+    /**
      * Returns a paginated list of categories with optional search filtering.
      *
      * Accessible only by authenticated librarians.
@@ -105,20 +96,7 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $validated = $request->validate([
-            'per_page' => 'nullable|integer|in:20,50,100',
-            'search_value' => 'nullable|string'
-        ]);
-
-        $search = $validated['search_value'] ?? null;
-        $perPage = $validated['per_page'] ?? 20;
-
-        $categories = Category::when($search, function ($query, $search) {
-            $query->where(function ($q) use ($search) {
-                $q->whereRaw('name ILIKE ?', ["%{$search}%"])
-                    ->orWhereRaw('description ILIKE ?', ["%{$search}%"]);
-            });
-        })->paginate($perPage);
+        $categories = $this->categoryService->getCategories($request->all());
 
         return response()->json([
             'message' => 'Category list',
@@ -126,38 +104,29 @@ class CategoryController extends Controller
         ]);
     }
 
-     /**
+
+    /**
      * Updates category's details.
      *
      * Accessible only by authenticated librarians.
      * Validates the provided input attributes and returns error message if validator fails.
      * On success, updates the category's data and returns JSON response with success message.
      *
-     * @param Request $request
+     * @param UpdateCategoryRequest $request
      * @param Category $category
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|string',
-            'description' => 'nullable|string'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $data = $request->only(['name', 'description']);
-        $category->update($data);
+        $updatedCategory = $this->categoryService->update($category, $request->validated());
 
         return response()->json([
             'message' => 'Category updated successfully',
-            'category' => $category
+            'category' => $updatedCategory
         ]);
     }
 
-     /**
+    /**
      * Updates category's icon.
      *
      * Accessible only by authenticated librarians.
@@ -179,20 +148,15 @@ class CategoryController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        if ($request->hasFile('icon')) {
-
-            $iconPath = $request->file('icon')->store('icons', 'public');
-            $category->icon = $iconPath;
-            $category->save();
-        }
-
+        $category = $this->categoryService->updateIcon($category, $request->file('icon'));
+        
         return response()->json([
             'message' => 'Icon updated successfully',
             'icon_url' => $category->icon
         ]);
     }
 
-     /**
+    /**
      * Deletes category.
      *
      * Accessible only by authenticated librarians.
