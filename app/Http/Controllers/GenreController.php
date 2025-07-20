@@ -2,75 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateGenreRequest;
+use App\Http\Requests\UpdateGenreRequest;
 use App\Models\Genre;
+use App\Services\GenreService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class GenreController extends Controller
 {
-    /**
-     * Returns a paginated list of genres with optional search filtering.
-     *
-     * Accessible only to authenticated librarians.
-     * Supports case-insensitive partial matching on the name and description fields (ILIKE).
-     * Supports pagination with per-page values of 20 (default), 50, or 100.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function index(Request $request)
+    private GenreService $genreService;
+
+    public function __construct(genreService $genreService)
     {
-        request()->validate([
-            'per_page' => 'integer|nullable|in:20,50,100',
-            'search_value' => 'string|nullable',
-        ]);
-
-        $query = Genre::query();
-
-        if ($request->filled('search_value')) {
-            $search = $request->search_value;
-            $query->where(function ($q) use ($search) {
-                $q->whereRaw('name ILIKE ?', ["%$search%"])
-                    ->orWhereRaw('description ILIKE ?', ["%$search%"]);
-            });
-        }
-
-        $perPage = $request->per_page ?? 20;
-        $genres = $query->paginate($perPage);
-
-        return response()->json([
-            'message' => "Success",
-            'genres' => $genres
-        ]);
+        $this->genreService = $genreService;
     }
 
     /**
-     * Creates new book.
+     * Creates new Genre.
      *
      * Accessible only by authenticated librarians.
-     * Validates the provided book's data via CreateBookRequest.
-     * Handles image uploads if any and store the image.
-     * Attaches related models and eager load related data before returning response.
-     * Returns a JSON response with created book and its relations.
+     * Validates the provided Genre's data.
+     * Returns a JSON response with created genre.
      *
-     * @param CreateBookRequest $request
+     * @param CreateGenreRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(Request $request)
+    public function create(CreateGenreRequest $request)
     {
-        $validator = Validator::make(request()->all(), [
-            'name' => 'required|string|max:500|unique:genres,name',
-            'description' => 'required|max:500',
-        ]);
+        $validated = $request->validated();
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $genre = Genre::create([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
+        $genre = $this->genreService->create($validated);
 
         return response()->json([
             'message' => 'Genre created successfully.',
@@ -94,39 +55,49 @@ class GenreController extends Controller
             'genre' => $genre
         ], 200);
     }
-  
-     /**
+
+    /**
+     * Returns a paginated list of genres with optional search filtering.
+     *
+     * Accessible only to authenticated librarians.
+     * Supports case-insensitive partial matching on the name and description fields (ILIKE).
+     * Supports pagination with per-page values of 20 (default), 50, or 100.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
+    {
+        $genres = $this->genreService->getGenres($request->all());
+
+        return response()->json([
+            'message' => "Success",
+            'genres' => $genres
+        ]);
+    }
+
+    /**
      * Updates the genre's details.
      *
      * Accessible only by authenticated librarians.
      * Validates the provided input attributes and returns an error message if validation fails.
      * On success, updates the genre's data and returns a JSON response with a success message.
      *
-     * @param Request $request
+     * @param UpdateGenreRequest $request
      * @param Genre $genre
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Genre $genre)
+    public function update(UpdateGenreRequest $request, Genre $genre)
     {
-        $validator = Validator::make(request()->all(), [
-            'name' => 'sometimes|string|max:500',
-            'description' => 'nullable|max:500',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $data = $request->only(['name', 'description']);
-        $genre->update($data);
+        $updatedGenre = $this->genreService->update($genre, $request->all());
 
         return response()->json([
             'message' => 'Genre updated successfully.',
-            'genre' => $genre,
+            'genre' => $updatedGenre,
         ]);
     }
-  
-     /**
+
+    /**
      * Deletes a genre.
      *
      * Accessible only by authenticated librarians.
@@ -138,6 +109,7 @@ class GenreController extends Controller
     public function destroy(Genre $genre)
     {
         $genre->delete();
+
         return response()->json([
             'message' => 'Genre deleted successfully.',
         ]);
