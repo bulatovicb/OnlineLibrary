@@ -12,6 +12,7 @@ class Book extends Model
     public const SCRIPTS = ['cyrillic', 'latin', 'arabic'];
     public const BINDINGS = ['hardcover', 'paperback', 'spiral-bound'];
     public const DIMENSIONS = ['A1', 'A2', '21cm x 29.7cm', '15cm x 21cm'];
+
     protected $fillable = [
         'name',
         'description',
@@ -22,6 +23,7 @@ class Book extends Model
         'script',
         'binding',
         'dimensions',
+        'publisher_id',
     ];
 
     /**
@@ -68,7 +70,7 @@ class Book extends Model
     /**
      * Get the publisher that published this book.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function publisher()
     {

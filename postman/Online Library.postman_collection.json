@@ -648,10 +648,16 @@
 							]
 						},
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \n    \"name\":\"Promjenaaa\"\n}",
+							"raw": "{\n  \"name\": \"Novi naziv knjige\",\n  \"publisher_id\": 21,\n  \"categories\": [3, 6, 7],\n  \"genres\": [1, 2],\n  \"authors\": [4, 8]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -659,7 +665,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/books/6/update",
+							"raw": "http://localhost/api/books/446/update",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -667,7 +673,7 @@
 							"path": [
 								"api",
 								"books",
-								"6",
+								"446",
 								"update"
 							]
 						}
@@ -849,7 +855,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "13|kzKIiT6SyPYJ6yz2LqrVBrLWG72Vo2ULLUmV563W0990dc2b",
 									"type": "string"
 								}
 							]
@@ -907,7 +913,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
 									"type": "string"
 								}
 							]
@@ -919,7 +925,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/api/authors/10",
+							"raw": "http://localhost/api/authors/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -927,7 +933,7 @@
 							"path": [
 								"api",
 								"authors",
-								"10"
+								"7"
 							]
 						}
 					},
@@ -941,7 +947,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
 									"type": "string"
 								}
 							]
@@ -966,19 +972,31 @@
 				},
 				{
 					"name": "View all",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "13|kzKIiT6SyPYJ6yz2LqrVBrLWG72Vo2ULLUmV563W0990dc2b",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost/api/authors?per_page=20",
 							"protocol": "http",
@@ -1007,7 +1025,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
 									"type": "string"
 								}
 							]
@@ -1047,7 +1065,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
 									"type": "string"
 								}
 							]
@@ -1088,7 +1106,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
 									"type": "string"
 								}
 							]
@@ -1571,7 +1589,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost/api/categories/4",
+							"raw": "http://localhost/api/categories/10",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1579,7 +1597,7 @@
 							"path": [
 								"api",
 								"categories",
-								"4"
+								"10"
 							]
 						}
 					},
@@ -1708,7 +1726,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "15|i7c1wKNv62ZsdZo3J4VO8Rkf2LxJXYEjGBOf3Y9E15403b27",
 									"type": "string"
 								}
 							]
@@ -1716,7 +1734,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost/api/categories?search_value=horror",
+							"raw": "http://localhost/api/categories",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1733,7 +1751,8 @@
 								},
 								{
 									"key": "search_value",
-									"value": "horror"
+									"value": "horor",
+									"disabled": true
 								}
 							]
 						}

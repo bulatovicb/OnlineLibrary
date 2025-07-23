@@ -183,17 +183,27 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string',
             'description' => 'sometimes|string',
-            'number_of_pages' => 'sometimes|integer',
+            'number_of_pages' => 'sometimes|integer|min:1',
             'number_of_copies_available' => 'sometimes|integer',
             'isbn' => 'sometimes|string|unique:books,isbn,' . $book->id,
             'language' => 'sometimes|string',
             'script' => ['nullable', Rule::in(Book::SCRIPTS)],
             'binding' => ['nullable', Rule::in(Book::BINDINGS)],
             'dimensions' => ['nullable', Rule::in(Book::DIMENSIONS)],
+
+            'publisher_id' => 'sometimes|exists:publishers,id',
+
+            'categories' => 'sometimes|array',
+            'categories.*' => 'exists:categories,id',
+
+            'genres' => 'sometimes|array',
+            'genres.*' => 'exists:genres,id',
+
+            'authors' => 'sometimes|array',
+            'authors.*' => 'exists:authors,id',
         ]);
 
         if ($validator->fails()) {
@@ -204,11 +214,22 @@ class BookController extends Controller
 
         $book->update($data);
 
+        if (isset($data['categories'])) {
+            $book->categories()->sync($data['categories']);
+        }
+
+        if (isset($data['genres'])) {
+            $book->genres()->sync($data['genres']);
+        }
+
+        if (isset($data['authors'])) {
+            $book->authors()->sync($data['authors']);
+        }
+
         return response()->json([
             'message' => 'Book updated successfully.',
-            'book' => $book,
+            'book' => $book->fresh(['authors', 'categories', 'genres', 'publisher']),
         ]);
-
     }
 
     /**
