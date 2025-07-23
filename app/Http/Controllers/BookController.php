@@ -23,6 +23,9 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
+
+        $book->load(['authors', 'categories', 'genres', 'publisher', 'images']);
+        
         return response()->json(['book' => $book], 200);
     }
 
