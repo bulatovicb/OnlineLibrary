@@ -586,10 +586,10 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n"
+							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/api/books/41",
+							"raw": "http://localhost/api/books/446",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -597,7 +597,7 @@
 							"path": [
 								"api",
 								"books",
-								"41"
+								"446"
 							]
 						}
 					},
@@ -648,10 +648,16 @@
 							]
 						},
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \n    \"name\":\"Promjenaaa\"\n}",
+							"raw": "{\n  \"name\": \"Novi naziv knjige\",\n  \"publisher_id\": 21,\n  \"categories\": [3, 6, 7],\n  \"genres\": [1, 2],\n  \"authors\": [4, 8]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -659,7 +665,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/books/6/update",
+							"raw": "http://localhost/api/books/446/update",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -667,7 +673,7 @@
 							"path": [
 								"api",
 								"books",
-								"6",
+								"446",
 								"update"
 							]
 						}
@@ -849,7 +855,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "13|kzKIiT6SyPYJ6yz2LqrVBrLWG72Vo2ULLUmV563W0990dc2b",
 									"type": "string"
 								}
 							]
@@ -907,7 +913,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "15|i7c1wKNv62ZsdZo3J4VO8Rkf2LxJXYEjGBOf3Y9E15403b27",
 									"type": "string"
 								}
 							]
@@ -919,7 +925,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/api/authors/10",
+							"raw": "http://localhost/api/authors/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -927,7 +933,7 @@
 							"path": [
 								"api",
 								"authors",
-								"10"
+								"7"
 							]
 						}
 					},
@@ -941,7 +947,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
 									"type": "string"
 								}
 							]
@@ -966,19 +972,81 @@
 				},
 				{
 					"name": "View all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `",
+									"<style type=\"text/css\">",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+									"    .tftable tr {background-color:#ffffff;}",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+									"    .tftable tr:hover {background-color:#e0ffff;}",
+									"</style>",
+									"",
+									"<table class=\"tftable\" border=\"1\">",
+									"    <tr>",
+									"        <th>ID</th>",
+									"        <th>First Name</th>",
+									"        <th>Last Name</th>",
+									"        <th>Biography</th>",
+									"        <th>Picture</th>",
+									"        <th>Created At</th>",
+									"        <th>Updated At</th>",
+									"    </tr>",
+									"",
+									"    {{#each response.data.data}}",
+									"        <tr id=row_{{@key}}>",
+									"            <td>{{id}}</td>",
+									"            <td>{{first_name}}</td>",
+									"            <td>{{last_name}}</td>",
+									"            <td>{{biography}}</td>",
+									"            <td><img src=\"{{picture}}\" alt=\"Author Picture\" width=\"50\" height=\"50\"></td>",
+									"            <td>{{created_at}}</td>",
+									"            <td>{{updated_at}}</td>",
+									"        </tr>",
+									"    {{/each}}",
+									"</table>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    return {response: pm.response.json()};",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "15|i7c1wKNv62ZsdZo3J4VO8Rkf2LxJXYEjGBOf3Y9E15403b27",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost/api/authors?per_page=20",
 							"protocol": "http",
@@ -1007,7 +1075,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
 									"type": "string"
 								}
 							]
@@ -1047,7 +1115,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
 									"type": "string"
 								}
 							]
@@ -1088,7 +1156,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
 									"type": "string"
 								}
 							]
@@ -1571,7 +1639,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost/api/categories/4",
+							"raw": "http://localhost/api/categories/10",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1579,7 +1647,7 @@
 							"path": [
 								"api",
 								"categories",
-								"4"
+								"10"
 							]
 						}
 					},
@@ -1708,7 +1776,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "15|i7c1wKNv62ZsdZo3J4VO8Rkf2LxJXYEjGBOf3Y9E15403b27",
 									"type": "string"
 								}
 							]
@@ -1716,7 +1784,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost/api/categories?search_value=horror",
+							"raw": "http://localhost/api/categories",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1733,7 +1801,8 @@
 								},
 								{
 									"key": "search_value",
-									"value": "horror"
+									"value": "horor",
+									"disabled": true
 								}
 							]
 						}

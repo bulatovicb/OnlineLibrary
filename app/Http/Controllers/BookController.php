@@ -46,14 +46,35 @@ class BookController extends Controller
      *
      * Accessible only by authenticated librarians.
      * Returns a JSON response with book data.
-     * Automatically returns 404 if the author is not found.
+     * Automatically returns 404 if the book is not found.
      *
      * @param Book $book
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Book $book)
     {
-        return response()->json(['book' => $book], 200);
+        $book->load([
+            'authors:id',
+            'categories:id',
+            'genres:id',
+            'publisher:id',
+            'images:id,book_id'
+        ]);
+
+        $bookData = $book->only($book->getFillable());
+
+        return response()->json([
+            'book' => array_merge(
+                $bookData,
+                [
+                    'authors' => $book->authors->pluck('id'),
+                    'categories' => $book->categories->pluck('id'),
+                    'genres' => $book->genres->pluck('id'),
+                    'publisher_id' => optional($book->publisher)->id,
+                    'images' => $book->images->pluck('id'),
+                ]
+            )
+        ], 200);
     }
 
     /**
