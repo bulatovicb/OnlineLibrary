@@ -23,10 +23,20 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
+        $book->load(['authors:id', 'categories:id', 'genres:id', 'publisher:id', 'images:id,book_id']);
 
-        $book->load(['authors', 'categories', 'genres', 'publisher', 'images']);
-        
-        return response()->json(['book' => $book], 200);
+        return response()->json([
+            'book' => array_merge(
+                $book->toArray(),
+                [
+                    'author_ids' => $book->authors->pluck('id'),
+                    'category_ids' => $book->categories->pluck('id'),
+                    'genre_ids' => $book->genres->pluck('id'),
+                    'publisher_id' => optional($book->publisher)->id,
+                    'image_ids' => $book->images->pluck('id'),
+                ]
+            )
+        ], 200);
     }
 
     /**
