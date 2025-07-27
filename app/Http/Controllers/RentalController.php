@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Book;
-use App\Models\DiscardedBook;
 use App\Models\Policy;
 use App\Models\Rental;
-use App\Models\Role;
-use App\Models\User;
+use App\Services\RentalService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class RentalController extends Controller
 {
+    protected RentalService $rentalService;
+
+    public function __construct(RentalService $rentalService)
+    {
+        $this->rentalService = $rentalService;
+    }
+
     /**
      * Store a newly created rental in storage.
      *
@@ -26,55 +29,24 @@ class RentalController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'book_id' => 'required|exists:books,id',
             'student_id' => 'required|exists:users,id',
             'librarian_id' => 'required|exists:users,id',
         ]);
 
-        $book = Book::findOrFail($request->book_id);
-
         try {
-            $this->validateUserRoles($request->student_id, $request->librarian_id);
-        } catch (\Exception $exception) {
+            $rental = $this->rentalService->createRental($validated);
+
             return response()->json([
-                'error' => $exception->getMessage()
-            ], 422);
-        }
+                'message' => 'Rental created successfully',
+                'rental' => $rental
+            ], 201);
 
-        if ($book->number_of_copies_available == 0) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
-                'error' => "All copies of the book $book->id have been rented out"
+                'errors' => $e->errors()
             ], 422);
-        }
-
-        $rental = Rental::create([
-            'book_id' => $book->id,
-            'student_id' => $request->student_id,
-            'librarian_id' => $request->librarian_id,
-            'rented_at' => now(),
-            'returned_at' => null,
-        ]);
-
-        $book->decrement('number_of_copies_available');
-
-        return response()->json([
-            'message' => 'Rental created successfully',
-            'rental' => $rental
-        ], 201);
-    }
-
-    public function validateUserRoles(int $studentId, int $librarianId)
-    {
-        $student = User::findOrFail($studentId);
-        $librarian = User::findOrFail($librarianId);
-
-        if ($student->role_id !== Role::STUDENT) {
-            throw new \Exception("Selected user is not a student");
-        }
-
-        if ($librarian->role_id !== Role::LIBRARIAN) {
-            throw new \Exception("Selected user is not a librarian");
         }
     }
 
@@ -112,43 +84,18 @@ class RentalController extends Controller
      */
     public function returnBook(Request $request, $id)
     {
-        $rental = Rental::find($id);
+        try {
+            $result = $this->rentalService->returnBook($id, $request->user()->id);
 
-        if (!$rental) {
             return response()->json([
-                'error' => 'This book was not rented out, hence cannot be returned.'
-            ], 422);
+                'message' => 'Book returned',
+                ...$result
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Something went wrong'], 500);
         }
-
-        if ($rental->returned_at !== null) {
-            return response()->json([
-                'error' => 'Already returned',
-            ], 422);
-        }
-
-        $librarian = $request->user();
-
-        $book = $rental->book;
-
-        $rental->update([
-            'returned_at' => now(),
-            'librarian_id' => $librarian->id
-        ]);
-
-        $book->increment('number_of_copies_available');
-
-        $overdue = max(0, $rental->days_rented - $rental->rental_period);
-
-        if ($overdue > 0) {
-            Log::debug("Book ID {$book->id} returned with {$overdue} overdue days by student ID {$rental->student_id}.");
-        }
-
-        return response()->json([
-            'message' => 'Book returned',
-            'librarian_id' => $rental->librarian_id,
-            'student_id' => $rental->student_id,
-            'overdue_days' => $overdue,
-        ]);
     }
 
     /**
@@ -167,94 +114,41 @@ class RentalController extends Controller
      */
     public function discard(Request $request, $id)
     {
-        $book = Book::find($id);
-
-        if (!$book) {
-            return response()->json([
-                'error' => 'This book cannot be discarded as it does not exist in the inventory.'
-            ], 422);
-        }
-
         $librarian = $request->user();
 
-        if ($book->number_of_copies_available == 0) {
-            $book->update([
-                'is_active' => false,
-            ]);
+        try {
+            $discarded = $this->rentalService->discardBook($id, $librarian->id);
 
             return response()->json([
-                'error' => 'This book have no copies to discard.'
+                'message' => 'Book discarded successfully.',
+                'discarded_at' => $discarded->discarded_at,
+                'librarian' => $discarded->librarian_id,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
             ], 422);
         }
-
-        $discardedBook = DiscardedBook::create([
-            'book_id' => $book->id,
-            'librarian_id' => $librarian->id,
-            'discarded_at' => now()
-        ]);
-
-        $book->decrement('number_of_copies_available');
-
-        return response()->json([
-            'message' => 'Book discarded successfully.',
-            'discarded_at' => $discardedBook->discarded_at,
-            'librarian' => $librarian->id,
-        ]);
     }
 
+    /**
+     * Returns a list of currently active (not returned) book rentals.
+     *
+     * Accepts optional request filters such as:
+     * - per_page: number of results per page (allowed values: 20, 50, 100)
+     * - search_value: text search on book name
+     * - book_id: filter by book ID
+     * - student_id: filter by student ID
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function indexRented(Request $request)
     {
-        request()->validate([
-            'per_page' => 'integer|nullable|in:20,50,100',
-            'search_value' => 'string|nullable',
-            'book_id' => 'integer|nullable|exists:books,id',
-            'student_id' => 'nullable|integer|exists:users,id',
-        ]);
-
-        $query = Rental::with([
-            'book',
-            'student',
-            'librarian'
-        ])->whereNull('returned_at');
-
-        if ($request->filled('book_id')) {
-            $query->where('book_id', $request->book_id);
-        }
-
-        if ($request->filled('student_id')) {
-            $query->where('student_id', $request->student_id);
-        }
-
-        if ($request->filled('search_value')) {
-            $search = $request->search_value;
-            $query->whereHas('book', function ($q) use ($search) {
-                $q->whereRaw("name ILIKE ?", ["%{$search}%"]);
-            });
-        }
-
-        $perPage = $request->per_page ?? 20;
-        $activeRentals = $query->paginate($perPage);
-
-        $activeRentals->getCollection()->transform(function ($rental) {
-            return [
-                'book_title' => $rental->book->name,
-                'rented_by' => [
-                    'name' => $rental->student->first_name,
-                    'last_name' => $rental->student->last_name,
-                    'id' => $rental->student->id,
-                ],
-                'rental_date' => $rental->rented_at->toDateTimeString(),
-                'active_days' => now()->diffInDays($rental->rented_at),
-                'rented_out_by' => [
-                    'name' => $rental->librarian->first_name,
-                    'last_name' => $rental->librarian->last_name,
-                    'id' => $rental->librarian->id,
-                ],
-            ];
-        });
+        $activeRentals = $this->rentalService->getActiveRentals($request);
 
         return response()->json([
-            'message' => "Success",
+            'message' => 'Success',
             'data' => $activeRentals,
         ]);
     }
@@ -273,54 +167,7 @@ class RentalController extends Controller
      */
     public function indexReturned(Request $request)
     {
-        $request->validate([
-            'per_page' => 'nullable|integer|in:20,50,100',
-            'search_value' => 'nullable|string',
-            'book_id' => 'integer|nullable|exists:books,id',
-            'student_id' => 'nullable|integer|exists:users,id',
-        ]);
-
-        $query = Rental::with([
-            'book',
-            'librarian',
-            'student',
-        ])->whereNotNull('returned_at');
-
-        if ($request->filled('book_id')) {
-            $query->where('book_id', $request->book_id);
-        }
-
-        if ($request->filled('student_id')) {
-            $query->where('student_id', $request->student_id);
-        }
-
-        if ($request->filled('search_value')) {
-            $search = $request->search_value;
-            $query->whereHas('book', function ($q) use ($search) {
-                $q->whereRaw("name ILIKE ?", ["%{$search}%"]);
-            });
-        }
-
-        $perPage = $request->per_page ?? 20;
-        $returnedRentals = $query->paginate($perPage);
-
-        $returnedRentals->getCollection()->transform(function ($rental) {
-            return [
-                'book_title' => $rental->book->name,
-                'returned_by' => [
-                    'name' => $rental->student->name,
-                    'last_name' => $rental->student->last_name,
-                    'id' => $rental->student->id,
-                ],
-                'rental_date' => $rental->rented_at->toDateTimeString(),
-                'returned_at' => $rental->returned_at->toDateTimeString(),
-                'rented_out_by' => [
-                    'name' => $rental->librarian->name,
-                    'last_name' => $rental->librarian->last_name,
-                    'id' => $rental->librarian->id,
-                ],
-            ];
-        });
+        $returnedRentals = $this->rentalService->getReturnedRentals($request);
 
         return response()->json([
             'message' => 'Returned Rentals',
@@ -343,62 +190,12 @@ class RentalController extends Controller
      */
     public function indexOverdue(Request $request)
     {
-        $request->validate([
-            'search_value' => 'nullable|string',
-            'per_page' => 'nullable|integer|in:20,50,100',
-            'book_id' => 'integer|nullable|exists:books,id',
-            'student_id' => 'nullable|integer|exists:users,id',
-        ]);
-
-        $rentalPolicy = Policy::where('name', 'rental_period')->first();
-        $rentalPeriod = $rentalPolicy->period;
-
-        $query = Rental::with(['book', 'librarian', 'student'])
-            ->whereNull('returned_at')
-            ->whereDate('rented_at', '<=', now()
-            ->subDays($rentalPeriod));
-
-        if ($request->filled('book_id')) {
-            $query->where('book_id', $request->book_id);
-        }
-
-        if ($request->filled('student_id')) {
-            $query->where('student_id', $request->student_id);
-        }
-
-        if ($request->filled('search_value')) {
-            $search = $request->search_value;
-
-            $query->whereHas('book', function ($q) use ($search) {
-                $q->whereRaw("name ILIKE ?", ["%{$search}%"]);
-            });
-        }
-
-        $perPage = $request->per_page ?? 20;
-        $overdueRentals = $query->paginate($perPage);
-
-        $overdueRentals->getCollection()->transform(function ($rental) use ($rentalPeriod) {
-            $daysRented = now()->diffInDays($rental->rented_at);
-            $daysOverdue = $daysRented - $rentalPeriod;
-
-            return [
-                'book_title' => $rental->book->name,
-                'rental_date' => $rental->rented_at ? $rental->rented_at->toDateTimeString() : null,
-                'rented_by' => [
-                    'name' => $rental->student->first_name,
-                    'last_name' => $rental->student->last_name,
-                    'id' => $rental->student->id,
-                ],
-                'total_rental_days' => $daysRented,
-                'days_overdue' => $daysOverdue > 0 ? $daysOverdue : 0,
-            ];
-        });
+        $overdueRentals = $this->rentalService->getOverdueRentals($request);
 
         return response()->json([
-            'message' => "Success",
+            'message' => 'Success',
             'data' => $overdueRentals,
         ]);
-
     }
 
     /**
@@ -411,24 +208,11 @@ class RentalController extends Controller
      */
     public function rentalSummary()
     {
-        $rentalPolicy = Policy::where('name', 'rental_period')->first();
-        $rentalPeriod = $rentalPolicy->period;
-        $now = now();
-
-        $notOverdueCount = Rental::whereNull('returned_at')
-            ->whereDate('rented_at', '>', $now->copy()->subDays($rentalPeriod))
-            ->count();
-
-        $overdueCount = Rental::whereNull('returned_at')
-            ->whereDate('rented_at', '<=', $now->copy()->subDays($rentalPeriod))
-            ->count();
+        $summary = $this->rentalService->getRentalSummary();
 
         return response()->json([
-            'message' => "Rental Summary retrieved successfully",
-            'data' => [
-                'active_rentals_not_overdue' => $notOverdueCount,
-                'active_rentals_overdue' => $overdueCount,
-            ]
+            'message' => 'Rental Summary retrieved successfully',
+            'data' => $summary,
         ]);
     }
 }
