@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Events\LibrarianCreated;
+use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +16,13 @@ use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Creates new user.
      * Accessible only by authenticated librarians.
@@ -24,54 +34,17 @@ class UserController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(Request $request)
+    public function create(CreateUserRequest $request)
     {
-
         if (!Auth::check() || !Auth::user()->isLibrarian()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'email' => 'required|string|email|unique:users,email',
-            'username' => 'required|string|unique:users,username',
-            'jmbg' => 'required|regex:/^\d{13}$/|unique:users,jmbg',
-            'role_id' => 'required|exists:roles,id',
-            'profile_picture' => 'nullable|image|max:5120',
-            'password' => 'required|min:8',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
-        $role = Role::findOrFail($request->role_id);
-
-        $profilePicturePath = null;
-
-        if ($request->hasFile('profile_picture')) {
-            $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
-        }
-
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'username' => $request->username,
-            'jmbg' => $request->jmbg,
-            'role_id' => $role->id,
-            'profile_picture' => $profilePicturePath,
-            'password' => Hash::make($request->password),
-        ]);
-
-        if ($role->id === Role::LIBRARIAN) {
-            event(new LibrarianCreated($user));
-        }
+        $user = $this->userService->createUser($request);
 
         return response()->json([
             'message' => 'User created successfully.',
-            'user' => $user
+            'user' => $user,
         ], 201);
     }
 
@@ -86,7 +59,6 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
@@ -120,20 +92,9 @@ class UserController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request)
+    public function update(UpdateUserRequest $request)
     {
         $user = Auth::user();
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'sometimes|string',
-            'last_name' => 'sometimes|string',
-            'email' => 'sometimes|string|email|unique:users,email, ' . $user->id,
-            'username' => 'sometimes|string|unique:users,username,' . $user->id,
-            'jmbg' => 'sometimes|regex:/^\d{13}$/'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
         $data = $request->only(['first_name', 'last_name', 'email', 'username', 'jmbg']);
         $user->update($data);
 
@@ -142,7 +103,6 @@ class UserController extends Controller
             'user' => $user
         ]);
     }
-
     /**
      * Updates the authenticated user's profile picture.
      * Validates the uploaded image file.
@@ -154,28 +114,7 @@ class UserController extends Controller
      */
     public function updateProfilePicture(Request $request)
     {
-        $user = Auth::user();
-
-        $validator = Validator::make($request->all(), [
-            'profile_picture' => 'required|image|max:5120',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        if ($request->hasFile('profile_picture')) {
-            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
-            $user->profile_picture = $path;
-            $user->save();
-        }
-
-        return response()->json([
-            'message' => 'Profile picture updated successfully.',
-            'profile_picture_url' => $user->profile_picture
-                ? route('user.profilePicture', ['user' => $user])
-                : null,
-        ]);
+        return $this->userService->updateProfilePicture($request);
     }
 
     /**
@@ -191,30 +130,10 @@ class UserController extends Controller
     public function index(Request $request)
     {
         try {
-            $validated = $request->validate([
-                'role_id' => 'required|exists:roles,id',
-                'per_page' => 'nullable|integer|in:20,50,100',
-                'search_value' => 'nullable|string',
-            ]);
-
+            $users = $this->userService->getUsersByRole($request);
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
         }
-
-        $query = User::where('role_id', $request->role_id);
-
-        if ($request->filled('search_value')) {
-            $search = strtolower($request->search_value);
-            $query->where(function ($q) use ($search) {
-                $q->whereRaw('first_name ILIKE ?', ["%$search%"])
-                    ->orWhereRaw('last_name ILIKE ?', ["%$search%"])
-                    ->orWhereRaw('email ILIKE ?', ["%$search%"])
-                    ->orWhereRaw('username ILIKE ?', ["%$search%"]);
-            });
-        }
-
-        $per_page = $request->per_page ?? 20;
-        $users = $query->paginate($per_page);
 
         if ($users->isEmpty()) {
             return response()->json([
@@ -228,6 +147,7 @@ class UserController extends Controller
             'data' => $users
         ]);
     }
+
 
     /**
      * Deletes  selected users based on provided user IDs.
