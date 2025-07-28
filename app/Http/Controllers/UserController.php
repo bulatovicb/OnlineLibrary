@@ -241,6 +241,17 @@ class UserController extends Controller
      */
     public function destroy(Request $request)
     {
+        if (!is_array($request->input('users_id'))) {
+            $request->merge([
+                'users_id' => [$request->input('users_id')]
+            ]);
+        }
+
+        $request->validate([
+            'users_id' => 'required',
+            'users_id.*' => 'integer|exists:users,id',
+        ]);
+
         $selectedUsers = $request->input('users_id');
 
         if (!is_array($selectedUsers)) {
@@ -257,8 +268,7 @@ class UserController extends Controller
         }
 
         return response()->json([
-            'message' => 'Users deleted successfully.',
-
+            'message' => 'User(s) deleted successfully.',
         ]);
     }
 }
