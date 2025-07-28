@@ -27,10 +27,16 @@
 									]
 								},
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"query\": [\"harry potter\"]\n}\n",
+									"raw": "{\n  \"query\": \"Lion king\"\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -180,16 +186,22 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "14|RzxxA3Nx1mkiEH5Cmj5urvXXw8uSiWu6YYBJmwBa0ead95a4",
+									"value": "17|BgxRG0ctPAiNb02nyJzji1enb8ib8F5J4SqMNaCE9d2e14f7",
 									"type": "string"
 								}
 							]
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\":\"bojana@mail.com \",\n    \"password\": \"bojana123\"\n\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -376,41 +388,52 @@
 				},
 				{
 					"name": "List All Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "6|u19YhRYWmv9jneNBzeOaOvSKxxA64GRW0qHjOKng8ba1fdb2",
+									"value": "5|78QhhbtG4Cn4LcSPtVPmznAe5bCJGuW40aXKaqy9ad135b06",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost/api/users?role_id=2&per_page=20&search_value=prob",
+							"raw": "http://localhost/api/users/?role_id=2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"api",
-								"users"
+								"users",
+								""
 							],
 							"query": [
 								{
 									"key": "role_id",
 									"value": "2"
-								},
-								{
-									"key": "per_page",
-									"value": "20"
-								},
-								{
-									"key": "search_value",
-									"value": "prob"
 								}
 							]
 						}
@@ -434,7 +457,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\n{\n    \"users_id\":[\"11\"]\n}",
+							"raw": "{\n  \"users_id\": 23\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -442,7 +465,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/users/blabla",
+							"raw": "http://localhost/api/users/kjasdfkajaisisjawrdas",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -450,7 +473,51 @@
 							"path": [
 								"api",
 								"users",
-								"blabla"
+								"kjasdfkajaisisjawrdas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete many users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "18|eDqcuPoXqMDObbFXNM0pOmEmWCM7zU6AcfeVpUq05e72a051",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"users_id\": [6,4]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"users"
 							]
 						}
 					},
@@ -529,13 +596,16 @@
 			"item": [
 				{
 					"name": "Book create",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -544,7 +614,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n",
+							"raw": "{\n    \"name\": \"na drini Cuprija 2\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[7],\n    \n    \n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -577,7 +647,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -586,10 +656,10 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n"
+							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/api/books/41",
+							"raw": "http://localhost/api/books/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -597,7 +667,7 @@
 							"path": [
 								"api",
 								"books",
-								"41"
+								"1"
 							]
 						}
 					},
@@ -729,7 +799,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -767,7 +837,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -810,7 +880,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -855,7 +925,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "13|kzKIiT6SyPYJ6yz2LqrVBrLWG72Vo2ULLUmV563W0990dc2b",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -913,7 +983,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -972,6 +1042,56 @@
 				},
 				{
 					"name": "View all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `",
+									"<style type=\"text/css\">",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+									"    .tftable tr {background-color:#ffffff;}",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+									"    .tftable tr:hover {background-color:#e0ffff;}",
+									"</style>",
+									"",
+									"<table class=\"tftable\" border=\"1\">",
+									"    <tr>",
+									"        <th>ID</th>",
+									"        <th>First Name</th>",
+									"        <th>Last Name</th>",
+									"        <th>Biography</th>",
+									"        <th>Picture</th>",
+									"        <th>Created At</th>",
+									"        <th>Updated At</th>",
+									"    </tr>",
+									"",
+									"    {{#each response.data.data}}",
+									"        <tr id=row_{{@key}}>",
+									"            <td>{{id}}</td>",
+									"            <td>{{first_name}}</td>",
+									"            <td>{{last_name}}</td>",
+									"            <td>{{biography}}</td>",
+									"            <td><img src=\"{{picture}}\" alt=\"Author Picture\" width=\"50\" height=\"50\"></td>",
+									"            <td>{{created_at}}</td>",
+									"            <td>{{updated_at}}</td>",
+									"        </tr>",
+									"    {{/each}}",
+									"</table>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    return {response: pm.response.json()};",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -981,7 +1101,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "13|kzKIiT6SyPYJ6yz2LqrVBrLWG72Vo2ULLUmV563W0990dc2b",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1025,7 +1145,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1042,7 +1162,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/authors/2/update",
+							"raw": "http://localhost/api/authors/7/update",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1050,7 +1170,7 @@
 							"path": [
 								"api",
 								"authors",
-								"2",
+								"7",
 								"update"
 							]
 						}
@@ -1106,7 +1226,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1142,7 +1262,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1189,7 +1309,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1228,7 +1348,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1277,7 +1397,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1342,7 +1462,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1403,7 +1523,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1454,7 +1574,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1508,7 +1628,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1516,24 +1636,13 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "name",
-									"value": "Comedy",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "sasldlkasjflksajljflskalasdw",
-									"type": "text"
-								},
-								{
-									"key": "icon",
-									"type": "file",
-									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-23 13-12-39.png"
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Biografija\",\n    \"description\": \"Knjige koje prate životne priče stvarnih ličnosti.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
 							"raw": "http://localhost/api/categories/create",
@@ -1561,7 +1670,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1589,7 +1698,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost/api/categories/10",
+							"raw": "http://localhost/api/categories/5",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1597,7 +1706,7 @@
 							"path": [
 								"api",
 								"categories",
-								"10"
+								"5"
 							]
 						}
 					},
@@ -1720,19 +1829,31 @@
 				},
 				{
 					"name": "Category view all",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "15|i7c1wKNv62ZsdZo3J4VO8Rkf2LxJXYEjGBOf3Y9E15403b27",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost/api/categories",
 							"protocol": "http",
@@ -1803,7 +1924,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1812,7 +1933,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\":\"Epika\",\n    \"description\":\"Epika je književni žanr koji obuhvata narativna dela velikih razmera, često ispunjena epskim herojima, legendarnim bitkama i temama koje istražuju sukobe između dobra i zla, čovekovu sudbinu i njegovu ulogu u svetu. Karakteristično je da epika uključuje opširne opise, složene zaplete i duboko razvijene likove koji putuju kroz vreme, prostor i sopstveni unutrašnji svet. .\"\n}",
+							"raw": "{\n  \"name\": \"Bajka\",\n  \"description\": \"Bajka je književni žanr koji sadrži fantastične elemente, magične događaje i nestvarne likove, najčešće sa poučnom ili moralnom porukom na kraju priče.\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1845,7 +1966,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1882,7 +2003,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -2128,7 +2249,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -2140,37 +2261,37 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "Publisher 10",
+									"value": "Cigra",
 									"type": "text"
 								},
 								{
 									"key": "logo",
-									"type": "file",
-									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-06-26 11-45-37.png"
+									"value": "",
+									"type": "text"
 								},
 								{
 									"key": "address",
-									"value": "adresa 2",
+									"value": "Bulevar Oslobodjenja 88",
 									"type": "text"
 								},
 								{
 									"key": "website",
-									"value": "blablaaa.com",
+									"value": "cigra.co.rs",
 									"type": "text"
 								},
 								{
 									"key": "email",
-									"value": "publisher10@email.com",
+									"value": "cigrainfo@email.com",
 									"type": "text"
 								},
 								{
 									"key": "phone",
-									"value": "069999999",
+									"value": "067123654",
 									"type": "text"
 								},
 								{
 									"key": "established_year",
-									"value": "2012",
+									"value": "1998",
 									"type": "text"
 								}
 							]
@@ -2198,7 +2319,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -2253,21 +2374,33 @@
 				},
 				{
 					"name": "View all publishers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost/api/publishers?search_value=1&per_page=50",
+							"raw": "http://localhost/api/publishers?search_value=1&per_page=20",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -2283,7 +2416,7 @@
 								},
 								{
 									"key": "per_page",
-									"value": "50"
+									"value": "20"
 								}
 							]
 						}
