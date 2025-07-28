@@ -3,39 +3,36 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\User;
+use App\Http\Requests\LoginUserRequest;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 
 class AuthController extends Controller
 {
+    protected AuthService $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     /**
      * Handles user login via email and password.
      * Validates credentials. checks if the provided password matches the stored hash.
      * Return JSON response with a generated Bearer token on success.
      *
-     * @param Request $request
+     * @param LoginUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request)
+    public function login(LoginUserRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
+        $result = $this->authService->login($request->email, $request->password);
 
-        $user = User::where('email', request('email'))->first();
-
-        if (!$user || !Hash::check(request('password'), $user->password)) {
-            return response()->json(['error' => 'Invalid email or password'], 401);
-        }
-
-        $token = $user->createToken(request('email'))->plainTextToken;
         return response()->json([
             'message' => 'Logged in successfully.',
-            'access_token' => $token,
+            'access_token' => $result['token'],
             'token_type' => 'Bearer',
         ]);
     }
@@ -54,7 +51,8 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $request->user()->currentAccessToken()->delete();
+        $this->authService->logout($request);
+
         return response()->json([
             'message' => 'Logged out successfully.',
         ]);
