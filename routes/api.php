@@ -27,6 +27,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('users/{user}', [UserController::class, 'show']);
         Route::get('/users/{user}/profile-picture', [UserController::class, 'profilePicture'])->name('user.profilePicture');
         Route::delete('users/{user}', [UserController::class, 'destroy']);
+        Route::delete('users', [UserController::class, 'destroyMany']);
         Route::post('/authors/create', [AuthorController::class, 'create']);
         Route::get('/authors/{author}', [AuthorController::class, 'show']);
         Route::get('/authors/{author}/picture', [AuthorController::class, 'authorsPicture'])->name('author.authorsPicture');

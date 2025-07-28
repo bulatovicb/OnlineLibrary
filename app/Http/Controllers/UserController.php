@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -105,7 +106,6 @@ class UserController extends Controller
      */
     public function profilePicture(User $user)
     {
-
         if (!$user->profile_picture) {
             return response()->json(['error' => 'Profile picture not found'], 404);
         }
@@ -230,27 +230,55 @@ class UserController extends Controller
     }
 
     /**
+     * Deletes  selected user based on provided user IDs.
+     * Accessible only by authenticated librarians.
+     * Returns JSON response with success message.
+     *
+     * @param User $user
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(User $user)
+    {
+        if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
+            Storage::disk('public')->delete($user->profile_picture);
+        }
+
+        $user->delete();
+
+        return response()->json([
+            'message' => 'User deleted successfully'
+        ]);
+    }
+
+    /**
      * Deletes  selected users based on provided user IDs.
      * Accessible only by authenticated librarians.
-     * Accepts a single ID or an array od users IDs.
+     * Accepts an array od users IDs.
      * Returns JSON response with success message.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Request $request)
+    public function destroyMany(Request $request)
     {
-        $selectedUsers = $request->input('users_id');
+        $validated = $request->validate([
+            'users_id' => 'required|array|min:1',
+            'users_id.*' => 'integer|exists:users,id',
+        ]);
 
-        if (!is_array($selectedUsers)) {
-            $selectedUsers = [$selectedUsers];
+        $userIds = $validated['users_id'];
+
+        $users = User::whereIn('id', $userIds)->get();
+
+        foreach ($users as $user) {
+            if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
+                Storage::disk('public')->delete($user->profile_picture);
+            }
+            $user->delete();
         }
-
-        User::whereIn('id', $selectedUsers)->delete();
 
         return response()->json([
             'message' => 'Users deleted successfully.',
-
         ]);
     }
 }
