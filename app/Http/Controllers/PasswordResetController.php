@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\SendResetLinkRequest;
+use App\Services\PasswordResetService;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\Rule;
 
 class PasswordResetController extends Controller
 {
+
+    protected $passwordResetService;
+
+    public function __construct(PasswordResetService $passwordResetService)
+    {
+        $this->passwordResetService = $passwordResetService;
+    }
+
     /**
      * Handle a password reset link request.
      *
@@ -19,27 +24,12 @@ class PasswordResetController extends Controller
      * If valid, sends a password reset email containing password reset token.
      * If invalid, returns validation error response.
      *
-     * @param Request $request
+     * @param SendResetLinkRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendResetLinkEmail(Request $request)
+    public function sendResetLinkEmail(SendResetLinkRequest $request)
     {
-        $request->validate([
-            'email' => [
-                'required',
-                'email',
-                Rule::exists('users', 'email')->where(function ($query) {
-                    $query->where('role_id', Role::LIBRARIAN);
-                }),
-            ],
-        ],
-            [
-                'email.exists' => 'The provided email address does not exist in our records.',
-            ]);
-
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $status = $this->passwordResetService->sendResetLink($request->email);
 
         if ($status === Password::RESET_LINK_SENT) {
             return response()->json([
@@ -59,32 +49,12 @@ class PasswordResetController extends Controller
      * Validates that password and confirmed password fields match.
      * Log in the librarian.
      *
-     * @param Request $request
+     * @param ResetPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function reset(Request $request)
+    public function reset(ResetPasswordRequest $request)
     {
-        $request->validate([
-            'token' => 'required',
-            'email' => [
-                'required',
-                'email',
-                Rule::exists('users', 'email')->where(function ($query) {
-                    $query->where('role_id', Role::LIBRARIAN);
-                }),
-            ],
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) use ($request) {
-                $user->password = Hash::make($password);
-                $user->save();
-                event(new PasswordReset($user));
-
-                Auth::login($user);
-            }
-        );
+        $status = $this->passwordResetService->resetPassword($request);
 
         if ($status === Password::PASSWORD_RESET) {
             return response()->json([
@@ -95,8 +65,5 @@ class PasswordResetController extends Controller
                 'message' => __($status)
             ], 400);
         }
-
     }
-
-
 }
