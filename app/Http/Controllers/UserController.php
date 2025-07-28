@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -246,7 +247,14 @@ class UserController extends Controller
             $selectedUsers = [$selectedUsers];
         }
 
-        User::whereIn('id', $selectedUsers)->delete();
+        $users = User::whereIn('id', $selectedUsers)->get();
+
+        foreach ($users as $user) {
+            if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
+                Storage::disk('public')->delete($user->profile_picture);
+            }
+            $user->delete();
+        }
 
         return response()->json([
             'message' => 'Users deleted successfully.',
