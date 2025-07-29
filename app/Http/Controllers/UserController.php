@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -237,17 +238,34 @@ class UserController extends Controller
      */
     public function destroy(Request $request)
     {
+        if (!is_array($request->input('users_id'))) {
+            $request->merge([
+                'users_id' => [$request->input('users_id')]
+            ]);
+        }
+
+        $request->validate([
+            'users_id' => 'required',
+            'users_id.*' => 'integer|exists:users,id',
+        ]);
+
         $selectedUsers = $request->input('users_id');
 
         if (!is_array($selectedUsers)) {
             $selectedUsers = [$selectedUsers];
         }
 
-        User::whereIn('id', $selectedUsers)->delete();
+        $users = User::whereIn('id', $selectedUsers)->get();
+
+        foreach ($users as $user) {
+            if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
+                Storage::disk('public')->delete($user->profile_picture);
+            }
+            $user->delete();
+        }
 
         return response()->json([
-            'message' => 'Users deleted successfully.',
-
+            'message' => 'User(s) deleted successfully.',
         ]);
     }
 }
