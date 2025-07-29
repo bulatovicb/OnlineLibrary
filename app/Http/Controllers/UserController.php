@@ -86,12 +86,10 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
-        return response()->json([]);
-
+        return response()->json([$user]);
     }
 
     /**
@@ -105,7 +103,6 @@ class UserController extends Controller
      */
     public function profilePicture(User $user)
     {
-
         if (!$user->profile_picture) {
             return response()->json(['error' => 'Profile picture not found'], 404);
         }
