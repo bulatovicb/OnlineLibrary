@@ -160,17 +160,23 @@ class UserController extends Controller
      */
     public function destroy(Request $request)
     {
-        $selectedUsers = $request->input('users_id');
-
-        if (!is_array($selectedUsers)) {
-            $selectedUsers = [$selectedUsers];
+        if (!is_array($request->input('users_id'))) {
+            $request->merge([
+                'users_id' => [$request->input('users_id')]
+            ]);
         }
 
-        User::whereIn('id', $selectedUsers)->delete();
+        $request->validate([
+            'users_id' => 'required|array',
+            'users_id.*' => 'integer|exists:users,id',
+        ]);
+
+        $selectedUsers = $request->input('users_id');
+
+        $this->userService->deleteUsers($selectedUsers);
 
         return response()->json([
-            'message' => 'Users deleted successfully.',
-
+            'message' => 'User(s) deleted successfully.',
         ]);
     }
 }

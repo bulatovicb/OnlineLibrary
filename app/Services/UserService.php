@@ -92,4 +92,15 @@ class UserService
         return $query->paginate($per_page);
     }
 
+    public function deleteUsers(array $userIds): void
+    {
+        $users = User::whereIn('id', $userIds)->get();
+
+        foreach ($users as $user) {
+            if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
+                Storage::disk('public')->delete($user->profile_picture);
+            }
+            $user->delete();
+        }
+    }
 }
