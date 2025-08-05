@@ -12,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PublisherController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookOptionsController;
 
 Route::post('login', [AuthController::class, 'login']);
 
@@ -50,6 +51,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::patch('/books/{book}/update', [BookController::class, 'update']);
         Route::post('/books/{book}/update-cover', [BookController::class, 'updateCover']);
         Route::delete('/books/{book}/destroy', [BookController::class, 'destroy']);
+
+        Route::get('/book-options', [BookOptionsController::class, 'index']);
 
         Route::get('/genres', [GenreController::class, 'index']);
         Route::post('/genres/create', [GenreController::class, 'create']);

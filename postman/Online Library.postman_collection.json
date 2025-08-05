@@ -1577,7 +1577,37 @@
 		},
 		{
 			"name": "Settings",
-			"item": []
+			"item": [
+				{
+					"name": "Book Options",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/book-options",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"book-options"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Category management",
@@ -1886,16 +1916,22 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
+									"value": "20|0LRu6RR5CciFdLlWoj4b17t9wRK0TjWP7EPlWHSMccb919be",
 									"type": "string"
 								}
 							]
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"Bajka\",\n  \"description\": \"Bajka je književni žanr koji sadrži fantastične elemente, magične događaje i nestvarne likove, najčešće sa poučnom ili moralnom porukom na kraju priče.\"\n}\n",
+							"raw": "{\n    \"name\": \"Istorija\",\n    \"description\": \"Knjige o istoriji.\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1915,7 +1951,81 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Create genre",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Istorija umjetnosti\",\n    \"description\": \"Knjige o istoriji2.\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost/api/genres/create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"path": [
+										"api",
+										"genres",
+										"create"
+									]
+								}
+							},
+							"status": "Method Not Allowed",
+							"code": 405,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "localhost"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.4.10"
+								},
+								{
+									"key": "Allow",
+									"value": "GET, HEAD, PUT, PATCH, DELETE"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 04 Aug 2025 12:10:09 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"The POST method is not supported for route api/genres/create. Supported methods: GET, HEAD, PUT, PATCH, DELETE.\",\n    \"exception\": \"Symfony\\\\Component\\\\HttpKernel\\\\Exception\\\\MethodNotAllowedHttpException\",\n    \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/AbstractRouteCollection.php\",\n    \"line\": 122,\n    \"trace\": [\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/AbstractRouteCollection.php\",\n            \"line\": 107,\n            \"function\": \"requestMethodNotAllowed\",\n            \"class\": \"Illuminate\\\\Routing\\\\AbstractRouteCollection\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/AbstractRouteCollection.php\",\n            \"line\": 41,\n            \"function\": \"getRouteForMethods\",\n            \"class\": \"Illuminate\\\\Routing\\\\AbstractRouteCollection\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/RouteCollection.php\",\n            \"line\": 162,\n            \"function\": \"handleMatchedRoute\",\n            \"class\": \"Illuminate\\\\Routing\\\\AbstractRouteCollection\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php\",\n            \"line\": 761,\n            \"function\": \"match\",\n            \"class\": \"Illuminate\\\\Routing\\\\RouteCollection\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php\",\n            \"line\": 748,\n            \"function\": \"findRoute\",\n            \"class\": \"Illuminate\\\\Routing\\\\Router\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Router.php\",\n            \"line\": 737,\n            \"function\": \"dispatchToRoute\",\n            \"class\": \"Illuminate\\\\Routing\\\\Router\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php\",\n            \"line\": 200,\n            \"function\": \"dispatch\",\n            \"class\": \"Illuminate\\\\Routing\\\\Router\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php\",\n            \"line\": 144,\n            \"function\": \"{closure:Illuminate\\\\Foundation\\\\Http\\\\Kernel::dispatchToRouter():197}\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Kernel\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php\",\n            \"line\": 21,\n            \"function\": \"{closure:Illuminate\\\\Pipeline\\\\Pipeline::prepareDestination():142}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php\",\n            \"line\": 31,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\TransformsRequest\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php\",\n            \"line\": 183,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\ConvertEmptyStringsToNull\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php\",\n            \"line\": 21,\n            \"function\": \"{closure:{closure:Illuminate\\\\Pipeline\\\\Pipeline::carry():158}:159}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php\",\n            \"line\": 40,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\TransformsRequest\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php\",\n            \"line\": 183,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\TrimStrings\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php\",\n            \"line\": 27,\n            \"function\": \"{closure:{closure:Illuminate\\\\Pipeline\\\\Pipeline::carry():158}:159}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php\",\n            \"line\": 183,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\ValidatePostSize\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php\",\n            \"line\": 99,\n            \"function\": \"{closure:{closure:Illuminate\\\\Pipeline\\\\Pipeline::carry():158}:159}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php\",\n            \"line\": 183,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Middleware\\\\PreventRequestsDuringMaintenance\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php\",\n            \"line\": 62,\n            \"function\": \"{closure:{closure:Illuminate\\\\Pipeline\\\\Pipeline::carry():158}:159}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php\",\n            \"line\": 183,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Http\\\\Middleware\\\\HandleCors\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php\",\n            \"line\": 39,\n            \"function\": \"{closure:{closure:Illuminate\\\\Pipeline\\\\Pipeline::carry():158}:159}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php\",\n            \"line\": 183,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Http\\\\Middleware\\\\TrustProxies\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php\",\n            \"line\": 119,\n            \"function\": \"{closure:{closure:Illuminate\\\\Pipeline\\\\Pipeline::carry():158}:159}\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php\",\n            \"line\": 175,\n            \"function\": \"then\",\n            \"class\": \"Illuminate\\\\Pipeline\\\\Pipeline\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php\",\n            \"line\": 144,\n            \"function\": \"sendRequestThroughRouter\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Kernel\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/public/index.php\",\n            \"line\": 51,\n            \"function\": \"handle\",\n            \"class\": \"Illuminate\\\\Foundation\\\\Http\\\\Kernel\",\n            \"type\": \"->\"\n        },\n        {\n            \"file\": \"/var/www/html/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php\",\n            \"line\": 16,\n            \"function\": \"require_once\"\n        }\n    ]\n}"
+						}
+					]
 				},
 				{
 					"name": "View genre",
