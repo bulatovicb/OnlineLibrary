@@ -10,7 +10,7 @@ class BookOptionsController extends Controller
 {
     /**
      * Return available static book options.
-     * 
+     *
      * @return JsonResponse
      */
     public function index() : JsonResponse
