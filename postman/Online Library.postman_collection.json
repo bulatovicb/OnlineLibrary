@@ -1577,7 +1577,37 @@
 		},
 		{
 			"name": "Settings",
-			"item": []
+			"item": [
+				{
+					"name": "Book Options",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/book-options",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"book-options"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Category management",
@@ -1886,16 +1916,22 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
+									"value": "20|0LRu6RR5CciFdLlWoj4b17t9wRK0TjWP7EPlWHSMccb919be",
 									"type": "string"
 								}
 							]
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"Bajka\",\n  \"description\": \"Bajka je književni žanr koji sadrži fantastične elemente, magične događaje i nestvarne likove, najčešće sa poučnom ili moralnom porukom na kraju priče.\"\n}\n",
+							"raw": "{\n    \"name\": \"Istorija\",\n    \"description\": \"Knjige o istoriji.\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
