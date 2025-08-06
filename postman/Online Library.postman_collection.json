@@ -397,7 +397,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "5|78QhhbtG4Cn4LcSPtVPmznAe5bCJGuW40aXKaqy9ad135b06",
+									"value": "21|iBmOB0nv3rdEu50Hx9axbheWIWwaOb6v8CsqRmxrccee0502",
 									"type": "string"
 								}
 							]
@@ -420,7 +420,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/users/?role_id=2",
+							"raw": "http://localhost/api/users/?role_id=1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -433,7 +433,7 @@
 							"query": [
 								{
 									"key": "role_id",
-									"value": "2"
+									"value": "1"
 								}
 							]
 						}
@@ -609,7 +609,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
 									"type": "string"
 								}
 							]
@@ -621,7 +621,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/api/books/1",
+							"raw": "http://localhost/api/books/494",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -629,7 +629,7 @@
 							"path": [
 								"api",
 								"books",
-								"1"
+								"494"
 							]
 						}
 					},
@@ -1629,7 +1629,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Biografija\",\n    \"description\": \"Knjige koje prate životne priče stvarnih ličnosti.\"\n}",
+							"raw": "{\n    \"name\": \"Biografija 2\",\n    \"description\": \"Knjige koje prate životne priče stvarnih ličnosti.\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
