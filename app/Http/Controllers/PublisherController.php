@@ -127,10 +127,10 @@ class PublisherController extends Controller
             $query->whereRaw('name ILIKE ?', ["%{$search}%"]);
         })->paginate($perPage);
 
-        $formatted = $publishers->getCollection()->map(function ($publisher) {
+        $formatted = $publishers->map(function ($publisher) {
             return [
-                'name' => $publisher->name,
-                'id' => $publisher->id,
+                'publisher_name' => $publisher->name,
+                'publisher_id' => $publisher->id,
             ];
         });
 
@@ -157,6 +157,12 @@ class PublisherController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string',
+            'logo' => 'sometimes|image|max:5120',
+            'address' => 'sometimes|string',
+            'website' => 'sometimes|string',
+            'email' => 'sometimes|string|email|unique:publishers',
+            'phone' => 'sometimes|string',
+            'established_year' => 'sometimes|integer|max:' . date('Y'),
         ]);
 
         if ($validator->fails()) {
@@ -171,9 +177,7 @@ class PublisherController extends Controller
 
         return response()->json([
             'message' => 'Publisher updated successfully',
-            'publisher' => [
-                'publisher_name' => $publisher->name,
-            ]
+            'publisher_name' => $publisher->name,
         ]);
     }
 

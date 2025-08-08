@@ -674,7 +674,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "22|Eyp7Uo5wnJJwoGIyxgIGnqUHFrXyWm3BUnpTjYR9708d9566",
 									"type": "string"
 								}
 							]
@@ -2398,7 +2398,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/publishers?search_value=1&per_page=50",
+							"raw": "http://localhost/api/publishers?per_page=20",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -2410,11 +2410,12 @@
 							"query": [
 								{
 									"key": "search_value",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								},
 								{
 									"key": "per_page",
-									"value": "50"
+									"value": "20"
 								}
 							]
 						}

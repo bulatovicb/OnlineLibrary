@@ -21,7 +21,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('publishers', function (Blueprint $table) {
-            //
+            $table->string('email')->nullable(false)->change();
         });
     }
 };
