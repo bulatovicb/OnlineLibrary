@@ -26,9 +26,9 @@ class PublisherController extends Controller
             'logo' => 'nullable|image|max:5120',
             'address' => 'nullable|string',
             'website' => 'nullable|string',
-            'email' => 'required|string|email|unique:publishers',
+            'email' => 'nullable|string|email|unique:publishers',
             'phone' => 'nullable|string',
-            'established_year' => 'required|integer|max:' . date('Y'),
+            'established_year' => 'nullable|integer|max:' . date('Y'),
         ]);
 
         if ($validator->fails()) {
@@ -54,7 +54,8 @@ class PublisherController extends Controller
 
         return response()->json([
             'message' => 'Publisher created successfully',
-            'publisher' => $publisher
+            'publisher_name' => $publisher->name,
+            'publisher_id' => $publisher->id,
         ], 201);
     }
 
@@ -72,7 +73,8 @@ class PublisherController extends Controller
     {
         return response()->json([
             'message' => 'Publisher retrieved successfully',
-            'publisher' => $publisher
+            'publisher_name' => $publisher->name,
+            'publisher_id' => $publisher->id
         ], 200);
     }
 
@@ -101,7 +103,7 @@ class PublisherController extends Controller
         ]);
     }
 
-     /**
+    /**
      * Returns a paginated list of publishers with optional search filtering.
      *
      * Accessible only by authenticated librarians.
@@ -125,13 +127,22 @@ class PublisherController extends Controller
             $query->whereRaw('name ILIKE ?', ["%{$search}%"]);
         })->paginate($perPage);
 
+        $formatted = $publishers->getCollection()->map(function ($publisher) {
+            return [
+                'name' => $publisher->name,
+                'id' => $publisher->id,
+            ];
+        });
+
+        $publishers->setCollection($formatted);
+
         return response()->json([
             'message' => 'Publishers list',
-            'publishers' => $publishers
+            'publishers' => $publishers,
         ]);
     }
 
-     /**
+    /**
      * Updates publisher's details.
      *
      * Accessible only by authenticated librarians.
@@ -146,11 +157,6 @@ class PublisherController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string',
-            'address' => 'nullable|string',
-            'website' => 'nullable|string',
-            'email' => 'sometimes|string|email',
-            'phone' => 'nullable|string',
-            'established_year' => 'nullable|integer|max:' . date('Y'),
         ]);
 
         if ($validator->fails()) {
@@ -159,18 +165,15 @@ class PublisherController extends Controller
 
         $data = $request->only([
             'name',
-            'address',
-            'website',
-            'email',
-            'phone',
-            'established_year'
         ]);
 
         $publisher->update($data);
 
         return response()->json([
             'message' => 'Publisher updated successfully',
-            'publisher' => $publisher
+            'publisher' => [
+                'publisher_name' => $publisher->name,
+            ]
         ]);
     }
 
@@ -208,7 +211,7 @@ class PublisherController extends Controller
         ]);
     }
 
-     /**
+    /**
      * Deletes publisher.
      *
      * Accessible only by authenticated librarians.

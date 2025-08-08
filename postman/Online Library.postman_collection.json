@@ -2381,7 +2381,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
 									"type": "string"
 								}
 							]
@@ -2398,7 +2398,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/publishers?search_value=1&per_page=20",
+							"raw": "http://localhost/api/publishers?search_value=1&per_page=50",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -2414,7 +2414,7 @@
 								},
 								{
 									"key": "per_page",
-									"value": "20"
+									"value": "50"
 								}
 							]
 						}
@@ -2459,7 +2459,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
 									"type": "string"
 								}
 							]
@@ -2474,7 +2474,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"izmjena\",\n    \"address\": \"123 Main Street\",\n    \"website\": \"https://example.com\",\n    \"email\": \"publisher@mail\",\n    \"phone\": 123456789,\n    \"established_year\": 2024\n}\n",
+							"raw": "{\n    \"name\": \"Publisher TESTIRANJeeE\"\n   \n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
