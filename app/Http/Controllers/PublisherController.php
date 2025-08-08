@@ -157,12 +157,11 @@ class PublisherController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string',
-            'logo' => 'sometimes|image|max:5120',
-            'address' => 'sometimes|string',
-            'website' => 'sometimes|string',
-            'email' => 'sometimes|string|email|unique:publishers',
-            'phone' => 'sometimes|string',
-            'established_year' => 'sometimes|integer|max:' . date('Y'),
+            'address' => 'nullable|string',
+            'website' => 'nullable|string',
+            'email' => 'nullable|string|email',
+            'phone' => 'nullable|string',
+            'established_year' => 'nullable|integer|max:' . date('Y'),
         ]);
 
         if ($validator->fails()) {
