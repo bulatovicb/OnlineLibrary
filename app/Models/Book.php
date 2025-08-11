@@ -9,8 +9,8 @@ class Book extends Model
 {
     use HasFactory;
 
-    public const SCRIPTS = ['cirilica', 'latinica', 'arapsko pismo'];
-    public const BINDINGS = ['tvrdi povez', 'meki povez', 'spiralni povez'];
+    public const SCRIPTS = ['cyrillic', 'latin', 'arabic'];
+    public const BINDINGS = ['hardcover', 'paperback', 'spiral-bound'];
     public const DIMENSIONS = ['A1', 'A2', '21cm x 29.7cm', '15cm x 21cm'];
 
     protected $fillable = [

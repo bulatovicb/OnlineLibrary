@@ -25,6 +25,9 @@ class CreateBookRequest extends FormRequest
      */
     public static function rules(): array
     {
+        $scriptTranslations = array_values(trans('book.scripts'));
+        $bindingTranslations = array_values(trans('book.bindings'));
+
         return [
             'name' => 'required',
             'description' => 'required',
@@ -32,8 +35,8 @@ class CreateBookRequest extends FormRequest
             'number_of_copies_available' => 'required|integer',
             'isbn' => 'required|unique:books,isbn',
             'language' => 'nullable',
-            'script' => ['nullable', Rule::in(Book::SCRIPTS)],
-            'binding' => ['nullable', Rule::in(Book::BINDINGS)],
+            'script' => ['nullable', Rule::in($scriptTranslations)],
+            'binding' => ['nullable', Rule::in($bindingTranslations)],
             'dimensions' => ['nullable', Rule::in(Book::DIMENSIONS)],
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',

@@ -16,9 +16,26 @@ class BookOptionsController extends Controller
     public function index() : JsonResponse
     {
         return response()->json([
-            'scripts' => Book::SCRIPTS,
-            'bindings' => Book::BINDINGS,
-            'dimensions' => Book::DIMENSIONS,
+            'scripts' => collect(Book::SCRIPTS)
+                ->map(fn ($value) => [
+                    'value' => $value,
+                    'label' => __('book.scripts.' . $value),
+                ])
+                ->values(),
+
+            'bindings' => collect(Book::BINDINGS)
+                ->map(fn ($value) => [
+                    'value' => $value,
+                    'label' => __('book.bindings.' . $value),
+                ])
+                ->values(),
+
+            'dimensions' => collect(Book::DIMENSIONS)
+                ->map(fn ($value) => [
+                    'value' => $value,
+                    'label' => __('book.dimensions.' . $value),
+                ])
+                ->values(),
         ]);
     }
 }
