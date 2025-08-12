@@ -9,6 +9,7 @@ use App\Models\Rental;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class RentalController extends Controller
@@ -47,7 +48,7 @@ class RentalController extends Controller
             ], 422);
         }
 
-        $librarian = $request->user();
+        $librarian = Auth::user();
 
         $rental = Rental::create([
             'book_id' => $book->id,
@@ -122,7 +123,7 @@ class RentalController extends Controller
             ], 422);
         }
 
-        $librarian = $request->user();
+        $librarian = Auth::user();
 
         $book = $rental->book;
 
@@ -171,7 +172,7 @@ class RentalController extends Controller
             ], 422);
         }
 
-        $librarian = $request->user();
+        $librarian = Auth::user();
 
         if ($book->number_of_copies_available == 0) {
             $book->update([
