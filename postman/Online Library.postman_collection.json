@@ -110,7 +110,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "6|u19YhRYWmv9jneNBzeOaOvSKxxA64GRW0qHjOKng8ba1fdb2",
+									"value": "22|Eyp7Uo5wnJJwoGIyxgIGnqUHFrXyWm3BUnpTjYR9708d9566",
 									"type": "string"
 								}
 							]
@@ -119,7 +119,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"first_name\": \"proba\",\n  \"last_name\": \"proba\",\n  \"email\": \"bpoppopa@mail.coom\",\n  \"username\": \"ppppppa\",\n  \"jmbg\": \"6236000890902\",\n  \"password\": \"tajna123\",\n  \"role_id\": 2\n}\n",
+							"raw": "{\n  \"first_name\": \"Ivan\",\n  \"last_name\": \"Markovic\",\n  \"email\": \"ivan@gmail.coom\",\n  \"username\": \"1van\",\n  \"jmbg\": \"1411442200321\",\n  \"password\": \"ivan1234\",\n  \"role_id\": 2\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -157,7 +157,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"bpoppopa@mail.coom\",\n    \"password\": \"novalozinka\"\n}",
+							"raw": "{\n    \"email\": \"ivanmarkovic@gmail.com\",\n    \"password\": \"ivan1234\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -420,7 +420,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/users/?role_id=1",
+							"raw": "http://localhost/api/users/?role_id=2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -433,7 +433,7 @@
 							"query": [
 								{
 									"key": "role_id",
-									"value": "1"
+									"value": "2"
 								}
 							]
 						}
@@ -609,7 +609,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -621,7 +621,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/api/books/494",
+							"raw": "http://localhost/api/books/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -629,7 +629,7 @@
 							"path": [
 								"api",
 								"books",
-								"494"
+								"3"
 							]
 						}
 					},
@@ -697,7 +697,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/books/446/update",
+							"raw": "http://localhost/api/books/4/update",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -705,7 +705,7 @@
 							"path": [
 								"api",
 								"books",
-								"446",
+								"4",
 								"update"
 							]
 						}
@@ -799,7 +799,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
+									"value": "21|iBmOB0nv3rdEu50Hx9axbheWIWwaOb6v8CsqRmxrccee0502",
 									"type": "string"
 								}
 							]
@@ -1239,7 +1239,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"book_id\": 14,\n    \"student_id\": 15,\n    \"librarian_id\": 16\n}\n",
+							"raw": "{\n    \"book_id\": 3,\n    \"student_id\": 26,\n    \"librarian_id\": 1\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1931,7 +1931,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Istorija\",\n    \"description\": \"Knjige o istoriji.\"\n}",
+							"raw": "{\n  \"name\": \"Novi žanr\",\n  \"description\": \"Novi zanr\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1976,7 +1976,7 @@
 							"raw": "{\n    \"name\":\"Fantasy\",\n    \"description\":\"Opis opis Opis opisOpis opis\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost/api/genres/10",
+							"raw": "http://localhost/api/genres/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1984,7 +1984,7 @@
 							"path": [
 								"api",
 								"genres",
-								"10"
+								"4"
 							]
 						}
 					},
