@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateBookRequest;
+use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -203,36 +204,9 @@ class BookController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, Book $book)
+    public function update(UpdateBookRequest $request, Book $book)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|string',
-            'description' => 'sometimes|string',
-            'number_of_pages' => 'sometimes|integer|min:1',
-            'number_of_copies_available' => 'sometimes|integer',
-            'isbn' => 'sometimes|string|unique:books,isbn,' . $book->id,
-            'language' => 'sometimes|string',
-            'script' => ['nullable', Rule::in(Book::SCRIPTS)],
-            'binding' => ['nullable', Rule::in(Book::BINDINGS)],
-            'dimensions' => ['nullable', Rule::in(Book::DIMENSIONS)],
-
-            'publisher_id' => 'sometimes|exists:publishers,id',
-
-            'categories' => 'sometimes|array',
-            'categories.*' => 'exists:categories,id',
-
-            'genres' => 'sometimes|array',
-            'genres.*' => 'exists:genres,id',
-
-            'authors' => 'sometimes|array',
-            'authors.*' => 'exists:authors,id',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->all()], 422);
-        }
-
-        $data = $validator->validated();
+        $data = $request->validated();
 
         $book->update($data);
 
