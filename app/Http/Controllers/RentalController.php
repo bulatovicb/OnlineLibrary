@@ -353,7 +353,7 @@ class RentalController extends Controller
         $query = Rental::with(['book', 'librarian', 'student'])
             ->whereNull('returned_at')
             ->whereDate('rented_at', '<=', now()
-                ->subDays($rentalPeriod));
+            ->subDays($rentalPeriod));
 
         if ($request->filled('book_id')) {
             $query->where('book_id', $request->book_id);
