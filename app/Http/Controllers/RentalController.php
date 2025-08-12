@@ -9,6 +9,7 @@ use App\Models\Rental;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class RentalController extends Controller
@@ -29,13 +30,12 @@ class RentalController extends Controller
         $request->validate([
             'book_id' => 'required|exists:books,id',
             'student_id' => 'required|exists:users,id',
-            'librarian_id' => 'required|exists:users,id',
         ]);
 
         $book = Book::findOrFail($request->book_id);
 
         try {
-            $this->validateUserRoles($request->student_id, $request->librarian_id);
+            $this->validateUserRoles($request->student_id);
         } catch (\Exception $exception) {
             return response()->json([
                 'error' => $exception->getMessage()
@@ -48,10 +48,12 @@ class RentalController extends Controller
             ], 422);
         }
 
+        $librarian = Auth::user();
+
         $rental = Rental::create([
             'book_id' => $book->id,
             'student_id' => $request->student_id,
-            'librarian_id' => $request->librarian_id,
+            'librarian_id' => $librarian->id,
             'rented_at' => now(),
             'returned_at' => null,
         ]);
@@ -64,17 +66,12 @@ class RentalController extends Controller
         ], 201);
     }
 
-    public function validateUserRoles(int $studentId, int $librarianId)
+    public function validateUserRoles(int $studentId)
     {
         $student = User::findOrFail($studentId);
-        $librarian = User::findOrFail($librarianId);
 
         if ($student->role_id !== Role::STUDENT) {
             throw new \Exception("Selected user is not a student");
-        }
-
-        if ($librarian->role_id !== Role::LIBRARIAN) {
-            throw new \Exception("Selected user is not a librarian");
         }
     }
 
@@ -126,7 +123,7 @@ class RentalController extends Controller
             ], 422);
         }
 
-        $librarian = $request->user();
+        $librarian = Auth::user();
 
         $book = $rental->book;
 
@@ -175,7 +172,7 @@ class RentalController extends Controller
             ], 422);
         }
 
-        $librarian = $request->user();
+        $librarian = Auth::user();
 
         if ($book->number_of_copies_available == 0) {
             $book->update([
