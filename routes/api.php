@@ -13,6 +13,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PublisherController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookOptionsController;
+use App\Http\Controllers\ReservationController;
 
 Route::post('login', [AuthController::class, 'login']);
 
@@ -84,6 +85,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::patch('/publishers/{publisher}/update', [PublisherController::class, 'update']);
         Route::post('/publishers/{publisher}/update-logo', [PublisherController::class, 'updateLogo']);
         Route::delete('/publishers/{publisher}', [PublisherController::class, 'destroy']);
+
+        Route::post('/reservations', [ReservationController::class, 'store']);
+        Route::get('/reservations/active', [ReservationController::class, 'active']);
+        Route::get('/reservations/archive', [ReservationController::class, 'archive']);
+        Route::post('/reservations/{id}/confirm', [ReservationController::class, 'confirm']);
+        Route::post('/reservations/{id}/reject', [ReservationController::class, 'reject']);
     });
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
