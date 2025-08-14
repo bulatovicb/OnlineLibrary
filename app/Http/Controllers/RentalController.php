@@ -247,6 +247,7 @@ class RentalController extends Controller
                     'last_name' => $rental->librarian->last_name,
                     'id' => $rental->librarian->id,
                 ],
+                'rental_id' => $rental->id,
             ];
         });
 
@@ -316,6 +317,7 @@ class RentalController extends Controller
                     'last_name' => $rental->librarian->last_name,
                     'id' => $rental->librarian->id,
                 ],
+                'rental_id' => $rental->id,
             ];
         });
 
@@ -386,6 +388,7 @@ class RentalController extends Controller
                     'last_name' => $rental->student->last_name,
                     'id' => $rental->student->id,
                 ],
+                'rental_id' => $rental->id,
                 'total_rental_days' => $daysRented,
                 'days_overdue' => $daysOverdue > 0 ? $daysOverdue : 0,
             ];
