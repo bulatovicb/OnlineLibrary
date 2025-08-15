@@ -90,7 +90,6 @@ class ReservationController extends Controller
      */
     public function confirm($id)
     {
-
         $librarian = Auth::user();
 
         try {
@@ -102,18 +101,14 @@ class ReservationController extends Controller
                     throw new \Exception('Only pending reservations can be confirmed. Current status: ' . $reservation->status);
                 }
 
-                $book = Book::lockForUpdate()->find($reservation->book_id);
+                $book = Book::lockForUpdate()->findOrFail($reservation->book_id);
 
-                if ($book->number_of_copies_available == 0) {
-                    throw new \Exception("All copies of the book $book->id have been rented out");
-                }
-
-                $alreadyConfirmed = Reservation::where('book_id', $book->id)
+                $confirmedReservations = Reservation::where('book_id', $book->id)
                     ->where('status', 'reserved')
-                    ->exists();
+                    ->count();
 
-                if ($alreadyConfirmed) {
-                    throw new \Exception("This book already has a confirmed reservation.");
+                if ($confirmedReservations >= $book->number_of_copies_available) {
+                    throw new \Exception("No available copies for this book.");
                 }
 
                 $reservation->status = 'reserved';
