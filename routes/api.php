@@ -4,16 +4,16 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookImportController;
+use App\Http\Controllers\BookOptionsController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PolicyController;
-use App\Http\Controllers\RentalController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PublisherController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BookOptionsController;
+use App\Http\Controllers\RentalController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
 
@@ -86,12 +86,15 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('/publishers/{publisher}/update-logo', [PublisherController::class, 'updateLogo']);
         Route::delete('/publishers/{publisher}', [PublisherController::class, 'destroy']);
 
-        Route::post('/reservations', [ReservationController::class, 'store']);
         Route::get('/reservations/active', [ReservationController::class, 'active']);
         Route::get('/reservations/archive', [ReservationController::class, 'archive']);
         Route::post('/reservations/{id}/confirm', [ReservationController::class, 'confirm']);
         Route::post('/reservations/{id}/reject', [ReservationController::class, 'reject']);
     });
+
+    Route::post('/reservations', [ReservationController::class, 'store']);
+    Route::post('/reservations/{id}/cancel', [ReservationController::class, 'cancel']);
+
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.reset');

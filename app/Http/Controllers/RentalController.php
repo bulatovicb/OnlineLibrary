@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\DiscardedBook;
 use App\Models\Policy;
 use App\Models\Rental;
+use App\Models\Reservation;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class RentalController extends Controller
      * Validates the request to ensure the book, student, and librarian exist.
      * Checks if the book is available for rent.
      * Ensures that the student and librarian have the correct roles.
+     * Checks if there is a reservation connected with this book if number of copies is 1.
      * Decrements the available book copies upon successful rental creation.
      *
      * @param Request $request
@@ -48,12 +50,40 @@ class RentalController extends Controller
             ], 422);
         }
 
+        $activeReservationsCount = Reservation::where('book_id', $book->id)
+            ->where('status', 'reserved')
+            ->where('expires_at', '>', now())
+            ->count();
+
+        if ($activeReservationsCount >= $book->number_of_copies_available) {
+            $studentReservation = Reservation::where('book_id', $book->id)
+                ->where('student_id', $request->student_id)
+                ->where('status', 'reserved')
+                ->where('expires_at', '>', now())
+                ->first();
+
+            if (!$studentReservation) {
+                return response()->json([
+                    'error' => 'No available copies for this book, it is reserved by other students.'
+                ], 422);
+            }
+        }
+
         $librarian = Auth::user();
+
+        if ($request->filled('reservation_id')) {
+            $reservation = Reservation::find($request->reservation_id);
+            if ($reservation) {
+                $reservation->status = 'rented';
+                $reservation->save();
+            }
+        }
 
         $rental = Rental::create([
             'book_id' => $book->id,
             'student_id' => $request->student_id,
             'librarian_id' => $librarian->id,
+            'reservation_id' => $request->reservation_id,
             'rented_at' => now(),
             'returned_at' => null,
         ]);
@@ -162,7 +192,8 @@ class RentalController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function discard(Request $request, $id)
+    public
+    function discard(Request $request, $id)
     {
         $book = Book::find($id);
 
@@ -199,7 +230,8 @@ class RentalController extends Controller
         ]);
     }
 
-    public function indexRented(Request $request)
+    public
+    function indexRented(Request $request)
     {
         request()->validate([
             'per_page' => 'integer|nullable|in:20,50,100',
@@ -234,6 +266,7 @@ class RentalController extends Controller
 
         $activeRentals->getCollection()->transform(function ($rental) {
             return [
+                'book_id' => $rental->book->id,
                 'book_title' => $rental->book->name,
                 'rented_by' => [
                     'name' => $rental->student->first_name,
@@ -355,7 +388,7 @@ class RentalController extends Controller
         $query = Rental::with(['book', 'librarian', 'student'])
             ->whereNull('returned_at')
             ->whereDate('rented_at', '<=', now()
-            ->subDays($rentalPeriod));
+                ->subDays($rentalPeriod));
 
         if ($request->filled('book_id')) {
             $query->where('book_id', $request->book_id);

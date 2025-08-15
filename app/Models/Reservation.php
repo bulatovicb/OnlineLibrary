@@ -33,4 +33,10 @@ class Reservation extends Model
         return $this->belongsTo(User::class, 'librarian_id');
     }
 
+    public function rental()
+    {
+        return $this->hasOne(Rental::class, 'reservation_id');
+    }
+
+
 }

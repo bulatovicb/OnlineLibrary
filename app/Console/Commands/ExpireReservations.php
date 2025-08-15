@@ -26,7 +26,7 @@ class ExpireReservations extends Command
      */
     public function handle()
     {
-        Reservation::where('status', 'reserved')
+        Reservation::where('status', 'pending')
             ->where('expires_at', '<', now())
             ->update(['status' => 'expired']);
     }

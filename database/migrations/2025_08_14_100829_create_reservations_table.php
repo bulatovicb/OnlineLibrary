@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('librarian_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('reserved_at')->nullable();
             $table->timestamp('expires_at')->nullable();
-            $table->enum('status', ['reserved', 'rejected', 'rented', 'expired']);
+            $table->enum('status', ['pending','reserved', 'rejected', 'rented', 'expired', 'cancelled']);
             $table->timestamps();
 
         });
