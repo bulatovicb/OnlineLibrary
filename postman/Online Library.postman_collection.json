@@ -1751,7 +1751,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "21|AZXxiUPWMgJ3feqP3Y8ENWxP6HIluSIkHObbXYpbdaea7715",
+									"value": "22|0mraVPDG5cN1tJZMEKrnPXZgeSbUeajiprdHZjrfdfde354c",
 									"type": "string"
 								}
 							]
@@ -1765,7 +1765,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost/api/reservations/3/cancel",
+							"raw": "http://localhost/api/reservations/8/cancel",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1773,7 +1773,7 @@
 							"path": [
 								"api",
 								"reservations",
-								"3",
+								"8",
 								"cancel"
 							]
 						}

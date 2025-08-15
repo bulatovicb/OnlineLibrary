@@ -230,8 +230,7 @@ class RentalController extends Controller
         ]);
     }
 
-    public
-    function indexRented(Request $request)
+    public function indexRented(Request $request)
     {
         request()->validate([
             'per_page' => 'integer|nullable|in:20,50,100',
@@ -388,7 +387,7 @@ class RentalController extends Controller
         $query = Rental::with(['book', 'librarian', 'student'])
             ->whereNull('returned_at')
             ->whereDate('rented_at', '<=', now()
-                ->subDays($rentalPeriod));
+            ->subDays($rentalPeriod));
 
         if ($request->filled('book_id')) {
             $query->where('book_id', $request->book_id);
