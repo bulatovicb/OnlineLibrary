@@ -87,4 +87,21 @@ class Book extends Model
         return $this->hasMany(DiscardedBook::class);
     }
 
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    public function activeReservations()
+    {
+        return $this->hasMany(Reservation::class)
+            ->whereIn('status', ['reserved', 'rejected']);
+    }
+
+    public function archivedReservations()
+    {
+        return $this->hasMany(Reservation::class)
+            ->whereIn('status', ['rented', 'expired']);
+    }
+
 }
