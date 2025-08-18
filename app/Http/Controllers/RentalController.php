@@ -192,8 +192,7 @@ class RentalController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public
-    function discard(Request $request, $id)
+    public function discard(Request $request, $id)
     {
         $book = Book::find($id);
 

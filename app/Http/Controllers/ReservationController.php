@@ -34,6 +34,21 @@ class ReservationController extends Controller
 
                 $book = Book::lockForUpdate()->findOrFail($request->book_id);
 
+                $studentId = $user->isLibrarian()
+                    ? ($request->student_id ?? null)
+                    : $user->id;
+
+                if ($studentId) {
+                    $existingReservation = Reservation::where('book_id', $book->id)
+                        ->where('student_id', $studentId)
+                        ->whereIn('status', ['pending', 'reserved'])
+                        ->first();
+
+                    if ($existingReservation) {
+                        throw new \Exception("This student already has an active reservation for this book.");
+                    }
+                }
+
                 $confirmedReservations = Reservation::where('book_id', $book->id)
                     ->where('status', 'reserved')
                     ->count();
@@ -43,10 +58,14 @@ class ReservationController extends Controller
                 }
 
                 if ($user->isLibrarian()) {
+                    if (!$request->filled('student_id')) {
+                        throw new \Exception("Librarian must provide a student ID.");
+                    }
+
                     $reservation = Reservation::create([
                         'book_id' => $book->id,
                         'librarian_id' => $user->id,
-                        'student_id' => $request->student_id ?? null,
+                        'student_id' => $request->student_id,
                         'reserved_at' => now(),
                         'expires_at' => now()->addHours(24),
                         'status' => 'reserved'

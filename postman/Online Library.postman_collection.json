@@ -1655,8 +1655,37 @@
 				{
 					"name": "Archived reservations",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/reservations/archived",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"reservations",
+								"archived"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "expired",
+									"disabled": true
+								}
+							]
+						}
 					},
 					"response": []
 				},
@@ -1691,7 +1720,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/reservations/25/confirm",
+							"raw": "http://localhost/api/reservations/12/confirm",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1699,7 +1728,7 @@
 							"path": [
 								"api",
 								"reservations",
-								"25",
+								"12",
 								"confirm"
 							]
 						}
@@ -1728,7 +1757,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost/api/reservations/24/reject",
+							"raw": "http://localhost/api/reservations/5/reject",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1736,7 +1765,7 @@
 							"path": [
 								"api",
 								"reservations",
-								"24",
+								"5",
 								"reject"
 							]
 						}

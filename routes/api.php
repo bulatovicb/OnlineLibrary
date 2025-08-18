@@ -87,7 +87,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::delete('/publishers/{publisher}', [PublisherController::class, 'destroy']);
 
         Route::get('/reservations/active', [ReservationController::class, 'active']);
-        Route::get('/reservations/archive', [ReservationController::class, 'archive']);
+        Route::get('/reservations/archived', [ReservationController::class, 'archive']);
         Route::post('/reservations/{id}/confirm', [ReservationController::class, 'confirm']);
         Route::post('/reservations/{id}/reject', [ReservationController::class, 'reject']);
     });
