@@ -233,7 +233,7 @@ class ReservationController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function archive(Request $request)
+    public function archived(Request $request)
     {
         $status = $request->query('status');
 
