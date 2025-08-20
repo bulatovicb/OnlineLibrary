@@ -87,7 +87,7 @@ class ReservationController extends Controller
                 'message' => $reservation->status === 'reserved'
                     ? 'Reservation created and automatically confirmed'
                     : 'Reservation created and waiting for confirmation',
-                'reservation' => $reservation->load(['book', 'student'])
+                'reservation' => $reservation->load(['book:id,name', 'student:id,first_name,last_name'])
             ], 201);
 
         } catch (\Exception $e) {
