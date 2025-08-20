@@ -621,7 +621,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/api/books/3",
+							"raw": "http://localhost/api/books/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -629,7 +629,7 @@
 							"path": [
 								"api",
 								"books",
-								"3"
+								"1"
 							]
 						}
 					},
@@ -689,7 +689,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"Novi naziv knjige\",\n  \"publisher_id\": 21,\n  \"categories\": [3, 6, 7],\n  \"genres\": [1, 2],\n  \"authors\": [4, 8]\n}\n",
+							"raw": "{\n \n  \"categories\": [3]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -697,7 +697,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/books/4/update",
+							"raw": "http://localhost/api/books/1/update",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -705,7 +705,7 @@
 							"path": [
 								"api",
 								"books",
-								"4",
+								"1",
 								"update"
 							]
 						}
@@ -811,7 +811,7 @@
 							"raw": "{\n   \"queries\": [\"harry potter\", \"lord of the rings\"],\n  \"email\": \"bpoppopa@mail.coom\",\n  \"number_of_copies_available\": 5\n}"
 						},
 						"url": {
-							"raw": "http://localhost/api/books?per_page=20&search_value=15",
+							"raw": "http://localhost/api/books",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -819,16 +819,6 @@
 							"path": [
 								"api",
 								"books"
-							],
-							"query": [
-								{
-									"key": "per_page",
-									"value": "20"
-								},
-								{
-									"key": "search_value",
-									"value": "15"
-								}
 							]
 						}
 					},
@@ -1218,6 +1208,9 @@
 			"item": [
 				{
 					"name": "Rent a book",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1229,7 +1222,7 @@
 								}
 							]
 						},
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
 								"key": "Accept",
@@ -1239,7 +1232,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"book_id\": 2,\n    \"student_id\": 26,\n    \"librarian_id\": 1\n}\n",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1247,14 +1240,21 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/rentals",
+							"raw": "http://localhost/api/rentals/returned?book",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"api",
-								"rentals"
+								"rentals",
+								"returned"
+							],
+							"query": [
+								{
+									"key": "book",
+									"value": null
+								}
 							]
 						}
 					},
@@ -1586,7 +1586,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
+									"value": "41|0eKj1e8AF8ZC1nY8AXLi48C5bACHyZkwuO3vYdxdec3f7e6c",
 									"type": "string"
 								}
 							]
@@ -1601,7 +1601,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"book_id\": 28,\n    \"student_id\": 14\n}",
+							"raw": "{\n    \"book_id\": 4,\n    \"student_id\": 26\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1624,6 +1624,9 @@
 				},
 				{
 					"name": "Active reservations",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1636,9 +1639,24 @@
 							]
 						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost/api/reservations/active",
+							"raw": "http://localhost/api/reservations/active?status=reserved&search_value=Knjiga&per_page=20",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1647,6 +1665,20 @@
 								"api",
 								"reservations",
 								"active"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "reserved"
+								},
+								{
+									"key": "search_value",
+									"value": "Knjiga"
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								}
 							]
 						}
 					},
@@ -1668,7 +1700,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost/api/reservations/archived",
+							"raw": "http://localhost/api/reservations/archived?status=&per_page=20&search_value=Knjiga 6",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1681,8 +1713,15 @@
 							"query": [
 								{
 									"key": "status",
-									"value": "expired",
-									"disabled": true
+									"value": ""
+								},
+								{
+									"key": "per_page",
+									"value": "20"
+								},
+								{
+									"key": "search_value",
+									"value": "Knjiga 6"
 								}
 							]
 						}
