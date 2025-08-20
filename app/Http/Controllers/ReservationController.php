@@ -87,7 +87,7 @@ class ReservationController extends Controller
                 'message' => $reservation->status === 'reserved'
                     ? 'Reservation created and automatically confirmed'
                     : 'Reservation created and waiting for confirmation',
-                'reservation' => $reservation
+                'reservation' => $reservation->load(['book:id,name', 'student:id,first_name,last_name'])
             ], 201);
 
         } catch (\Exception $e) {
@@ -112,7 +112,7 @@ class ReservationController extends Controller
         $librarian = Auth::user();
 
         try {
-            $reservation = DB::transaction(function () use ($id) {
+            $reservation = DB::transaction(function () use ($id, $librarian) {
 
                 $reservation = Reservation::lockForUpdate()->findOrFail($id);
 
@@ -131,6 +131,7 @@ class ReservationController extends Controller
                 }
 
                 $reservation->status = 'reserved';
+                $reservation->librarian_id = $librarian->id;
                 $reservation->save();
 
                 return $reservation;
@@ -229,15 +230,25 @@ class ReservationController extends Controller
      *
      * By default, returns reservations with status 'expired', 'rented', or 'rejected'.
      * Can filter by a specific status via query parameter.
+     * Supports case-insensitive partial matching on name (ILIKE).
+     * Supports pagination with per-page values of 20 (default), 50, or 100.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function archived(Request $request)
     {
-        $status = $request->query('status');
+        $validated = $request->validate([
+            'per_page' => 'nullable|integer|in:20,50,100',
+            'search_value' => 'nullable|string',
+            'status' => 'nullable|string',
+        ]);
 
-        $query = Reservation::with('rental')
+        $perPage = $validated['per_page'] ?? 20;
+        $search = $validated['search_value'] ?? null;
+        $status = $validated['status'] ?? null;
+
+        $query = Reservation::with('rental', 'book:id,name', 'student:id,first_name,last_name')
             ->where(function ($q) {
                 $q->whereHas('rental')
                     ->orWhereIn('status', ['expired', 'rejected', 'rented', 'cancelled']);
@@ -251,7 +262,18 @@ class ReservationController extends Controller
             }
         }
 
-        return response()->json($query->get());
+        if ($search) {
+            $query->whereHas('book', function ($q) use ($search) {
+                $q->whereRaw('name ILIKE ?', ["%{$search}%"]);
+            });
+        }
+
+        $reservations = $query->paginate($perPage);
+
+        return response()->json([
+            'message' => 'Archived reservations list',
+            'reservations' => $reservations,
+        ]);
     }
 
     /**
@@ -259,21 +281,43 @@ class ReservationController extends Controller
      *
      * By default, returns reservations with status 'reserved', 'pending' or 'rejected'.
      * Can filter by a specific status via query parameter.
+     * Supports case-insensitive partial matching on name (ILIKE).
+     * Supports pagination with per-page values of 20 (default), 50, or 100.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function active(Request $request)
     {
-        $status = $request->query('status');
+        $validated = $request->validate([
+            'per_page' => 'nullable|integer|in:20,50,100',
+            'search_value' => 'nullable|string',
+            'status' => 'nullable|string',
+        ]);
 
-        $query = Reservation::whereIn('status', ['reserved', 'rejected', 'pending']);
+        $perPage = $validated['per_page'] ?? 20;
+        $search = $validated['search_value'] ?? null;
+        $status = $validated['status'] ?? null;
+
+        $query = Reservation::with(['book:id,name', 'student:id,first_name,last_name'])
+            ->whereIn('status', ['reserved', 'rejected', 'pending']);
 
         if ($status) {
             $query->where('status', $status);
         }
 
-        return response()->json($query->get());
+        if ($search) {
+            $query->whereHas('book', function ($q) use ($search) {
+                $q->whereRaw('name ILIKE ?', ["%{$search}%"]);
+            });
+        }
+
+        $reservations = $query->paginate($perPage);
+
+        return response()->json([
+            'message' => 'Active reservations list',
+            'reservations' => $reservations,
+        ]);
     }
 
 }
