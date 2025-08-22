@@ -15,7 +15,6 @@ class BookController extends Controller
      /**
      * Displays book's data based on provided id.
      *
-     * Accessible only by authenticated librarians.
      * Returns a JSON response with book data.
      * Automatically returns 404 if the book is not found.
      *
@@ -231,7 +230,6 @@ class BookController extends Controller
     /**
      * Returns a paginated list of books with optional search filtering.
      *
-     * Accessible only by authenticated librarians.
      * Supports case-insensitive partial matching on first and last name (ILIKE).
      * Supports pagination with per-page values of 20 (default), 50, or 100.
      *

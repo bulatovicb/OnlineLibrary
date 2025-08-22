@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Reservation;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -232,12 +233,16 @@ class ReservationController extends Controller
      * Can filter by a specific status via query parameter.
      * Supports case-insensitive partial matching on name (ILIKE).
      * Supports pagination with per-page values of 20 (default), 50, or 100.
+     * Librarians can view any user's archived reservations.
+     * Students can view only their own archived reservations.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function archived(Request $request)
     {
+        $authUser = Auth::user();
+
         $validated = $request->validate([
             'per_page' => 'nullable|integer|in:20,50,100',
             'search_value' => 'nullable|string',
@@ -253,6 +258,10 @@ class ReservationController extends Controller
                 $q->whereHas('rental')
                     ->orWhereIn('status', ['expired', 'rejected', 'rented', 'cancelled']);
             });
+
+        if ($authUser->role_id === Role::STUDENT) {
+            $query->where('student_id', $authUser->id);
+        }
 
         if ($status) {
             if ($status === 'with_rental') {
@@ -283,12 +292,16 @@ class ReservationController extends Controller
      * Can filter by a specific status via query parameter.
      * Supports case-insensitive partial matching on name (ILIKE).
      * Supports pagination with per-page values of 20 (default), 50, or 100.
+     * Librarians can view any user's active reservations.
+     * Students can view only their own active reservations.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function active(Request $request)
     {
+        $authUser = Auth::user();
+
         $validated = $request->validate([
             'per_page' => 'nullable|integer|in:20,50,100',
             'search_value' => 'nullable|string',
@@ -301,6 +314,10 @@ class ReservationController extends Controller
 
         $query = Reservation::with(['book:id,name', 'student:id,first_name,last_name'])
             ->whereIn('status', ['reserved', 'rejected', 'pending']);
+
+        if ($authUser->role_id === Role::STUDENT) {
+            $query->where('student_id', $authUser->id);
+        }
 
         if ($status) {
             $query->where('status', $status);
