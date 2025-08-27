@@ -309,11 +309,10 @@ class ReservationController extends Controller
         $search = $validated['search_value'] ?? null;
         $status = $validated['status'] ?? null;
 
-        $query = Reservation::with(['book:id,name', 'student:id,first_name,last_name'])
+        $query = Reservation::with(['book:id,name', 'student:id,first_name,last_name,username', 'librarian:id,first_name,last_name,username'])
             ->whereIn('status', ['reserved', 'rejected', 'pending'])
             ->forStudent($authUser);
-        ;
-
+        
         if ($status) {
             $query->where('status', $status);
         }
