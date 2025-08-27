@@ -312,8 +312,7 @@ class ReservationController extends Controller
         $query = Reservation::with(['book:id,name', 'student:id,first_name,last_name'])
             ->whereIn('status', ['reserved', 'rejected', 'pending'])
             ->forStudent($authUser);
-        ;
-
+        
         if ($status) {
             $query->where('status', $status);
         }
