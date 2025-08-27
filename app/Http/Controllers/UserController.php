@@ -109,29 +109,17 @@ class UserController extends Controller
      * @param User $user
      * @return \Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function profilePicture($id)
+    public function profilePicture(User $user)
     {
         $authUser = Auth::user();
 
         if (!$authUser) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+        $this->authorize('view', $user);
 
-        if ($authUser->role_id === Role::STUDENT) {
-            if (!$authUser->profile_picture) {
-                return response()->json(['error' => 'Profile picture not found'], 404);
-            }
-            $user = $authUser;
-        } else {
-            $user = User::find($id);
-
-            if (!$user) {
-                return response()->json(['error' => 'User not found'], 404);
-            }
-
-            if (!$user->profile_picture) {
-                return response()->json(['error' => 'Profile picture not found'], 404);
-            }
+        if (!$user->profile_picture) {
+            return response()->json(['error' => 'Profile picture not found'], 404);
         }
 
         return response()->file(storage_path('app/public/' . $user->profile_picture));
