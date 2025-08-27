@@ -267,6 +267,7 @@ class RentalController extends Controller
                 'book_id' => $rental->book->id,
                 'book_title' => $rental->book->name,
                 'rented_by' => [
+                    'username' => $rental->student->username,
                     'first_name' => $rental->student->first_name,
                     'last_name' => $rental->student->last_name,
                     'id' => $rental->student->id,
@@ -274,6 +275,7 @@ class RentalController extends Controller
                 'rental_date' => $rental->rented_at->toDateTimeString(),
                 'active_days' => now()->diffInDays($rental->rented_at),
                 'rented_out_by' => [
+                    'username' => $rental->librarian->username,
                     'first_name' => $rental->librarian->first_name,
                     'last_name' => $rental->librarian->last_name,
                     'id' => $rental->librarian->id,
@@ -337,6 +339,7 @@ class RentalController extends Controller
             return [
                 'book_title' => $rental->book->name,
                 'returned_by' => [
+                    'username' => $rental->student->username,
                     'first_name' => $rental->student->first_name,
                     'last_name' => $rental->student->last_name,
                     'id' => $rental->student->id,
@@ -344,6 +347,7 @@ class RentalController extends Controller
                 'rental_date' => $rental->rented_at->toDateTimeString(),
                 'returned_at' => $rental->returned_at->toDateTimeString(),
                 'rented_out_by' => [
+                    'username' => $rental->librarian->username,
                     'first_name' => $rental->librarian->first_name,
                     'last_name' => $rental->librarian->last_name,
                     'id' => $rental->librarian->id,
