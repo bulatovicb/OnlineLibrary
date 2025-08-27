@@ -62,7 +62,6 @@ class PublisherController extends Controller
     /**
      * Display the publisher's details.
      *
-     * Accessible only by authenticated librarians.
      * Returns a JSON response containing publisher data.
      * Automatically returns a 404 response if the publisher is not found.
      *
@@ -106,7 +105,6 @@ class PublisherController extends Controller
     /**
      * Returns a paginated list of publishers with optional search filtering.
      *
-     * Accessible only by authenticated librarians.
      * Supports case-insensitive partial matching on name (ILIKE).
      * Supports pagination with per-page values of 20 (default), 50, or 100.
      *

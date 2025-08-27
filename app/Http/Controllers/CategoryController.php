@@ -56,7 +56,6 @@ class CategoryController extends Controller
      /**
      * Shows a category.
      *
-     * Accessible only by authenticated librarians.
      * Returns a JSON response with category data.
      * Automatically returns 404 if the category is not found.
      *
@@ -96,7 +95,6 @@ class CategoryController extends Controller
      /**
      * Returns a paginated list of categories with optional search filtering.
      *
-     * Accessible only by authenticated librarians.
      * Supports case-insensitive partial matching on name and description (ILIKE).
      * Supports pagination with per-page values of 20 (default), 50, or 100.
      *

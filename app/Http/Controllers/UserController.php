@@ -78,7 +78,8 @@ class UserController extends Controller
 
     /**
      *  Shows user profile data based on provided username.
-     *  Accessible only by authenticated librarians.
+     *  Librarians can view any user's profile.
+     *  Students can view only their own profile.
      *  Returns error if user is not found.
      *  Returns a JSON response.
      *
@@ -87,15 +88,21 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
-        return response()->json([$user]);
+        $this->authorize('view', $user);
+
+        return response()->json([
+            'id' => $user->id,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'email' => $user->email,
+            'role' => $user->role,
+        ]);
     }
 
     /**
      *  Returns the profile picture of a user based on the provided username.
-     *  Accessible only by authenticated librarians.
+     *  Librarians can view any user's profile picture.
+     *  Students can view only their own profile picture.
      *  Returns JSON error response if the user or the profile picture is not found.
      *  Otherwise, returns the image file.
      *
@@ -104,9 +111,17 @@ class UserController extends Controller
      */
     public function profilePicture(User $user)
     {
+        $authUser = Auth::user();
+
+        if (!$authUser) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+        $this->authorize('view', $user);
+
         if (!$user->profile_picture) {
             return response()->json(['error' => 'Profile picture not found'], 404);
         }
+
         return response()->file(storage_path('app/public/' . $user->profile_picture));
     }
 

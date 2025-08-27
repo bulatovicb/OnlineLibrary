@@ -275,13 +275,19 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "1|4KE2pMP494hCfO6mjfMti6zuPh5in0URv7wXnRex06149cc7",
+									"value": "26|w8HhFtOyk1DnSURmm4P9Q6T4Bxog8QWw3FQAgUyva070005a",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -292,7 +298,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/users/bojana/profile-picture",
+							"raw": "http://localhost/api/users/18/profile-picture",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -300,7 +306,7 @@
 							"path": [
 								"api",
 								"users",
-								"bojana",
+								"18",
 								"profile-picture"
 							]
 						}
@@ -1271,13 +1277,19 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
+									"value": "26|w8HhFtOyk1DnSURmm4P9Q6T4Bxog8QWw3FQAgUyva070005a",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -1633,7 +1645,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
+									"value": "26|w8HhFtOyk1DnSURmm4P9Q6T4Bxog8QWw3FQAgUyva070005a",
 									"type": "string"
 								}
 							]
@@ -1656,7 +1668,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/reservations/active?status=reserved&search_value=Knjiga&per_page=20",
+							"raw": "http://localhost/api/reservations/active",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1669,15 +1681,18 @@
 							"query": [
 								{
 									"key": "status",
-									"value": "reserved"
+									"value": "reserved",
+									"disabled": true
 								},
 								{
 									"key": "search_value",
-									"value": "Knjiga"
+									"value": "Knjiga",
+									"disabled": true
 								},
 								{
 									"key": "per_page",
-									"value": "20"
+									"value": "20",
+									"disabled": true
 								}
 							]
 						}
@@ -1692,7 +1707,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
+									"value": "26|w8HhFtOyk1DnSURmm4P9Q6T4Bxog8QWw3FQAgUyva070005a",
 									"type": "string"
 								}
 							]
@@ -1700,7 +1715,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost/api/reservations/archived?status=&per_page=20&search_value=Knjiga 6",
+							"raw": "http://localhost/api/reservations/archived?status=rejected",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1713,15 +1728,17 @@
 							"query": [
 								{
 									"key": "status",
-									"value": ""
+									"value": "rejected"
 								},
 								{
 									"key": "per_page",
-									"value": "20"
+									"value": "20",
+									"disabled": true
 								},
 								{
 									"key": "search_value",
-									"value": "Knjiga 6"
+									"value": "Knjiga 6",
+									"disabled": true
 								}
 							]
 						}

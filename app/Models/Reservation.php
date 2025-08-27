@@ -38,5 +38,14 @@ class Reservation extends Model
         return $this->hasOne(Rental::class, 'reservation_id');
     }
 
+    public function scopeForStudent($query, User $user)
+    {
+        if ($user->role_id === Role::STUDENT) {
+            return $query->where('student_id', $user->id);
+        }
+
+        return $query;
+    }
+
 
 }
