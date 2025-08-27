@@ -90,13 +90,7 @@ class UserController extends Controller
     {
         $this->authorize('view', $user);
 
-        return response()->json([
-            'id' => $user->id,
-            'first_name' => $user->first_name,
-            'last_name' => $user->last_name,
-            'email' => $user->email,
-            'role' => $user->role,
-        ]);
+        return response()->json([$user]);
     }
 
     /**
