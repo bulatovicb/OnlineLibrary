@@ -121,15 +121,7 @@ class RentalController extends Controller
      */
     public function show(Rental $rental)
     {
-        $authUser = Auth::user();
-
-        if (!$authUser) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        if ($authUser->role_id === Role::STUDENT && $rental->student_id !== $authUser->id) {
-            return response()->json(['error' => 'Forbidden'], 403);
-        }
+        $this->authorize('view', $rental);
 
         $isReturned = !is_null($rental->returned_at);
         $isOverdue = $rental->is_overdue;

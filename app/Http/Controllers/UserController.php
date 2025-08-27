@@ -86,22 +86,9 @@ class UserController extends Controller
      * @param User $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function show(User $user)
     {
-        $authUser = Auth::user();
-
-        if (!$authUser) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        if ($authUser->role_id === Role::STUDENT) {
-            $user = $authUser;
-        } else {
-            $user = User::find($id);
-            if (!$user) {
-                return response()->json(['error' => 'User not found'], 404);
-            }
-        }
+        $this->authorize('view', $user);
 
         return response()->json([
             'id' => $user->id,
