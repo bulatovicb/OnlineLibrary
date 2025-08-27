@@ -85,4 +85,15 @@ class Rental extends Model
         return $this->belongsTo(Reservation::class);
     }
 
+    public function scopeForUser($query, $user, $studentId = null)
+    {
+        if ($user->role_id === Role::STUDENT) {
+            $query->where('student_id', $user->id);
+        } elseif ($studentId) {
+            $query->where('student_id', $studentId);
+        }
+
+        return $query;
+    }
+
 }

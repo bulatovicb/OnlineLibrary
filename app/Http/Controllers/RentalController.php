@@ -280,22 +280,11 @@ class RentalController extends Controller
             'book',
             'student',
             'librarian'
-        ])->whereNull('returned_at');
-
-        if ($authUser->role_id === Role::STUDENT) {
-            $query->where('student_id', $authUser->id);
-        } else {
-            if ($request->filled('student_id')) {
-                $query->where('student_id', $request->student_id);
-            }
-        }
+        ])->whereNull('returned_at')
+            ->forUser($authUser, $request->student_id);
 
         if ($request->filled('book_id')) {
             $query->where('book_id', $request->book_id);
-        }
-
-        if ($request->filled('student_id')) {
-            $query->where('student_id', $request->student_id);
         }
 
         if ($request->filled('search_value')) {
@@ -362,22 +351,11 @@ class RentalController extends Controller
             'book',
             'librarian',
             'student',
-        ])->whereNotNull('returned_at');
-
-        if ($authUser->role_id === Role::STUDENT) {
-            $query->where('student_id', $authUser->id);
-        } else {
-            if ($request->filled('student_id')) {
-                $query->where('student_id', $request->student_id);
-            }
-        }
+        ])->whereNotNull('returned_at')
+            ->forUser($authUser, $request->student_id);
 
         if ($request->filled('book_id')) {
             $query->where('book_id', $request->book_id);
-        }
-
-        if ($request->filled('student_id')) {
-            $query->where('student_id', $request->student_id);
         }
 
         if ($request->filled('search_value')) {
@@ -446,24 +424,12 @@ class RentalController extends Controller
         $query = Rental::with(['book', 'librarian', 'student'])
             ->whereNull('returned_at')
             ->whereDate('rented_at', '<=', now()
-                ->subDays($rentalPeriod));
-
-        if ($authUser->role_id === Role::STUDENT) {
-            $query->where('student_id', $authUser->id);
-        } else {
-            if ($request->filled('student_id')) {
-                $query->where('student_id', $request->student_id);
-            }
-        }
+                ->subDays($rentalPeriod))
+            ->forUser($authUser, $request->student_id);
 
         if ($request->filled('book_id')) {
             $query->where('book_id', $request->book_id);
         }
-
-        if ($request->filled('student_id')) {
-            $query->where('student_id', $request->student_id);
-        }
-
         if ($request->filled('search_value')) {
             $search = $request->search_value;
 

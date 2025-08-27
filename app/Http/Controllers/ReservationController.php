@@ -254,14 +254,11 @@ class ReservationController extends Controller
         $status = $validated['status'] ?? null;
 
         $query = Reservation::with('rental', 'book:id,name', 'student:id,first_name,last_name')
-            ->where(function ($q) {
+            ->where(function ($q) use ($authUser) {
                 $q->whereHas('rental')
-                    ->orWhereIn('status', ['expired', 'rejected', 'rented', 'cancelled']);
+                    ->orWhereIn('status', ['expired', 'rejected', 'rented', 'cancelled'])
+                    ->forStudent($authUser);
             });
-
-        if ($authUser->role_id === Role::STUDENT) {
-            $query->where('student_id', $authUser->id);
-        }
 
         if ($status) {
             if ($status === 'with_rental') {
@@ -313,11 +310,9 @@ class ReservationController extends Controller
         $status = $validated['status'] ?? null;
 
         $query = Reservation::with(['book:id,name', 'student:id,first_name,last_name'])
-            ->whereIn('status', ['reserved', 'rejected', 'pending']);
-
-        if ($authUser->role_id === Role::STUDENT) {
-            $query->where('student_id', $authUser->id);
-        }
+            ->whereIn('status', ['reserved', 'rejected', 'pending'])
+            ->forStudent($authUser);
+        ;
 
         if ($status) {
             $query->where('status', $status);
