@@ -37,9 +37,7 @@ class AuthController extends Controller
 
        $result = $this->authService->login($request->email, $request->password);
 
-       return response()->json([
-           $result
-           ]);
+       return response()->json($result);
 
     }
 
@@ -55,8 +53,6 @@ class AuthController extends Controller
     {
        $result = $this->authService->logout();
 
-       return response()->json(
-           $result
-       );
+       return response()->json($result);
     }
 }
