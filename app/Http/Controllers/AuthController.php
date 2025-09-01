@@ -4,14 +4,22 @@ namespace App\Http\Controllers;
 
 
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use function Sodium\increment;
+
 
 
 class AuthController extends Controller
 {
+    private AuthService $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     /**
      * Handles user login via email and password.
      * Validates credentials. checks if the provided password matches the stored hash.
@@ -27,35 +35,12 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        $user = User::where('email', request('email'))->first();
+       $result = $this->authService->login($request->email, $request->password);
 
-        if (!$user || !Hash::check(request('password'), $user->password)) {
-            return response()->json(['error' => 'Invalid email or password'], 401);
-        }
+       return response()->json([
+           $result
+           ]);
 
-        $user->increment("login_count");
-        $user->last_login_at = $user->current_login_at;
-        $user->current_login_at = now();
-        $user->save();
-
-        $token = $user->createToken(request('email'))->plainTextToken;
-        return response()->json([
-            'message' => 'Logged in successfully.',
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => [
-                'id' => $user->id,
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'role' => $user->role->name,
-                'jmbg' => $user->jmbg,
-                'email' => $user->email,
-                'username' => $user->username,
-                'profile_picture' => $user->profile_picture,
-                'login_count' => $user->login_count,
-                'last_login_at' => $user->last_login_at,
-            ]
-        ]);
     }
 
     /**
@@ -68,13 +53,10 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        if (!Auth::check()) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
+       $result = $this->authService->logout();
 
-        $request->user()->currentAccessToken()->delete();
-        return response()->json([
-            'message' => 'Logged out successfully.',
-        ]);
+       return response()->json(
+           $result
+       );
     }
 }
