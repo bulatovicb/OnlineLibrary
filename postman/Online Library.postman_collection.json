@@ -330,7 +330,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\":\"Promjena\"\n}\n",
+							"raw": "{\n    \"first_name\":\"Amel\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -338,7 +338,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/user/update",
+							"raw": "http://localhost/api/user/amel",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -346,7 +346,7 @@
 							"path": [
 								"api",
 								"user",
-								"update"
+								"amel"
 							]
 						}
 					},
@@ -1645,7 +1645,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "26|w8HhFtOyk1DnSURmm4P9Q6T4Bxog8QWw3FQAgUyva070005a",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
 									"type": "string"
 								}
 							]
@@ -1668,7 +1668,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/reservations/active",
+							"raw": "http://localhost/api/reservations/active?page=2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1690,9 +1690,8 @@
 									"disabled": true
 								},
 								{
-									"key": "per_page",
-									"value": "20",
-									"disabled": true
+									"key": "page",
+									"value": "2"
 								}
 							]
 						}
@@ -1860,6 +1859,36 @@
 								"reservations",
 								"8",
 								"cancel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View reservation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/reservations/57",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"reservations",
+								"57"
 							]
 						}
 					},

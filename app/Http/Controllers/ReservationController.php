@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Reservation;
-use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -96,6 +95,19 @@ class ReservationController extends Controller
                 'error' => $e->getMessage()
             ], 422);
         }
+    }
+
+    public function show($id)
+    {
+        $authUser = Auth::user();
+
+        $reservation = Reservation::with(['book:id,name', 'student:id,first_name,last_name,username', 'librarian:id,first_name,last_name,username'])
+            ->forStudent($authUser)
+            ->findOrFail($id);
+
+        return response()->json([
+            'reservation' => $reservation
+        ]);
     }
 
     /**
@@ -312,7 +324,7 @@ class ReservationController extends Controller
         $query = Reservation::with(['book:id,name', 'student:id,first_name,last_name,username', 'librarian:id,first_name,last_name,username'])
             ->whereIn('status', ['reserved', 'rejected', 'pending'])
             ->forStudent($authUser);
-        
+
         if ($status) {
             $query->where('status', $status);
         }
