@@ -56,7 +56,6 @@ class AuthorController extends Controller
     /**
      * Display author's profile data based on provided id.
      *
-     * Accessible only by authenticated librarians.
      * Returns a JSON response with authors data.
      * Automatically returns 404 if the author is not found.
      *
@@ -93,7 +92,6 @@ class AuthorController extends Controller
     /**
      *  Return a paginated list of authors with optional search filtering.
      *
-     *  Accessible only by authenticated librarians.
      *  Supports case-insensitive partial matching on first and last name (ILIKE).
      *  Supports pagination with per-page values of 20 (default), 50, or 100.
      *
