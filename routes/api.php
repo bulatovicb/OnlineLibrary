@@ -102,7 +102,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/reservations/active', [ReservationController::class, 'active']);
     Route::get('/reservations/archived', [ReservationController::class, 'archived']);
     Route::post('/reservations/{id}/cancel', [ReservationController::class, 'cancel']);
-    Route::get('/reservations/{id}', [ReservationController::class, 'show']);
+    Route::get('/reservations/{reservation}', [ReservationController::class, 'show']);
 
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);

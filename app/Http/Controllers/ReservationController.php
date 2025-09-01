@@ -97,13 +97,11 @@ class ReservationController extends Controller
         }
     }
 
-    public function show($id)
+    public function show(Reservation $reservation)
     {
-        $authUser = Auth::user();
+        $this->authorize('view', $reservation);
 
-        $reservation = Reservation::with(['book:id,name', 'student:id,first_name,last_name,username', 'librarian:id,first_name,last_name,username'])
-            ->forStudent($authUser)
-            ->findOrFail($id);
+        $reservation->load(['book:id,name', 'student:id,first_name,last_name,username', 'librarian:id,first_name,last_name,username']);
 
         return response()->json([
             'reservation' => $reservation
