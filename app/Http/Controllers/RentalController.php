@@ -135,14 +135,20 @@ class RentalController extends Controller
             'rented_at' => $rental->rented_at,
             'days_rented' => $rental->days_rented,
             'message' => $message,
+            'book' => [
+                'id' => $rental->book->id,
+                'name' => $rental->book->name,
+            ],
             'student' => [
                 'first_name' => $rental->student->first_name,
                 'last_name' => $rental->student->last_name,
+                'username' => $rental->student->username,
                 'id' => $rental->student->id,
             ],
             'librarian' => [
                 'first_name' => $rental->librarian->first_name,
                 'last_name' => $rental->librarian->last_name,
+                'username' => $rental->librarian->username,
                 'id' => $rental->librarian->id,
             ]
         ]);
