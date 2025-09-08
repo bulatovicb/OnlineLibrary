@@ -77,6 +77,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('users/{user}', [UserController::class, 'show']);
     Route::get('/users/{user}/profile-picture', [UserController::class, 'profilePicture'])->name('user.profilePicture');
+    Route::post('users/change-password', [PasswordResetController::class, 'changePassword']);
 
     Route::get('/authors/{author}', [AuthorController::class, 'show']);
     Route::get('/authors', [AuthorController::class, 'index']);
@@ -103,7 +104,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/reservations/archived', [ReservationController::class, 'archived']);
     Route::post('/reservations/{id}/cancel', [ReservationController::class, 'cancel']);
     Route::get('/reservations/{reservation}', [ReservationController::class, 'show']);
-
 });
 Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail']);
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.reset');
