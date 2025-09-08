@@ -6,10 +6,8 @@ use App\Models\Book;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CreateBookRequest extends FormRequest
+class UpdateBookRequest extends FormRequest
 {
-    public const TYPES = ['front_cover', 'back_cover', 'artwork'];
-
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -23,33 +21,38 @@ class CreateBookRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public static function rules(): array
+    public function rules(): array
     {
         $scriptTranslations = array_values(trans('book.scripts'));
         $bindingTranslations = array_values(trans('book.bindings'));
 
+        $bookId = $this->route('book')?->id;
+
         return [
-            'name' => 'required',
-            'description' => 'required',
-            'number_of_pages' => 'required|integer|min:1',
-            'number_of_copies_available' => 'required|integer',
-            'isbn' => 'required|unique:books,isbn',
-            'language' => 'nullable',
+            'name' => 'sometimes|string',
+            'description' => 'sometimes|string',
+            'number_of_pages' => 'sometimes|integer',
+            'number_of_copies_available' => 'sometimes|integer',
+            'isbn' => [
+                'sometimes',
+                'string',
+                Rule::unique('books', 'isbn')->ignore($bookId),
+            ],
+            'language' => 'sometimes|string',
             'script' => ['nullable', Rule::in($scriptTranslations)],
             'binding' => ['nullable', Rule::in($bindingTranslations)],
             'dimensions' => ['nullable', Rule::in(Book::DIMENSIONS)],
-            'categories' => 'nullable|array',
-            'categories.*' => 'exists:categories,id',
-            'genres' => 'nullable|array',
-            'genres.*' => 'exists:genres,id',
-            'authors' => 'required|array',
-            'authors.*' => 'exists:authors,id',
-            'publisher_id' => 'required|exists:publishers,id',
 
-            'images' => 'nullable|array',
-            'images.*' => 'file|image|max:5120',
-            'image_types' => 'nullable|array',
-            'image_types.*' => ['required', Rule::in(self::TYPES)],
+            'publisher_id' => 'sometimes|exists:publishers,id',
+
+            'categories' => 'sometimes|array',
+            'categories.*' => 'exists:categories,id',
+
+            'genres' => 'sometimes|array',
+            'genres.*' => 'exists:genres,id',
+
+            'authors' => 'sometimes|array',
+            'authors.*' => 'exists:authors,id',
         ];
     }
 }

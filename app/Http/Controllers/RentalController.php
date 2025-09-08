@@ -6,9 +6,11 @@ use App\Models\Book;
 use App\Models\DiscardedBook;
 use App\Models\Policy;
 use App\Models\Rental;
+use App\Models\Reservation;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class RentalController extends Controller
@@ -19,6 +21,7 @@ class RentalController extends Controller
      * Validates the request to ensure the book, student, and librarian exist.
      * Checks if the book is available for rent.
      * Ensures that the student and librarian have the correct roles.
+     * Checks if there is a reservation connected with this book if number of copies is 1.
      * Decrements the available book copies upon successful rental creation.
      *
      * @param Request $request
@@ -29,13 +32,12 @@ class RentalController extends Controller
         $request->validate([
             'book_id' => 'required|exists:books,id',
             'student_id' => 'required|exists:users,id',
-            'librarian_id' => 'required|exists:users,id',
         ]);
 
         $book = Book::findOrFail($request->book_id);
 
         try {
-            $this->validateUserRoles($request->student_id, $request->librarian_id);
+            $this->validateUserRoles($request->student_id);
         } catch (\Exception $exception) {
             return response()->json([
                 'error' => $exception->getMessage()
@@ -48,10 +50,40 @@ class RentalController extends Controller
             ], 422);
         }
 
+        $activeReservationsCount = Reservation::where('book_id', $book->id)
+            ->where('status', 'reserved')
+            ->where('expires_at', '>', now())
+            ->count();
+
+        if ($activeReservationsCount >= $book->number_of_copies_available) {
+            $studentReservation = Reservation::where('book_id', $book->id)
+                ->where('student_id', $request->student_id)
+                ->where('status', 'reserved')
+                ->where('expires_at', '>', now())
+                ->first();
+
+            if (!$studentReservation) {
+                return response()->json([
+                    'error' => 'No available copies for this book, it is reserved by other students.'
+                ], 422);
+            }
+        }
+
+        $librarian = Auth::user();
+
+        if ($request->filled('reservation_id')) {
+            $reservation = Reservation::find($request->reservation_id);
+            if ($reservation) {
+                $reservation->status = 'rented';
+                $reservation->save();
+            }
+        }
+
         $rental = Rental::create([
             'book_id' => $book->id,
             'student_id' => $request->student_id,
-            'librarian_id' => $request->librarian_id,
+            'librarian_id' => $librarian->id,
+            'reservation_id' => $request->reservation_id,
             'rented_at' => now(),
             'returned_at' => null,
         ]);
@@ -64,17 +96,12 @@ class RentalController extends Controller
         ], 201);
     }
 
-    public function validateUserRoles(int $studentId, int $librarianId)
+    public function validateUserRoles(int $studentId)
     {
         $student = User::findOrFail($studentId);
-        $librarian = User::findOrFail($librarianId);
 
         if ($student->role_id !== Role::STUDENT) {
             throw new \Exception("Selected user is not a student");
-        }
-
-        if ($librarian->role_id !== Role::LIBRARIAN) {
-            throw new \Exception("Selected user is not a librarian");
         }
     }
 
@@ -86,15 +113,38 @@ class RentalController extends Controller
      * - whether the rental is overdue,
      * - a message indicating rental status.
      *
+     *  Librarians can view any user's rentals.
+     *  Students can view only their own rentals.
+     *
      * @param Rental $rental
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Rental $rental)
     {
+        $this->authorize('view', $rental);
+
+        $isReturned = !is_null($rental->returned_at);
+        $isOverdue = $rental->is_overdue;
+
+        $message = $isReturned
+            ? 'This book has been returned.'
+            : ($isOverdue ? 'This rental is overdue!' : 'Rental period is still valid.');
+
+
         return response()->json([
+            'rented_at' => $rental->rented_at,
             'days_rented' => $rental->days_rented,
-            'is_overdue' => $rental->is_overdue,
-            'message' => $rental->is_overdue ? 'This rental is overdue!' : 'Rental period is still valid.'
+            'message' => $message,
+            'student' => [
+                'first_name' => $rental->student->first_name,
+                'last_name' => $rental->student->last_name,
+                'id' => $rental->student->id,
+            ],
+            'librarian' => [
+                'first_name' => $rental->librarian->first_name,
+                'last_name' => $rental->librarian->last_name,
+                'id' => $rental->librarian->id,
+            ]
         ]);
     }
 
@@ -126,7 +176,7 @@ class RentalController extends Controller
             ], 422);
         }
 
-        $librarian = $request->user();
+        $librarian = Auth::user();
 
         $book = $rental->book;
 
@@ -175,7 +225,7 @@ class RentalController extends Controller
             ], 422);
         }
 
-        $librarian = $request->user();
+        $librarian = Auth::user();
 
         if ($book->number_of_copies_available == 0) {
             $book->update([
@@ -202,8 +252,23 @@ class RentalController extends Controller
         ]);
     }
 
+    /**
+     * Returns a paginated list of rented books.
+     *
+     * Supports filtering by book ID to view rented rentals for a specific book.
+     * Supports filtering by student ID to view rented rentals for a specific student.
+     * Supports case-insensitive partial matching on the book name (using ILIKE for PostgreSQL).
+     * Supports pagination with 'per_page' values of 20 (default), 50, or 100.
+     * Librarians can view any user's rentals.
+     * Students can view only their own rentals.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function indexRented(Request $request)
     {
+        $authUser = Auth::user();
+
         request()->validate([
             'per_page' => 'integer|nullable|in:20,50,100',
             'search_value' => 'string|nullable',
@@ -215,14 +280,11 @@ class RentalController extends Controller
             'book',
             'student',
             'librarian'
-        ])->whereNull('returned_at');
+        ])->whereNull('returned_at')
+            ->forUser($authUser, $request->student_id);
 
         if ($request->filled('book_id')) {
             $query->where('book_id', $request->book_id);
-        }
-
-        if ($request->filled('student_id')) {
-            $query->where('student_id', $request->student_id);
         }
 
         if ($request->filled('search_value')) {
@@ -237,19 +299,23 @@ class RentalController extends Controller
 
         $activeRentals->getCollection()->transform(function ($rental) {
             return [
+                'book_id' => $rental->book->id,
                 'book_title' => $rental->book->name,
                 'rented_by' => [
-                    'name' => $rental->student->first_name,
+                    'username' => $rental->student->username,
+                    'first_name' => $rental->student->first_name,
                     'last_name' => $rental->student->last_name,
                     'id' => $rental->student->id,
                 ],
                 'rental_date' => $rental->rented_at->toDateTimeString(),
                 'active_days' => now()->diffInDays($rental->rented_at),
                 'rented_out_by' => [
-                    'name' => $rental->librarian->first_name,
+                    'username' => $rental->librarian->username,
+                    'first_name' => $rental->librarian->first_name,
                     'last_name' => $rental->librarian->last_name,
                     'id' => $rental->librarian->id,
                 ],
+                'rental_id' => $rental->id,
             ];
         });
 
@@ -262,17 +328,20 @@ class RentalController extends Controller
     /**
      * Returns a paginated list of returned books.
      *
-     * Accessible only to authenticated librarians.
      * Supports filtering by book ID to view returned rentals for a specific book.
      * Supports filtering by student ID to view returned rentals for a specific student.
      * Supports case-insensitive partial matching on the book name (using ILIKE for PostgreSQL).
      * Supports pagination with 'per_page' values of 20 (default), 50, or 100.
+     * Librarians can view any user's rentals.
+     * Students can view only their own rentals.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function indexReturned(Request $request)
     {
+        $authUser = Auth::user();
+
         $request->validate([
             'per_page' => 'nullable|integer|in:20,50,100',
             'search_value' => 'nullable|string',
@@ -284,14 +353,11 @@ class RentalController extends Controller
             'book',
             'librarian',
             'student',
-        ])->whereNotNull('returned_at');
+        ])->whereNotNull('returned_at')
+            ->forUser($authUser, $request->student_id);
 
         if ($request->filled('book_id')) {
             $query->where('book_id', $request->book_id);
-        }
-
-        if ($request->filled('student_id')) {
-            $query->where('student_id', $request->student_id);
         }
 
         if ($request->filled('search_value')) {
@@ -308,17 +374,20 @@ class RentalController extends Controller
             return [
                 'book_title' => $rental->book->name,
                 'returned_by' => [
-                    'name' => $rental->student->name,
+                    'username' => $rental->student->username,
+                    'first_name' => $rental->student->first_name,
                     'last_name' => $rental->student->last_name,
                     'id' => $rental->student->id,
                 ],
                 'rental_date' => $rental->rented_at->toDateTimeString(),
                 'returned_at' => $rental->returned_at->toDateTimeString(),
                 'rented_out_by' => [
-                    'name' => $rental->librarian->name,
+                    'username' => $rental->librarian->username,
+                    'first_name' => $rental->librarian->first_name,
                     'last_name' => $rental->librarian->last_name,
                     'id' => $rental->librarian->id,
                 ],
+                'rental_id' => $rental->id,
             ];
         });
 
@@ -331,18 +400,21 @@ class RentalController extends Controller
     /**
      * Returns a paginated list of overdue books.
      *
-     * Accessible only to authenticated librarians.
      * Supports filtering by book ID to view overdue rentals for a specific book.
      * Supports filtering by student ID to view overdue rentals for a specific student.
      * Supports case-insensitive partial matching on the book name (ILIKE).
      * Supports pagination with 'per_page' values of 20 (default), 50, or 100.
      * Overdue books are defined as books rented for longer than the allowed rental period in policy.
+     * Librarians can view any user's rentals.
+     * Students can view only their own rentals.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function indexOverdue(Request $request)
     {
+        $authUser = Auth::user();
+
         $request->validate([
             'search_value' => 'nullable|string',
             'per_page' => 'nullable|integer|in:20,50,100',
@@ -356,16 +428,12 @@ class RentalController extends Controller
         $query = Rental::with(['book', 'librarian', 'student'])
             ->whereNull('returned_at')
             ->whereDate('rented_at', '<=', now()
-            ->subDays($rentalPeriod));
+                ->subDays($rentalPeriod))
+            ->forUser($authUser, $request->student_id);
 
         if ($request->filled('book_id')) {
             $query->where('book_id', $request->book_id);
         }
-
-        if ($request->filled('student_id')) {
-            $query->where('student_id', $request->student_id);
-        }
-
         if ($request->filled('search_value')) {
             $search = $request->search_value;
 
@@ -389,6 +457,12 @@ class RentalController extends Controller
                     'last_name' => $rental->student->last_name,
                     'id' => $rental->student->id,
                 ],
+                'rented_out_by' => [
+                    'first_name' => $rental->librarian->first_name,
+                    'last_name' => $rental->librarian->last_name,
+                    'id' => $rental->librarian->id,
+                ],
+                'rental_id' => $rental->id,
                 'total_rental_days' => $daysRented,
                 'days_overdue' => $daysOverdue > 0 ? $daysOverdue : 0,
             ];
@@ -415,18 +489,19 @@ class RentalController extends Controller
         $rentalPeriod = $rentalPolicy->period;
         $now = now();
 
-        $notOverdueCount = Rental::whereNull('returned_at')
-            ->whereDate('rented_at', '>', $now->copy()->subDays($rentalPeriod))
-            ->count();
-
         $overdueCount = Rental::whereNull('returned_at')
             ->whereDate('rented_at', '<=', $now->copy()->subDays($rentalPeriod))
             ->count();
 
+        $totalRentals = Rental::count();
+
+        $totalReservations = Reservation::count();
+
         return response()->json([
             'message' => "Rental Summary retrieved successfully",
             'data' => [
-                'active_rentals_not_overdue' => $notOverdueCount,
+                'total_rentals' => $totalRentals,
+                'total_reservations' => $totalReservations,
                 'active_rentals_overdue' => $overdueCount,
             ]
         ]);
