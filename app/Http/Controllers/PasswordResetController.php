@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rule;
+use App\Mail\ResetPasswordMail;
+use Illuminate\Support\Facades\Mail;
 
 class PasswordResetController extends Controller
 {
@@ -24,29 +27,22 @@ class PasswordResetController extends Controller
     public function sendResetLinkEmail(Request $request)
     {
         $request->validate([
-            'email' => [
-                'required',
-                'email',
-                Rule::exists('users', 'email')
-            ],
-        ],
-            [
-                'email.exists' => 'The provided email address does not exist in our records.',
-            ]);
+            'email' => 'required|email|exists:users,email',
+        ]);
 
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $user = User::where('email', $request->email)->first();
 
-        if ($status === Password::RESET_LINK_SENT) {
-            return response()->json([
-                'message' => __($status)
-            ], 200);
-        } else {
-            return response()->json([
-                'message' => __($status)
-            ], 400);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
         }
+
+        $token = Password::createToken($user);
+
+        Mail::to($user->email)->send(new ResetPasswordMail($user, $token));
+
+        return response()->json([
+            'message' => 'Password reset link sent successfully.'
+        ], 200);
     }
 
     /**
