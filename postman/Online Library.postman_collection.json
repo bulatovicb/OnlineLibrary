@@ -526,7 +526,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"password\": \"novaloninnka\",\n  \"password_confirmation\": \"novaloninnka\"\n  \n}\n",
+							"raw": "{\n    \"token\": \"1695365e6b92519eae2fd74dc7cf405f71cb68e64640e2c3eb05c920c3a9fa47\",\n    \"email\": \"bibliotekar@email.com\",\n    \"password\": \"novaaa12345\",\n    \"password_confirmation\": \"novaaa12345\"\n  \n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -534,7 +534,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/reset-password?token=f753a3c755c7c51516e71017da6ce24179b4cae69fee251bca2b6c56c6f54f11&email=bpoppopa%40mail.coom",
+							"raw": "http://localhost/api/reset-password",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -542,16 +542,6 @@
 							"path": [
 								"api",
 								"reset-password"
-							],
-							"query": [
-								{
-									"key": "token",
-									"value": "f753a3c755c7c51516e71017da6ce24179b4cae69fee251bca2b6c56c6f54f11"
-								},
-								{
-									"key": "email",
-									"value": "bpoppopa%40mail.coom"
-								}
 							]
 						}
 					},
