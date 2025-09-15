@@ -14,28 +14,19 @@ use RuntimeException;
 class PasswordService
 {
 
-    public function sendResetLink(string $email): void
+    public function sendResetLink(string $email): bool
     {
-        \Log::info('sendResetLink email', [
-            'raw'     => $email,
-            'trimmed' => trim($email),
-            'lower'   => strtolower(trim($email)),
-        ]);
-
-        // 2️⃣  Očisti email da ukloniš razmake i ujednačiš case
-        $email = strtolower(trim($email));
-
-        // 3️⃣  Upit sada radi i ako su slova velika/mala pomiješana
-        $user = User::whereRaw('LOWER(email) = ?', [$email])->first();
-
         $user = User::where('email', $email)->first();
 
         if (!$user) {
-            throw new RuntimeException('User not found');
+            return false;
         }
 
         $token = Password::createToken($user);
+
         Mail::to($user->email)->send(new ResetPasswordMail($user, $token));
+
+        return true;
     }
 
 

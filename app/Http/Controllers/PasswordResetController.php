@@ -27,9 +27,9 @@ class PasswordResetController extends Controller
      */
     public function sendResetLinkEmail(SendResetLinkRequest $request)
     {
-        try {
-            $this->passwordService->sendResetLink($request->email);
-        } catch (RuntimeException $e) {
+        $sent = $this->passwordService->sendResetLink($request->email);
+
+        if (!$sent) {
             return response()->json(['message' => 'User not found'], 404);
         }
 
