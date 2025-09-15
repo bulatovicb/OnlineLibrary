@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\SendResetLinkRequest;
+use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\ChangePasswordRequest;
+use App\Services\PasswordService;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\Rule;
-use App\Mail\ResetPasswordMail;
-use Illuminate\Support\Facades\Mail;
+use RuntimeException;
+
 
 class PasswordResetController extends Controller
 {
+
+    public function __construct(private PasswordService $passwordService) {}
+
     /**
      * Handle a password reset link request.
      *
@@ -21,24 +22,16 @@ class PasswordResetController extends Controller
      * If valid, sends a password reset email containing password reset token.
      * If invalid, returns validation error response.
      *
-     * @param Request $request
+     * @param SendResetLinkRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendResetLinkEmail(Request $request)
+    public function sendResetLinkEmail(SendResetLinkRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email|exists:users,email',
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user) {
+        try {
+            $this->passwordService->sendResetLink($request->email);
+        } catch (RuntimeException $e) {
             return response()->json(['message' => 'User not found'], 404);
         }
-
-        $token = Password::createToken($user);
-
-        Mail::to($user->email)->send(new ResetPasswordMail($user, $token));
 
         return response()->json([
             'message' => 'Password reset link sent successfully.'
@@ -52,41 +45,20 @@ class PasswordResetController extends Controller
      * Validates that password and confirmed password fields match.
      * Log in the user.
      *
-     * @param Request $request
+     * @param ResetPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function reset(Request $request)
+    public function reset(ResetPasswordRequest $request)
     {
-        $request->validate([
-            'token' => 'required',
-            'email' => [
-                'required',
-                'email',
-                Rule::exists('users', 'email')
-            ],
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) use ($request) {
-                $user->password = Hash::make($password);
-                $user->save();
-                event(new PasswordReset($user));
-
-                Auth::login($user);
-            }
+        $status = $this->passwordService->resetPassword(
+            $request->only('email', 'password', 'password_confirmation', 'token')
         );
 
         if ($status === Password::PASSWORD_RESET) {
-            return response()->json([
-                'message' => __($status)
-            ], 200);
-        } else {
-            return response()->json([
-                'message' => __($status)
-            ], 400);
+            return response()->json(['message' => __($status)], 200);
         }
 
+        return response()->json(['message' => __($status)], 400);
     }
 
     /**
@@ -97,28 +69,21 @@ class PasswordResetController extends Controller
      * Deletes all active tokens to force logout from all devices.
      * Returns a JSON response with a success message or error if validation fails.
      *
-     * @param Request $request
+     * @param ChangePasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function changePassword(Request $request)
+    public function changePassword(ChangePasswordRequest $request)
     {
-        $request->validate([
-            'current_password' => 'required|string',
-            'new_password' => 'required|string|min:8|confirmed',
-        ]);
-
-        $user = Auth::user();
-
-        if (!Hash::check($request->current_password, $user->password)) {
+        try {
+            $this->passwordService->changePassword(
+                $request->current_password,
+                $request->new_password
+            );
+        } catch (RuntimeException $e) {
             return response()->json([
                 'error' => 'Current password is incorrect.'
             ], 400);
         }
-
-        $user->password = Hash::make($request->new_password);
-        $user->save();
-
-        $user->tokens()->delete();
 
         return response()->json([
             'message' => 'Password changed successfully.'
