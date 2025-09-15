@@ -2,54 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\SendResetLinkRequest;
+use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\ChangePasswordRequest;
+use App\Services\PasswordService;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\Rule;
+use RuntimeException;
+
 
 class PasswordResetController extends Controller
 {
+
+    public function __construct(private PasswordService $passwordService) {}
+
     /**
      * Handle a password reset link request.
      *
-     * Validates the provided email address and check if it belongs to a librarian.
+     * Validates the provided email address.
      * If valid, sends a password reset email containing password reset token.
      * If invalid, returns validation error response.
      *
-     * @param Request $request
+     * @param SendResetLinkRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function sendResetLinkEmail(Request $request)
+    public function sendResetLinkEmail(SendResetLinkRequest $request)
     {
-        $request->validate([
-            'email' => [
-                'required',
-                'email',
-                Rule::exists('users', 'email')->where(function ($query) {
-                    $query->where('role_id', Role::LIBRARIAN);
-                }),
-            ],
-        ],
-            [
-                'email.exists' => 'The provided email address does not exist in our records.',
-            ]);
+        $sent = $this->passwordService->sendResetLink($request->email);
 
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-
-        if ($status === Password::RESET_LINK_SENT) {
-            return response()->json([
-                'message' => __($status)
-            ], 200);
-        } else {
-            return response()->json([
-                'message' => __($status)
-            ], 400);
+        if (!$sent) {
+            return response()->json(['message' => 'User not found'], 404);
         }
+
+        return response()->json([
+            'message' => 'Password reset link sent successfully.'
+        ], 200);
     }
 
     /**
@@ -57,46 +43,51 @@ class PasswordResetController extends Controller
      *
      * Validates the received token.
      * Validates that password and confirmed password fields match.
-     * Log in the librarian.
+     * Log in the user.
      *
-     * @param Request $request
+     * @param ResetPasswordRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function reset(Request $request)
+    public function reset(ResetPasswordRequest $request)
     {
-        $request->validate([
-            'token' => 'required',
-            'email' => [
-                'required',
-                'email',
-                Rule::exists('users', 'email')->where(function ($query) {
-                    $query->where('role_id', Role::LIBRARIAN);
-                }),
-            ],
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) use ($request) {
-                $user->password = Hash::make($password);
-                $user->save();
-                event(new PasswordReset($user));
-
-                Auth::login($user);
-            }
+        $status = $this->passwordService->resetPassword(
+            $request->only('email', 'password', 'password_confirmation', 'token')
         );
 
         if ($status === Password::PASSWORD_RESET) {
+            return response()->json(['message' => __($status)], 200);
+        }
+
+        return response()->json(['message' => __($status)], 400);
+    }
+
+    /**
+     * Change the authenticated user's password.
+     *
+     * Validates the current password and checks if it matches the stored hash.
+     * If valid, updates the user's password with the new one.
+     * Deletes all active tokens to force logout from all devices.
+     * Returns a JSON response with a success message or error if validation fails.
+     *
+     * @param ChangePasswordRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        try {
+            $this->passwordService->changePassword(
+                $request->current_password,
+                $request->new_password
+            );
+        } catch (RuntimeException $e) {
             return response()->json([
-                'message' => __($status)
-            ], 200);
-        } else {
-            return response()->json([
-                'message' => __($status)
+                'error' => 'Current password is incorrect.'
             ], 400);
         }
 
+        return response()->json([
+            'message' => 'Password changed successfully.'
+        ]);
     }
-
 
 }

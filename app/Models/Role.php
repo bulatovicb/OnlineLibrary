@@ -16,6 +16,8 @@ class Role extends Model
     const STUDENT = 1;
     const LIBRARIAN = 2;
     protected $fillable = ['name'];
+    protected $hidden = ['created_at', 'updated_at'];
+
 
     /**
      * Get all users associated with this role.

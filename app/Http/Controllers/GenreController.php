@@ -11,7 +11,6 @@ class GenreController extends Controller
     /**
      * Returns a paginated list of genres with optional search filtering.
      *
-     * Accessible only to authenticated librarians.
      * Supports case-insensitive partial matching on the name and description fields (ILIKE).
      * Supports pagination with per-page values of 20 (default), 50, or 100.
      *
@@ -81,7 +80,6 @@ class GenreController extends Controller
     /**
      * Shows a genre.
      *
-     * Accessible only by authenticated librarians.
      * Returns a JSON response with the genre data.
      * Automatically returns 404 if the genre is not found.
      *
@@ -94,7 +92,7 @@ class GenreController extends Controller
             'genre' => $genre
         ], 200);
     }
-  
+
      /**
      * Updates the genre's details.
      *
@@ -125,7 +123,7 @@ class GenreController extends Controller
             'genre' => $genre,
         ]);
     }
-  
+
      /**
      * Deletes a genre.
      *

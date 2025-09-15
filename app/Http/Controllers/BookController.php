@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateBookRequest;
+use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,16 +15,36 @@ class BookController extends Controller
      /**
      * Displays book's data based on provided id.
      *
-     * Accessible only by authenticated librarians.
      * Returns a JSON response with book data.
-     * Automatically returns 404 if the author is not found.
+     * Automatically returns 404 if the book is not found.
      *
      * @param Book $book
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Book $book)
     {
-        return response()->json(['book' => $book], 200);
+        $book->load([
+            'authors:id',
+            'categories:id',
+            'genres:id',
+            'publisher:id',
+            'images:id,book_id'
+        ]);
+
+        $bookData = $book->only($book->getFillable());
+
+        return response()->json([
+            'book' => array_merge(
+                $bookData,
+                [
+                    'authors' => $book->authors->pluck('id'),
+                    'categories' => $book->categories->pluck('id'),
+                    'genres' => $book->genres->pluck('id'),
+                    'publisher_id' => optional($book->publisher)->id,
+                    'images' => $book->images->pluck('id'),
+                ]
+            )
+        ], 200);
     }
 
     /**
@@ -139,6 +160,7 @@ class BookController extends Controller
         $book->genres()->attach($request->genres);
         $book->authors()->attach($request->authors);
         $book->publisher()->associate($request->publisher_id);
+        $book->save();
         $book->load(['images', 'authors', 'genres', 'categories', 'publisher' ]);
 
         return response()->json([
@@ -181,40 +203,33 @@ class BookController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, Book $book)
+    public function update(UpdateBookRequest $request, Book $book)
     {
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|string',
-            'description' => 'sometimes|string',
-            'number_of_pages' => 'sometimes|integer',
-            'number_of_copies_available' => 'sometimes|integer',
-            'isbn' => 'sometimes|string|unique:books,isbn,' . $book->id,
-            'language' => 'sometimes|string',
-            'script' => ['nullable', Rule::in(Book::SCRIPTS)],
-            'binding' => ['nullable', Rule::in(Book::BINDINGS)],
-            'dimensions' => ['nullable', Rule::in(Book::DIMENSIONS)],
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()->all()], 422);
-        }
-
-        $data = $validator->validated();
+        $data = $request->validated();
 
         $book->update($data);
 
+        if (isset($data['categories'])) {
+            $book->categories()->sync($data['categories']);
+        }
+
+        if (isset($data['genres'])) {
+            $book->genres()->sync($data['genres']);
+        }
+
+        if (isset($data['authors'])) {
+            $book->authors()->sync($data['authors']);
+        }
+
         return response()->json([
             'message' => 'Book updated successfully.',
-            'book' => $book,
+            'book' => $book->fresh(['authors', 'categories', 'genres', 'publisher']),
         ]);
-
     }
 
     /**
      * Returns a paginated list of books with optional search filtering.
      *
-     * Accessible only by authenticated librarians.
      * Supports case-insensitive partial matching on first and last name (ILIKE).
      * Supports pagination with per-page values of 20 (default), 50, or 100.
      *

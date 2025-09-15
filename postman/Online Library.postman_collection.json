@@ -27,10 +27,16 @@
 									]
 								},
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"query\": [\"harry potter\"]\n}\n",
+									"raw": "{\n  \"query\": \"Lion king\"\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -104,7 +110,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "6|u19YhRYWmv9jneNBzeOaOvSKxxA64GRW0qHjOKng8ba1fdb2",
+									"value": "22|Eyp7Uo5wnJJwoGIyxgIGnqUHFrXyWm3BUnpTjYR9708d9566",
 									"type": "string"
 								}
 							]
@@ -113,7 +119,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"first_name\": \"proba\",\n  \"last_name\": \"proba\",\n  \"email\": \"bpoppopa@mail.coom\",\n  \"username\": \"ppppppa\",\n  \"jmbg\": \"6236000890902\",\n  \"password\": \"tajna123\",\n  \"role_id\": 2\n}\n",
+							"raw": "{\n  \"first_name\": \"Jovan\",\n  \"last_name\": \"Popovic\",\n  \"email\": \"jovan@gmail.coom\",\n  \"username\": \"j0van\",\n  \"jmbg\": \"1411442990321\",\n  \"password\": \"j0van1234\",\n  \"role_id\": 1\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -151,7 +157,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"bpoppopa@mail.coom\",\n    \"password\": \"novalozinka\"\n}",
+							"raw": "{\n    \"email\": \"admin@gmail.com\",\n    \"password\": \"password\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -180,16 +186,22 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "14|RzxxA3Nx1mkiEH5Cmj5urvXXw8uSiWu6YYBJmwBa0ead95a4",
+									"value": "17|BgxRG0ctPAiNb02nyJzji1enb8ib8F5J4SqMNaCE9d2e14f7",
 									"type": "string"
 								}
 							]
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\":\"bojana@mail.com \",\n    \"password\": \"bojana123\"\n\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -238,7 +250,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/users/bojana",
+							"raw": "http://localhost/api/users/amel",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -246,7 +258,7 @@
 							"path": [
 								"api",
 								"users",
-								"bojana"
+								"amel"
 							]
 						}
 					},
@@ -263,13 +275,19 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "1|4KE2pMP494hCfO6mjfMti6zuPh5in0URv7wXnRex06149cc7",
+									"value": "26|w8HhFtOyk1DnSURmm4P9Q6T4Bxog8QWw3FQAgUyva070005a",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -280,7 +298,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/users/bojana/profile-picture",
+							"raw": "http://localhost/api/users/18/profile-picture",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -288,7 +306,7 @@
 							"path": [
 								"api",
 								"users",
-								"bojana",
+								"18",
 								"profile-picture"
 							]
 						}
@@ -312,7 +330,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\":\"Promjena\"\n}\n",
+							"raw": "{\n    \"first_name\":\"Amel\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -320,7 +338,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/user/update",
+							"raw": "http://localhost/api/user/amel",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -328,7 +346,7 @@
 							"path": [
 								"api",
 								"user",
-								"update"
+								"amel"
 							]
 						}
 					},
@@ -376,41 +394,52 @@
 				},
 				{
 					"name": "List All Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "6|u19YhRYWmv9jneNBzeOaOvSKxxA64GRW0qHjOKng8ba1fdb2",
+									"value": "21|iBmOB0nv3rdEu50Hx9axbheWIWwaOb6v8CsqRmxrccee0502",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost/api/users?role_id=2&per_page=20&search_value=prob",
+							"raw": "http://localhost/api/users/?role_id=2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"api",
-								"users"
+								"users",
+								""
 							],
 							"query": [
 								{
 									"key": "role_id",
 									"value": "2"
-								},
-								{
-									"key": "per_page",
-									"value": "20"
-								},
-								{
-									"key": "search_value",
-									"value": "prob"
 								}
 							]
 						}
@@ -425,16 +454,23 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "6|u19YhRYWmv9jneNBzeOaOvSKxxA64GRW0qHjOKng8ba1fdb2",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
 									"type": "string"
 								}
 							]
 						},
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "\n{\n    \"users_id\":[\"11\"]\n}",
+							"raw": "{\n  \"users_id\": [12,16]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -442,15 +478,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/users/blabla",
+							"raw": "http://localhost/api/users",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"api",
-								"users",
-								"blabla"
+								"users"
 							]
 						}
 					},
@@ -491,7 +526,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"password\": \"novaloninnka\",\n  \"password_confirmation\": \"novaloninnka\"\n  \n}\n",
+							"raw": "{\n    \"token\": \"1695365e6b92519eae2fd74dc7cf405f71cb68e64640e2c3eb05c920c3a9fa47\",\n    \"email\": \"bibliotekar@email.com\",\n    \"password\": \"novaaa12345\",\n    \"password_confirmation\": \"novaaa12345\"\n  \n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -499,7 +534,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/reset-password?token=f753a3c755c7c51516e71017da6ce24179b4cae69fee251bca2b6c56c6f54f11&email=bpoppopa%40mail.coom",
+							"raw": "http://localhost/api/reset-password",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -507,16 +542,51 @@
 							"path": [
 								"api",
 								"reset-password"
-							],
-							"query": [
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
 								{
 									"key": "token",
-									"value": "f753a3c755c7c51516e71017da6ce24179b4cae69fee251bca2b6c56c6f54f11"
-								},
-								{
-									"key": "email",
-									"value": "bpoppopa%40mail.coom"
+									"value": "53|q3cYOJsxYaqR2q7kAoirin9zirHZdX2cKu1LVm1pfd6bd214",
+									"type": "string"
 								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"current_password\": \"bibliotekar1\",\n    \"new_password\": \"bibliotekar\",\n    \"new_password_confirmation\": \"bibliotekar\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/users/change-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"users",
+								"change-password"
 							]
 						}
 					},
@@ -529,13 +599,16 @@
 			"item": [
 				{
 					"name": "Book create",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -544,7 +617,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n",
+							"raw": "{\n    \"name\": \"Dervis i smrt\",\n    \"description\": \"Psihološki roman smješten u osmansko doba, prati Ahmeda Nurudina, derviša koji traži pravdu za smrt svog brata. Knjiga istražuje teme morala, vlasti i ljudske egzistencije\",\n    \"number_of_pages\": 345,\n    \"number_of_copies_available\": 28,\n    \"isbn\": \"9788610004414\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[15],\n    \n    \n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -577,7 +650,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -586,10 +659,10 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Druga knjiga\",\n    \"description\": \"Druga druga druga\",\n    \"number_of_pages\": 310,\n    \"number_of_copies_available\": 2,\n    \"isbn\": \"9781234567890\",\n    \"language\": \"Serbian\",\n    \"script\": \"cyrillic\",\n    \"binding\": \"paperback\",\n    \"dimensions\": \"21cm x 29.7cm\",\n    \"authors\":[6]\n}\n"
+							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/api/books/41",
+							"raw": "http://localhost/api/books/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -597,7 +670,7 @@
 							"path": [
 								"api",
 								"books",
-								"41"
+								"1"
 							]
 						}
 					},
@@ -642,16 +715,22 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "22|Eyp7Uo5wnJJwoGIyxgIGnqUHFrXyWm3BUnpTjYR9708d9566",
 									"type": "string"
 								}
 							]
 						},
 						"method": "PATCH",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \n    \"name\":\"Promjenaaa\"\n}",
+							"raw": "{\n \n  \"categories\": [3]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -659,7 +738,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/books/6/update",
+							"raw": "http://localhost/api/books/1/update",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -667,7 +746,7 @@
 							"path": [
 								"api",
 								"books",
-								"6",
+								"1",
 								"update"
 							]
 						}
@@ -723,7 +802,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -761,7 +840,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "21|iBmOB0nv3rdEu50Hx9axbheWIWwaOb6v8CsqRmxrccee0502",
 									"type": "string"
 								}
 							]
@@ -773,7 +852,7 @@
 							"raw": "{\n   \"queries\": [\"harry potter\", \"lord of the rings\"],\n  \"email\": \"bpoppopa@mail.coom\",\n  \"number_of_copies_available\": 5\n}"
 						},
 						"url": {
-							"raw": "http://localhost/api/books?per_page=20&search_value=15",
+							"raw": "http://localhost/api/books",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -781,16 +860,6 @@
 							"path": [
 								"api",
 								"books"
-							],
-							"query": [
-								{
-									"key": "per_page",
-									"value": "20"
-								},
-								{
-									"key": "search_value",
-									"value": "15"
-								}
 							]
 						}
 					},
@@ -804,7 +873,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -849,7 +918,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -907,7 +976,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -919,7 +988,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/api/authors/10",
+							"raw": "http://localhost/api/authors/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -927,7 +996,7 @@
 							"path": [
 								"api",
 								"authors",
-								"10"
+								"7"
 							]
 						}
 					},
@@ -941,7 +1010,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
 									"type": "string"
 								}
 							]
@@ -966,19 +1035,81 @@
 				},
 				{
 					"name": "View all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `",
+									"<style type=\"text/css\">",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+									"    .tftable tr {background-color:#ffffff;}",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+									"    .tftable tr:hover {background-color:#e0ffff;}",
+									"</style>",
+									"",
+									"<table class=\"tftable\" border=\"1\">",
+									"    <tr>",
+									"        <th>ID</th>",
+									"        <th>First Name</th>",
+									"        <th>Last Name</th>",
+									"        <th>Biography</th>",
+									"        <th>Picture</th>",
+									"        <th>Created At</th>",
+									"        <th>Updated At</th>",
+									"    </tr>",
+									"",
+									"    {{#each response.data.data}}",
+									"        <tr id=row_{{@key}}>",
+									"            <td>{{id}}</td>",
+									"            <td>{{first_name}}</td>",
+									"            <td>{{last_name}}</td>",
+									"            <td>{{biography}}</td>",
+									"            <td><img src=\"{{picture}}\" alt=\"Author Picture\" width=\"50\" height=\"50\"></td>",
+									"            <td>{{created_at}}</td>",
+									"            <td>{{updated_at}}</td>",
+									"        </tr>",
+									"    {{/each}}",
+									"</table>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    return {response: pm.response.json()};",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost/api/authors?per_page=20",
 							"protocol": "http",
@@ -1007,7 +1138,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1024,7 +1155,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/authors/2/update",
+							"raw": "http://localhost/api/authors/7/update",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1032,7 +1163,7 @@
 							"path": [
 								"api",
 								"authors",
-								"2",
+								"7",
 								"update"
 							]
 						}
@@ -1047,7 +1178,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "11|fM5yhiac1isGn1MfyXFTTwGuT8tN7xl3mKoiz1VPc99b56e0",
 									"type": "string"
 								}
 							]
@@ -1088,7 +1219,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1118,18 +1249,21 @@
 			"item": [
 				{
 					"name": "Rent a book",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
 						},
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
 								"key": "Accept",
@@ -1139,7 +1273,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"book_id\": 14,\n    \"student_id\": 15,\n    \"librarian_id\": 16\n}\n",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1147,14 +1281,21 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/rentals",
+							"raw": "http://localhost/api/rentals/returned?book",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"path": [
 								"api",
-								"rentals"
+								"rentals",
+								"returned"
+							],
+							"query": [
+								{
+									"key": "book",
+									"value": null
+								}
 							]
 						}
 					},
@@ -1171,13 +1312,19 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "26|w8HhFtOyk1DnSURmm4P9Q6T4Bxog8QWw3FQAgUyva070005a",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "",
@@ -1210,7 +1357,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1225,7 +1372,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"librarian_id\": 15\n}\n",
+							"raw": "{\n    \"librarian_id\": 1\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1233,7 +1380,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/rentals/4/return",
+							"raw": "http://localhost/api/rentals/2/return",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1241,7 +1388,7 @@
 							"path": [
 								"api",
 								"rentals",
-								"4",
+								"2",
 								"return"
 							]
 						}
@@ -1259,7 +1406,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1267,18 +1414,11 @@
 						"method": "GET",
 						"header": [],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "",
-									"value": "",
-									"type": "text",
-									"disabled": true
-								}
-							]
+							"mode": "raw",
+							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/api/rentals/active?book_id=365",
+							"raw": "http://localhost/api/rentals/active?book",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1305,8 +1445,8 @@
 									"disabled": true
 								},
 								{
-									"key": "book_id",
-									"value": "365"
+									"key": "book",
+									"value": null
 								}
 							]
 						}
@@ -1324,7 +1464,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1342,7 +1482,7 @@
 							"raw": "{\n    \"book_id\": 14,\n    \"student_id\": 15,\n    \"librarian_id\": 16\n}\n"
 						},
 						"url": {
-							"raw": "http://localhost/api/rentals/returned?book_id=365",
+							"raw": "http://localhost/api/rentals/returned?book",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1369,8 +1509,8 @@
 									"disabled": true
 								},
 								{
-									"key": "book_id",
-									"value": "365"
+									"key": "book",
+									"value": null
 								}
 							]
 						}
@@ -1379,21 +1519,33 @@
 				},
 				{
 					"name": "Overdue Books",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost/api/rentals/overdue?search_value=Knjiga&per_page=20&student_id=17&book_id=365",
+							"raw": "http://localhost/api/rentals/overdue?search_value=Knjiga&per_page=20&student_id=17&book_id=4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1418,7 +1570,7 @@
 								},
 								{
 									"key": "book_id",
-									"value": "365"
+									"value": "4"
 								}
 							]
 						}
@@ -1436,7 +1588,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1472,12 +1624,358 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Create reservation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "41|0eKj1e8AF8ZC1nY8AXLi48C5bACHyZkwuO3vYdxdec3f7e6c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"book_id\": 4,\n    \"student_id\": 26\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/reservations",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"reservations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Active reservations",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/reservations/active?page=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"reservations",
+								"active"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "reserved",
+									"disabled": true
+								},
+								{
+									"key": "search_value",
+									"value": "Knjiga",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Archived reservations",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "26|w8HhFtOyk1DnSURmm4P9Q6T4Bxog8QWw3FQAgUyva070005a",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/reservations/archived?status=rejected",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"reservations",
+								"archived"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "rejected"
+								},
+								{
+									"key": "per_page",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "search_value",
+									"value": "Knjiga 6",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm reservation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/reservations/12/confirm",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"reservations",
+								"12",
+								"confirm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reject a reservation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost/api/reservations/5/reject",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"reservations",
+								"5",
+								"reject"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel reservation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "22|0mraVPDG5cN1tJZMEKrnPXZgeSbUeajiprdHZjrfdfde354c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost/api/reservations/8/cancel",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"reservations",
+								"8",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View reservation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/reservations/57",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"reservations",
+								"57"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
 			"name": "Settings",
-			"item": []
+			"item": [
+				{
+					"name": "Book Options",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/book-options",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"book-options"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Category management",
@@ -1490,7 +1988,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1498,24 +1996,13 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "name",
-									"value": "Comedy",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "sasldlkasjflksajljflskalasdw",
-									"type": "text"
-								},
-								{
-									"key": "icon",
-									"type": "file",
-									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-05-23 13-12-39.png"
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Biografija 2\",\n    \"description\": \"Knjige koje prate životne priče stvarnih ličnosti.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
 							"raw": "http://localhost/api/categories/create",
@@ -1543,7 +2030,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1571,7 +2058,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost/api/categories/4",
+							"raw": "http://localhost/api/categories/5",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1579,7 +2066,7 @@
 							"path": [
 								"api",
 								"categories",
-								"4"
+								"5"
 							]
 						}
 					},
@@ -1702,21 +2189,33 @@
 				},
 				{
 					"name": "Category view all",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost/api/categories?search_value=horror",
+							"raw": "http://localhost/api/categories",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1733,7 +2232,8 @@
 								},
 								{
 									"key": "search_value",
-									"value": "horror"
+									"value": "horor",
+									"disabled": true
 								}
 							]
 						}
@@ -1784,16 +2284,22 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "20|0LRu6RR5CciFdLlWoj4b17t9wRK0TjWP7EPlWHSMccb919be",
 									"type": "string"
 								}
 							]
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\":\"Epika\",\n    \"description\":\"Epika je književni žanr koji obuhvata narativna dela velikih razmera, često ispunjena epskim herojima, legendarnim bitkama i temama koje istražuju sukobe između dobra i zla, čovekovu sudbinu i njegovu ulogu u svetu. Karakteristično je da epika uključuje opširne opise, složene zaplete i duboko razvijene likove koji putuju kroz vreme, prostor i sopstveni unutrašnji svet. .\"\n}",
+							"raw": "{\n  \"name\": \"Novi žanr\",\n  \"description\": \"Novi zanr\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1826,7 +2332,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -1838,7 +2344,7 @@
 							"raw": "{\n    \"name\":\"Fantasy\",\n    \"description\":\"Opis opis Opis opisOpis opis\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost/api/genres/10",
+							"raw": "http://localhost/api/genres/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1846,7 +2352,7 @@
 							"path": [
 								"api",
 								"genres",
-								"10"
+								"4"
 							]
 						}
 					},
@@ -1863,7 +2369,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -2075,7 +2581,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "38|DNcsq7uxwRVI7vMYrWoHYVlCGfkIFXkQCRPgCmkk9c08dca4",
 									"type": "string"
 								}
 							]
@@ -2109,7 +2615,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -2121,37 +2627,37 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "Publisher 10",
+									"value": "Cigra",
 									"type": "text"
 								},
 								{
 									"key": "logo",
-									"type": "file",
-									"src": "/home/codeus/Pictures/Screenshots/Screenshot from 2025-06-26 11-45-37.png"
+									"value": "",
+									"type": "text"
 								},
 								{
 									"key": "address",
-									"value": "adresa 2",
+									"value": "Bulevar Oslobodjenja 88",
 									"type": "text"
 								},
 								{
 									"key": "website",
-									"value": "blablaaa.com",
+									"value": "cigra.co.rs",
 									"type": "text"
 								},
 								{
 									"key": "email",
-									"value": "publisher10@email.com",
+									"value": "cigrainfo@email.com",
 									"type": "text"
 								},
 								{
 									"key": "phone",
-									"value": "069999999",
+									"value": "067123654",
 									"type": "text"
 								},
 								{
 									"key": "established_year",
-									"value": "2012",
+									"value": "1998",
 									"type": "text"
 								}
 							]
@@ -2179,7 +2685,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "17|7zaq1VdH7VtyTEhD7iyRJoUQl2w7vW8GpmaEMImef7af4d07",
 									"type": "string"
 								}
 							]
@@ -2234,21 +2740,33 @@
 				},
 				{
 					"name": "View all publishers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost/api/publishers?search_value=1&per_page=50",
+							"raw": "http://localhost/api/publishers?per_page=20",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -2260,11 +2778,12 @@
 							"query": [
 								{
 									"key": "search_value",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								},
 								{
 									"key": "per_page",
-									"value": "50"
+									"value": "20"
 								}
 							]
 						}
@@ -2309,7 +2828,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "11|rNQtY5mQsjTxVjHzdpDhq87DXn0fOVzFNDdFEPlj3ca89348",
+									"value": "20|61ePCNiBoFIfqT7g34IhDoSAG0D4LOeYlUht81g28dbcf7ef",
 									"type": "string"
 								}
 							]
@@ -2324,7 +2843,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"izmjena\",\n    \"address\": \"123 Main Street\",\n    \"website\": \"https://example.com\",\n    \"email\": \"publisher@mail\",\n    \"phone\": 123456789,\n    \"established_year\": 2024\n}\n",
+							"raw": "{\n    \"name\": \"Publisher TESTIRANJeeE\"\n   \n}\n",
 							"options": {
 								"raw": {
 									"language": "json"

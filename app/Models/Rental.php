@@ -15,6 +15,7 @@ class Rental extends Model
         'book_id',
         'student_id',
         'librarian_id',
+        'reservation_id',
         'rented_at',
         'returned_at',
     ];
@@ -78,4 +79,21 @@ class Rental extends Model
         $policy= Policy::where('name', 'rental_period')->first();
         return $policy ? $policy->period : 30;
     }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
+
+    public function scopeForUser($query, $user, $studentId = null)
+    {
+        if ($user->role_id === Role::STUDENT) {
+            $query->where('student_id', $user->id);
+        } elseif ($studentId) {
+            $query->where('student_id', $studentId);
+        }
+
+        return $query;
+    }
+
 }
