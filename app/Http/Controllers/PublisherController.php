@@ -2,13 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Publisher\CreatePublisherRequest;
+use App\Http\Requests\Publisher\IndexPublisherRequest;
+use App\Http\Requests\Publisher\UpdatePublisherLogoRequest;
+use App\Http\Requests\Publisher\UpdatePublisherRequest;
 use App\Models\Publisher;
+use App\Services\PublisherService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PublisherController extends Controller
 {
+
+    public function __construct(PublisherService $publisherService)
+    {
+        $this->publisherService = $publisherService;
+    }
     /**
      * Creates new publisher.
      *
@@ -19,38 +29,9 @@ class PublisherController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(Request $request)
+    public function create(CreatePublisherRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'logo' => 'nullable|image|max:5120',
-            'address' => 'nullable|string',
-            'website' => 'nullable|string',
-            'email' => 'nullable|string|email|unique:publishers',
-            'phone' => 'nullable|string',
-            'established_year' => 'nullable|integer|max:' . date('Y'),
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        $logoPath = null;
-        if ($request->hasFile('logo')) {
-            $logoPath = $request->file('logo')->store('publisher/logo', 'public');
-        }
-
-        $publisher = Publisher::create([
-            'name' => $request->name,
-            'logo' => $logoPath,
-            'address' => $request->address,
-            'website' => $request->website,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'established_year' => $request->established_year
-        ]);
+        $publisher = $this->publisherService->create($request);
 
         return response()->json([
             'message' => 'Publisher created successfully',
@@ -89,13 +70,7 @@ class PublisherController extends Controller
      */
     public function publisherLogo(Publisher $publisher)
     {
-        $logo = $publisher->logo;
-
-        if (!$logo) {
-            return response()->json([
-                'message' => 'Publisher logo not found'
-            ], 404);
-        }
+        $logo = $this->publisherService->publisherLogo($publisher);
 
         return response()->json([
             'logo_url' => $logo
@@ -111,28 +86,9 @@ class PublisherController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index(IndexPublisherRequest $request)
     {
-        $validated = $request->validate([
-            'per_page' => 'nullable|integer|in:20,50,100',
-            'search_value' => 'nullable|string'
-        ]);
-
-        $search = $validated['search_value'] ?? null;
-        $perPage = $validated['per_page'] ?? 20;
-
-        $publishers = Publisher::when($search, function ($query, $search) {
-            $query->whereRaw('name ILIKE ?', ["%{$search}%"]);
-        })->paginate($perPage);
-
-        $formatted = $publishers->map(function ($publisher) {
-            return [
-                'publisher_name' => $publisher->name,
-                'publisher_id' => $publisher->id,
-            ];
-        });
-
-        $publishers->setCollection($formatted);
+        $publishers = $this->publisherService->getPublishers($request);
 
         return response()->json([
             'message' => 'Publishers list',
@@ -151,26 +107,9 @@ class PublisherController extends Controller
      * @param Publisher $publisher
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Publisher $publisher)
+    public function update(UpdatePublisherRequest $request, Publisher $publisher)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|string',
-            'address' => 'nullable|string',
-            'website' => 'nullable|string',
-            'email' => 'nullable|string|email',
-            'phone' => 'nullable|string',
-            'established_year' => 'nullable|integer|max:' . date('Y'),
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $data = $request->only([
-            'name',
-        ]);
-
-        $publisher->update($data);
+        $publisher = $this->publisherService->update($request, $publisher);
 
         return response()->json([
             'message' => 'Publisher updated successfully',
@@ -190,21 +129,9 @@ class PublisherController extends Controller
      * @param Publisher $publisher
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateLogo(Request $request, Publisher $publisher)
+    public function updateLogo(UpdatePublisherLogoRequest $request, Publisher $publisher)
     {
-        $validator = Validator::make($request->all(), [
-            'logo' => 'nullable|image|max:5120',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        if ($request->hasFile('logo')) {
-            $logoPath = $request->file('logo')->store('publisher/logo', 'public');
-            $publisher->logo = $logoPath;
-            $publisher->save();
-        }
+        $publisher = $this->publisherService->updateLogo($request, $publisher);
 
         return response()->json([
             'message' => 'Publisher logo updated successfully',
