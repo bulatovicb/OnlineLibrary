@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Genre\CreateGenreRequest;
+use App\Http\Requests\Genre\IndexGenreRequest;
+use App\Http\Requests\Genre\UpdateGenreRequest;
 use App\Models\Genre;
+use App\Services\GenreService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class GenreController extends Controller
 {
+    public function __construct(GenreService $createGenreService)
+    {
+        $this->GenreService = $createGenreService;
+    }
     /**
      * Returns a paginated list of genres with optional search filtering.
      *
@@ -17,25 +24,9 @@ class GenreController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index(IndexGenreRequest $request)
     {
-        request()->validate([
-            'per_page' => 'integer|nullable|in:20,50,100',
-            'search_value' => 'string|nullable',
-        ]);
-
-        $query = Genre::query();
-
-        if ($request->filled('search_value')) {
-            $search = $request->search_value;
-            $query->where(function ($q) use ($search) {
-                $q->whereRaw('name ILIKE ?', ["%$search%"])
-                    ->orWhereRaw('description ILIKE ?', ["%$search%"]);
-            });
-        }
-
-        $perPage = $request->per_page ?? 20;
-        $genres = $query->paginate($perPage);
+        $genres = $this->GenreService->getGenres($request);
 
         return response()->json([
             'message' => "Success",
@@ -55,21 +46,9 @@ class GenreController extends Controller
      * @param CreateBookRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(Request $request)
+    public function create(CreateGenreRequest $request)
     {
-        $validator = Validator::make(request()->all(), [
-            'name' => 'required|string|max:500|unique:genres,name',
-            'description' => 'required|max:500',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $genre = Genre::create([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
+        $genre = $this->GenreService->createGenre($request);
 
         return response()->json([
             'message' => 'Genre created successfully.',
@@ -104,19 +83,9 @@ class GenreController extends Controller
      * @param Genre $genre
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Genre $genre)
+    public function update(UpdateGenreRequest $request, Genre $genre)
     {
-        $validator = Validator::make(request()->all(), [
-            'name' => 'sometimes|string|max:500',
-            'description' => 'nullable|max:500',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $data = $request->only(['name', 'description']);
-        $genre->update($data);
+        $genre = $this->GenreService->updateGenre($request, $genre);
 
         return response()->json([
             'message' => 'Genre updated successfully.',
@@ -136,6 +105,7 @@ class GenreController extends Controller
     public function destroy(Genre $genre)
     {
         $genre->delete();
+
         return response()->json([
             'message' => 'Genre deleted successfully.',
         ]);
